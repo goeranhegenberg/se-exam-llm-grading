@@ -1,0 +1,30 @@
+{
+  "question_id": "se-105",
+  "topic": "User Stories",
+  "type": "anwendung",
+  "question": "Gewinnen Sie aus der Erzählung des Produktionsleiters drei User Stories (aber keine vollständigen User Story Cards) für das neue Überwachungssystem:\n\n\"Wir sind ein mittelständisches Unternehmen und stellen Spezialnägel für unterschiedliche Anwendungsfälle her. In unserer Produktionshalle befinden sich knapp fünfzig Maschinen. Mit dem neuen System soll der Status der Maschinen erfasst werden. Die Techniker sollen auf ihren Tablets zu allen Maschinen die relevanten Daten abrufen können. Dann können sie schneller kaputte Teile tauschen. Zukünftig wäre predictive maintenance natürlich schön. Die Maschinen sind bereits alle mit Steuerboards ausgestattet, die diese Daten via WLAN bereitstellen können. Zu den Daten gehört beispielsweise ob die Maschine läuft und wie hoch ihr momentaner Durchsatz ist. Die Daten sollen zur späteren Analyse auch gespeichert werden, sodass unsere Mitarbeiter nachvollziehen können, wie viel eine Maschine über das Jahr produziert hat. Es wäre schön wenn wir den Status aller Maschinen im Eingangsbereich auf einen Blick erfassen könnten. Dann kann unser Schichtführer sehen wie viel wir momentan produzieren und ob es Probleme gibt. Fehler könnten idealerweise direkt zu einem akustischen Warnsignal führen.\"",
+  "max_points": 6,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 6. Bewertungsschema: je korrekt strukturierter Story mit sinnvollem Inhalt 2 P.",
+  "rubric": [
+    {"id": 1, "criterion": "Erste User Story korrekt strukturiert (Als <Rolle> möchte ich <Ziel>, um/damit <Nutzen>) mit sinnvollem Inhalt aus der Erzählung", "points": 2},
+    {"id": 2, "criterion": "Zweite User Story korrekt strukturiert mit sinnvollem Inhalt aus der Erzählung", "points": 2},
+    {"id": 3, "criterion": "Dritte User Story korrekt strukturiert mit sinnvollem Inhalt aus der Erzählung", "points": 2}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-105-a-base", "points": 4, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "1: Als Techniker möchte ich die relevanten Daten aller Maschinen auf meinem Tablet abrufen, damit ich kaputte Teile schneller tauschen kann.\n2: Als Schichtführer möchte ich den Status aller Maschinen im Eingangsbereich auf einen Blick sehen, damit ich Probleme sofort erkenne.\n3: Das System soll bei Fehlern automatisch ein akustisches Warnsignal abspielen."
+    },
+    {
+      "answer_id": "se-105-b-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Das neue System sollte modern aussehen und einfach zu bedienen sein. Wichtig ist auch, dass es zuverlässig läuft und nicht zu viel kostet. Außerdem sollte es sich gut in die bestehende IT integrieren lassen."
+    },
+    {
+      "answer_id": "se-105-c-base", "points": 6, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "1: Als Techniker möchte ich die relevanten Daten aller Maschinen auf meinem Tablet abrufen können, damit ich defekte Teile schneller austauschen kann.\n2: Als Schichtführer möchte ich den Status aller Maschinen im Eingangsbereich auf einen Blick erfassen, damit ich die aktuelle Produktion und auftretende Probleme sofort erkenne.\n3: Als Mitarbeiter möchte ich, dass die Maschinendaten dauerhaft gespeichert werden, damit ich später auswerten kann, wie viel eine Maschine über das Jahr produziert hat."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "question_id": "se-103",
+  "topic": "Diamond Problem",
+  "type": "erklaerung",
+  "question": "Was ist das Diamond Problem?",
+  "max_points": 3,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 4.",
+  "rubric": [
+    {"id": 1, "criterion": "Mehrfachvererbung als Ursache genannt", "points": 1},
+    {"id": 2, "criterion": "Konkrete Diamant-Struktur beschrieben (eine Klasse erbt von zwei Klassen, die eine gemeinsame Oberklasse haben)", "points": 1},
+    {"id": 3, "criterion": "Konsequenz erklärt (Mehrdeutigkeit, welche geerbte Implementierung bzw. welches Attribut gilt)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-103-a-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Mit dem Diamond Problem ist gemeint, dass die Raute in UML-Klassendiagrammen zwei Bedeutungen haben kann. Eine ausgefüllte Raute steht für Komposition, eine leere für Aggregation. Das führt beim Modellieren oft zu Verwechslungen."
+    },
+    {
+      "answer_id": "se-103-b-base", "points": 3, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Das Diamond Problem ist ein Problem der Mehrfachvererbung. Es tritt bei folgender Struktur auf: Eine Klasse D erbt von zwei Klassen B und C, die beide von derselben Oberklasse A erben. Das Vererbungsdiagramm bildet also eine Raute. Wenn B und C eine Methode oder ein Attribut aus A unterschiedlich überschreiben, ist für D mehrdeutig, welche der beiden geerbten Varianten gelten soll. Deshalb erlaubt Java z.B. auch keine Mehrfachvererbung von Klassen."
+    },
+    {
+      "answer_id": "se-103-c-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 3],
+      "text": "Das Diamond Problem tritt bei Mehrfachvererbung auf. Wenn eine Klasse von zwei anderen Klassen gleichzeitig erbt, kann es zu Konflikten kommen, weil beide das Gleiche vererben können. Deshalb ist Mehrfachvererbung in Java auch verboten."
+    }
+  ]
+}

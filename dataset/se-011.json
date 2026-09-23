@@ -1,0 +1,61 @@
+{
+  "question_id": "se-011",
+  "topic": "Single-Responsibility-Principle (SOLID)",
+  "type": "begruendung",
+  "question": "Was besagt das Single-Responsibility-Principle (SRP)? Begründen Sie, warum seine Einhaltung die Wartbarkeit einer Software verbessert.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an R. C. Martin (SOLID) sowie Sommerville Kap. 7 'Design and Implementation'.",
+  "rubric": [
+    {"id": 1, "criterion": "SRP korrekt: eine Klasse/Modul soll genau eine Verantwortlichkeit haben", "points": 1},
+    {"id": 2, "criterion": "Präzisierung: nur ein Grund zur Änderung / fachlich eine Aufgabe", "points": 1},
+    {"id": 3, "criterion": "Begründung: Änderungen bleiben lokal, weniger ungewollte Seiteneffekte", "points": 1},
+    {"id": 4, "criterion": "Folge bei Verletzung: aufgeblähte 'God-Class', schlechter test-/änderbar", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-011-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Das Single-Responsibility-Principle besagt, dass eine Klasse genau eine Verantwortlichkeit haben soll. Präziser formuliert: Sie soll nur einen einzigen Grund haben, sich zu ändern, also fachlich nur für eine Aufgabe zuständig sein. Das verbessert die Wartbarkeit, weil eine Änderung an einer Aufgabe dann lokal in einer Klasse bleibt und keine ungewollten Seiteneffekte an unbeteiligten Funktionen auslöst. Verletzt man das Prinzip, entstehen aufgeblähte God-Classes, die viele Dinge gleichzeitig tun und dadurch schwer zu testen und zu ändern sind."
+    },
+    {
+      "answer_id": "se-011-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Nach dem SRP übernimmt jede Klasse nur eine Zuständigkeit. Der Kerngedanke ist, dass es nur einen Grund geben darf, weshalb man die Klasse anfassen muss. Dadurch wirkt sich eine fachliche Änderung nur an einer Stelle aus und reißt nicht an anderer Stelle etwas auf, was die Pflege erleichtert. Hält man sich nicht daran, wächst eine Klasse zu einem unübersichtlichen Alleskönner heran, der kaum noch sinnvoll testbar oder erweiterbar ist."
+    },
+    {
+      "answer_id": "se-011-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Sammelt eine Klasse mehrere Aufgaben, wird sie schnell zur God-Class, die niemand mehr gefahrlos ändern oder testen kann. Genau das verhindert das SRP, indem es jeder Klasse nur eine Verantwortung und damit nur einen Änderungsgrund zugesteht. So bleiben Anpassungen lokal und seiteneffektarm, was die Wartung deutlich vereinfacht."
+    },
+    {
+      "answer_id": "se-011-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Eine Klasse soll nur eine Verantwortung tragen, also nur einen Grund haben, geändert zu werden. Das hilft der Wartbarkeit, weil Änderungen dann auf eine Klasse begrenzt bleiben und nicht in andere Funktionen hineinwirken."
+    },
+    {
+      "answer_id": "se-011-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 3],
+      "text": "Das Prinzip sagt, dass eine Klasse nur für eine Sache zuständig sein soll. Das ist gut für die Wartung, weil man dann gezielt an einer Stelle ändern kann."
+    },
+    {
+      "answer_id": "se-011-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [4],
+      "text": "Wenn man das Prinzip nicht beachtet, bekommt man riesige Klassen, die alles machen und schwer zu warten sind. Das Prinzip besagt, dass jede Methode nur eine einzige Zeile Code enthalten darf."
+    },
+    {
+      "answer_id": "se-011-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Das Single-Responsibility-Principle besagt, dass jede Anforderung an die Software von genau einem Teammitglied verantwortet werden muss, damit im Projekt klar ist, wer bei Rückfragen zuständig ist. Das verbessert die Organisation des Teams."
+    },
+    {
+      "answer_id": "se-011-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "SRP heißt, dass jedes Programm nur eine einzige Hauptfunktion (main) haben darf, von der aus alles andere aufgerufen wird."
+    },
+    {
+      "answer_id": "se-011-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist das Prinzip, dass man Quellcode nicht doppelt schreiben soll, sondern alles nur einmal, damit es keine Wiederholungen gibt."
+    }
+  ]
+}

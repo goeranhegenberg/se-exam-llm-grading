@@ -1,0 +1,61 @@
+{
+  "question_id": "se-010",
+  "topic": "Entwurfsmuster Observer",
+  "type": "erklaerung",
+  "question": "Erklären Sie das Entwurfsmuster Observer (Beobachter): welches Problem es löst, wie es grundsätzlich funktioniert und welchen Vorteil es bringt.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Gamma et al. (GoF), Design Patterns, sowie Sommerville Kap. 7 'Design and Implementation'.",
+  "rubric": [
+    {"id": 1, "criterion": "Problem/Zweck: ein Objekt (Subject) soll mehrere abhängige Objekte über Zustandsänderungen informieren", "points": 1},
+    {"id": 2, "criterion": "Mechanismus: Observer registrieren sich beim Subject und werden bei Änderungen benachrichtigt (notify/update)", "points": 1},
+    {"id": 3, "criterion": "1:n-Beziehung zwischen Subject und Observern korrekt benannt", "points": 1},
+    {"id": 4, "criterion": "Vorteil: lose Kopplung (Subject kennt nur die Schnittstelle, Observer austauschbar/erweiterbar)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-010-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Das Observer-Muster löst das Problem, dass ein Objekt (das Subject) mehrere abhängige Objekte über Zustandsänderungen auf dem Laufenden halten muss. Die Observer registrieren sich dazu beim Subject und werden bei jeder Änderung automatisch benachrichtigt, indem das Subject eine notify-Methode aufruft, die bei den Observern update auslöst. Dabei besteht eine 1:n-Beziehung, ein Subject zu beliebig vielen Observern. Der Vorteil ist die lose Kopplung: Das Subject kennt nur die Observer-Schnittstelle, sodass man Beobachter hinzufügen oder austauschen kann, ohne das Subject zu ändern."
+    },
+    {
+      "answer_id": "se-010-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Beim Beobachter-Muster geht es darum, viele interessierte Objekte über Änderungen an einem zentralen Objekt zu informieren. Die interessierten Objekte tragen sich beim zentralen Objekt ein und werden von ihm bei einer Änderung über einen Aufruf benachrichtigt. So hängt ein Subject an vielen Beobachtern (eins zu n). Weil das Subject die Beobachter nur über eine gemeinsame Schnittstelle anspricht, bleibt die Kopplung locker und das System leicht erweiterbar."
+    },
+    {
+      "answer_id": "se-010-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Der große Vorteil des Observers ist die lose Kopplung über eine Schnittstelle, sodass Beobachter ergänzt werden können, ohne das beobachtete Objekt anzufassen. Technisch melden sich die Beobachter beim Subject an und werden bei Zustandsänderungen per Benachrichtigung aktualisiert. Es ist eine Eins-zu-viele-Beziehung, mit der ein Subject mehrere abhängige Objekte synchron hält."
+    },
+    {
+      "answer_id": "se-010-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Ein Subject hält mehrere abhängige Objekte über Änderungen informiert. Die Beobachter registrieren sich und werden bei einer Änderung benachrichtigt. Es ist eine Eins-zu-viele-Beziehung zwischen dem Subject und seinen Beobachtern."
+    },
+    {
+      "answer_id": "se-010-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Wenn sich der Zustand eines Objekts ändert, sollen andere Objekte davon erfahren. Dafür melden sich diese Objekte an und bekommen dann eine Benachrichtigung, sobald sich etwas ändert."
+    },
+    {
+      "answer_id": "se-010-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [4],
+      "text": "Das Observer-Muster sorgt für lose Kopplung zwischen Objekten. Dazu erzeugt eine Fabrikmethode bei Bedarf neue Objekte, sodass der Aufrufer die konkrete Klasse nicht kennen muss."
+    },
+    {
+      "answer_id": "se-010-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Das Observer-Muster stellt sicher, dass von einer Klasse nur eine einzige Instanz existiert, auf die alle Teile des Programms über einen globalen Zugriffspunkt zugreifen. Damit vermeidet man mehrfach angelegte Objekte und spart Speicher."
+    },
+    {
+      "answer_id": "se-010-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Der Observer ist ein Diagrammtyp in UML, mit dem man darstellt, welche Klasse welche andere beobachtet, und gehört damit zur Dokumentation und nicht zum Code."
+    },
+    {
+      "answer_id": "se-010-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist das Muster, bei dem man ein großes Objekt in kleinere zerlegt und sie über Schichten anordnet, damit der Code übersichtlicher wird."
+    }
+  ]
+}

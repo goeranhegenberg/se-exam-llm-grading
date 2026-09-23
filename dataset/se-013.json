@@ -1,0 +1,61 @@
+{
+  "question_id": "se-013",
+  "topic": "Assoziation, Aggregation und Komposition (UML)",
+  "type": "vergleich",
+  "question": "Unterscheiden Sie in UML-Klassendiagrammen die Beziehungen Assoziation, Aggregation und Komposition. Gehen Sie besonders auf den Unterschied zwischen Aggregation und Komposition ein.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville Kap. 5 'System Modeling' (UML-Klassendiagramme).",
+  "rubric": [
+    {"id": 1, "criterion": "Assoziation korrekt: allgemeine Beziehung ('kennt'/nutzt) zwischen Klassen", "points": 1},
+    {"id": 2, "criterion": "Aggregation korrekt: schwache Teil-Ganzes-Beziehung, Teil kann unabhängig existieren", "points": 1},
+    {"id": 3, "criterion": "Komposition korrekt: starke Teil-Ganzes-Beziehung, Existenz des Teils an das Ganze gebunden", "points": 1},
+    {"id": 4, "criterion": "Unterschied Aggregation/Komposition über Lebensdauer/Besitz klar herausgestellt", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-013-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Eine Assoziation ist die allgemeinste Beziehung und drückt aus, dass eine Klasse eine andere kennt oder nutzt. Aggregation und Komposition sind Spezialfälle einer Teil-Ganzes-Beziehung. Bei der Aggregation ist die Beziehung schwach: Das Teil kann auch unabhängig vom Ganzen existieren, zum Beispiel ein Student in einer Arbeitsgruppe, der die Gruppe überdauert. Bei der Komposition ist sie stark: Die Existenz des Teils ist an das Ganze gebunden, etwa Räume in einem Gebäude, die mit dem Abriss verschwinden. Der entscheidende Unterschied liegt also in der Lebensdauer und im Besitz: Bei Komposition gehört das Teil exklusiv zum Ganzen und stirbt mit ihm, bei Aggregation nicht."
+    },
+    {
+      "answer_id": "se-013-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Die Assoziation steht für eine ganz allgemeine Verbindung, bei der Objekte einer Klasse mit Objekten einer anderen in Beziehung stehen. Aggregation und Komposition verfeinern das zu einer Ganzes-Teil-Sicht. Aggregation ist locker, das Teil lebt unabhängig weiter, wenn das Ganze verschwindet. Komposition ist fest, das Teil existiert nur, solange das Ganze existiert. Der Kern des Unterschieds ist somit die Bindung der Lebensdauer: nur bei der Komposition reißt das Ganze sein Teil mit in den Untergang."
+    },
+    {
+      "answer_id": "se-013-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Aggregation und Komposition unterscheiden sich vor allem darin, ob das Teil das Ganze überdauert: Bei der Aggregation (schwach) ja, das Teil kann eigenständig existieren; bei der Komposition (stark) nein, es ist existenzabhängig und gehört exklusiv zum Ganzen. Beide sind Teil-Ganzes-Spezialfälle der Assoziation, die allgemein nur ausdrückt, dass eine Klasse eine andere kennt oder nutzt."
+    },
+    {
+      "answer_id": "se-013-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Die Assoziation ist eine allgemeine Verbindung zwischen Klassen. Die Aggregation ist eine Teil-Ganzes-Beziehung, bei der das Teil auch allein existieren kann. Bei der Komposition ist das Teil dagegen fest an das Ganze gebunden und existiert nur mit ihm."
+    },
+    {
+      "answer_id": "se-013-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 4],
+      "text": "Eine Assoziation verbindet zwei Klassen ganz allgemein. Aggregation und Komposition sind beides Teil-Ganzes-Beziehungen und unterscheiden sich darin, wie stark das Teil an das Ganze gebunden ist, bei der Komposition stärker als bei der Aggregation."
+    },
+    {
+      "answer_id": "se-013-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [3],
+      "text": "Bei der Komposition kann das Teil nicht ohne das Ganze existieren. Aggregation und Assoziation sind dagegen einfach zwei Wörter für eine Vererbungsbeziehung, bei der eine Klasse von einer anderen erbt."
+    },
+    {
+      "answer_id": "se-013-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Assoziation, Aggregation und Komposition bezeichnen die drei Sichtbarkeiten von Attributen in UML: Assoziation steht für public, Aggregation für protected und Komposition für private. Damit legt man fest, wer von außen auf ein Attribut zugreifen darf."
+    },
+    {
+      "answer_id": "se-013-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Das sind drei Phasen im Wasserfallmodell: In der Assoziation sammelt man Anforderungen, in der Aggregation programmiert man, und in der Komposition wird getestet."
+    },
+    {
+      "answer_id": "se-013-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Aggregation heißt, Daten in einer Datenbank zusammenzuzählen, und Komposition heißt, mehrere Bilder zu einem zusammenzusetzen. Mit Klassendiagrammen hat das nichts zu tun."
+    }
+  ]
+}

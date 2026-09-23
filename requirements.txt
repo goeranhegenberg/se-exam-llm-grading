@@ -1,0 +1,9 @@
+# Python-Abhängigkeiten für die Bewertungs-Pipeline (getestet mit Python 3.9).
+# Versionen mit oberer Schranke, damit die Installation unter 3.9 reproduzierbar bleibt.
+openai>=1.30,<2
+numpy>=1.24,<2.1
+pandas>=2.0,<2.3
+matplotlib>=3.7,<3.10
+python-dotenv>=1.0,<2
+tenacity>=8.2,<9
+jsonschema>=4.0,<5

@@ -1,0 +1,54 @@
+{
+  "models": {
+    "main": "z-ai/glm-5.2",
+    "sensitivity": "mistralai/mistral-small-2603",
+    "tertiary": "openai/gpt-oss-120b"
+  },
+  "provider": {
+    "base_url": "https://openrouter.ai/api/v1",
+    "note": "OpenRouter (OpenAI-kompatibel). Das modell-native Thinking wird pro Prompt-Version ueber run.thinking gesteuert (reasoning.enabled). Beide Modelle (GLM 5.2, Mistral Small 4) unterstuetzen reasoning und non-reasoning."
+  },
+  "sampling": {
+    "note": "Non-Reasoning-Versionen laufen determinismus-nah (temperature 0, top_p 1). Reasoning-/Thinking-Versionen laufen mit der vom Anbieter empfohlenen Sampling-Konfiguration, da Reasoning-Modelle bei greedy decoding (temp 0) zu Wiederholungsschleifen/degenerierter Argumentation neigen: GLM 5.2 temperature=1.0, top_p=0.95; Mistral Small 4 temperature=0.7, top_p=0.95; GPT-OSS-120B temperature=1.0, top_p=1.0. temperature_thinking/top_p_thinking sind je Modell hinterlegt (Schluessel wie in models).",
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "temperature_thinking": {
+      "main": 1.0,
+      "sensitivity": 0.7,
+      "tertiary": 1.0,
+      "default": 1.0
+    },
+    "top_p_thinking": {
+      "main": 0.95,
+      "sensitivity": 0.95,
+      "tertiary": 1.0,
+      "default": 0.95
+    },
+    "max_tokens": 1024,
+    "max_tokens_thinking": 4096,
+    "seed": 42
+  },
+  "run": {
+    "repetitions": 3,
+    "concurrency": 8,
+    "thinking": {
+      "v1_baseline": false,
+      "v2_begruendung": false,
+      "v3_thinking": true,
+      "v4_fewshot": true,
+      "v5_rubrik": true
+    },
+    "prompt_versions": [
+      "v1_baseline",
+      "v2_begruendung",
+      "v3_thinking",
+      "v4_fewshot",
+      "v5_rubrik"
+    ]
+  },
+  "paths": {
+    "dataset_dir": "dataset",
+    "prompts_dir": "prompts",
+    "results_dir": "results"
+  }
+}

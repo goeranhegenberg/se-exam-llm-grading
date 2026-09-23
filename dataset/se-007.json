@@ -1,0 +1,61 @@
+{
+  "question_id": "se-007",
+  "topic": "Verifikation vs. Validierung",
+  "type": "vergleich",
+  "question": "Erklären Sie den Unterschied zwischen Verifikation und Validierung in der Softwareentwicklung. Ordnen Sie beide kurz in die Qualitätssicherung ein.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville, Software Engineering (10. Aufl.), Kap. 8 'Software Testing' (V&V).",
+  "rubric": [
+    {"id": 1, "criterion": "Verifikation korrekt: Produkt entspricht der Spezifikation ('bauen wir das Produkt richtig')", "points": 1},
+    {"id": 2, "criterion": "Validierung korrekt: Produkt erfüllt die tatsächlichen Nutzeranforderungen ('bauen wir das richtige Produkt')", "points": 1},
+    {"id": 3, "criterion": "Klare Abgrenzung der beiden Begriffe zueinander (nicht verwechselt)", "points": 1},
+    {"id": 4, "criterion": "Einordnung: beide gehören zur Qualitätssicherung und ergänzen sich", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-007-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Verifikation prüft, ob das Produkt korrekt gemäß seiner Spezifikation gebaut wurde, ob wir also das Produkt richtig bauen. Validierung prüft dagegen, ob das gebaute Produkt die tatsächlichen Bedürfnisse der Nutzer erfüllt, ob wir also das richtige Produkt bauen. Beide sind klar zu unterscheiden: Verifikation bezieht sich auf die Spezifikation, Validierung auf den realen Bedarf. Sie gehören beide zur Qualitätssicherung und ergänzen sich, weil eine Software spezifikationskonform und trotzdem am Nutzer vorbei entwickelt sein kann."
+    },
+    {
+      "answer_id": "se-007-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Bei der Verifikation geht es um die Frage, ob die Umsetzung der vorgegebenen Spezifikation entspricht. Die Validierung stellt die andere Frage, nämlich ob das Ergebnis überhaupt das ist, was die Anwender brauchen. Das sind zwei unterschiedliche Prüfrichtungen und sollten nicht vermischt werden. Als Teil der Qualitätssicherung greifen sie ineinander, denn beide zusammen sichern erst ein brauchbares Produkt ab."
+    },
+    {
+      "answer_id": "se-007-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Verifikation und Validierung sind die zwei sich ergänzenden Säulen der Qualitätssicherung. Validierung meint dabei den Abgleich mit den echten Nutzeranforderungen (das richtige Produkt), Verifikation den Abgleich mit der Spezifikation (das Produkt richtig). Genau in diesem Bezugspunkt unterscheiden sie sich, weshalb man sie auseinanderhalten muss."
+    },
+    {
+      "answer_id": "se-007-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Verifikation heißt, die Software gegen die Spezifikation zu prüfen, also ob sie richtig gebaut ist. Validierung heißt, gegen die echten Anforderungen der Nutzer zu prüfen, also ob das Richtige gebaut wurde. Das sind klar zwei verschiedene Blickwinkel, die man nicht verwechseln darf."
+    },
+    {
+      "answer_id": "se-007-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Bei der Verifikation schaut man, ob die Software die Spezifikation einhält. Bei der Validierung schaut man, ob die Software am Ende das tut, was die Nutzer eigentlich erwarten."
+    },
+    {
+      "answer_id": "se-007-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [2],
+      "text": "Validierung prüft, ob die Software die Anforderungen der Anwender erfüllt. Verifikation ist eigentlich dasselbe, nur dass es der Entwickler statt der Kunde durchführt."
+    },
+    {
+      "answer_id": "se-007-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Verifikation bedeutet, dass der Kunde das fertige Produkt abnimmt und bestätigt, dass es seinen Wünschen entspricht. Validierung ist hingegen der interne Nachweis, dass der Quellcode fehlerfrei kompiliert und keine Syntaxfehler enthält."
+    },
+    {
+      "answer_id": "se-007-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Verifikation und Validierung sind zwei Bezeichnungen für denselben Vorgang, nämlich das Durchführen von Unit-Tests am Ende eines Sprints."
+    },
+    {
+      "answer_id": "se-007-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Verifizieren heißt den Code ordentlich zu formatieren, und validieren heißt, die Dokumentation dazu zu schreiben."
+    }
+  ]
+}

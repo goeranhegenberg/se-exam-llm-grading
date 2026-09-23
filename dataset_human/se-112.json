@@ -1,0 +1,29 @@
+{
+  "question_id": "se-112",
+  "topic": "Grammatiken und reguläre Ausdrücke",
+  "type": "anwendung",
+  "question": "Betrachten Sie folgende kontextfreie Grammatik. S ist das Startsymbol, große Buchstaben sind Nichtterminal-Symbole, kleine Buchstaben sind Terminal-Symbole. Der griechische Buchstabe ε repräsentiert einen leeren String (keine Zeichen).\n\nS -> A B C\nA -> Aa | ε\nB -> Bb | ε\nC -> Cc | ε\n\nErstellen Sie einen regulären Ausdruck, der dieselbe Sprache akzeptiert.",
+  "max_points": 5,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 10. Bewertungsschema: 5 P. komplett korrekt, 1-2 P. für a+b+c+ bzw. richtige Richtung.",
+  "rubric": [
+    {"id": 1, "criterion": "Struktur erkannt: erst a's, dann b's, dann c's in fester Reihenfolge", "points": 2},
+    {"id": 2, "criterion": "Quantoren korrekt: alle drei Teile optional (Kleene-Stern), auch das leere Wort wird akzeptiert (a*b*c*)", "points": 3}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-112-a-base", "points": 5, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "a*b*c*\n\nJedes der drei Nichtterminale A, B und C erzeugt beliebig viele Wiederholungen seines Terminals, kann aber wegen der ε-Produktion auch zum leeren String abgeleitet werden. Deshalb der Kleene-Stern statt Plus: Auch Wörter ganz ohne a's, b's oder c's (bis hin zum leeren Wort) gehören zur Sprache, die Reihenfolge a's vor b's vor c's ist durch S -> A B C fest vorgegeben."
+    },
+    {
+      "answer_id": "se-112-b-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "a+b+c+\n\nDie Grammatik erzeugt erst a's, dann b's und dann c's, also müssen die Buchstaben in dieser Reihenfolge vorkommen."
+    },
+    {
+      "answer_id": "se-112-c-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "(a|b|c)*\n\nDie Sprache besteht aus den Buchstaben a, b und c in beliebiger Anzahl, also passt ein Ausdruck, der beliebige Folgen dieser drei Buchstaben zulässt."
+    }
+  ]
+}

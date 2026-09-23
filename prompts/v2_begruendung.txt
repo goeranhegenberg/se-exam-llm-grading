@@ -1,0 +1,12 @@
+Bewerte die folgende Antwort auf eine Software-Engineering-Klausurfrage.
+
+Frage:
+{{frage}}
+
+Studentische Antwort:
+{{antwort}}
+
+Begründe zuerst kurz, wie vollständig und fachlich korrekt die Antwort die Frage beantwortet, und vergib erst danach eine Punktzahl von 0 bis {{max_punkte}}.
+
+Gib das Ergebnis als JSON in genau diesem Format zurück. Wichtig: Das Feld "begruendung" steht vor dem Feld "punkte" und wird zuerst ausgefüllt.
+{"begruendung": "<kurze Begründung>", "punkte": <Zahl von 0 bis {{max_punkte}}>}

@@ -1,0 +1,61 @@
+{
+  "question_id": "se-016",
+  "topic": "Fehler, Defekt und Ausfall (error/fault/failure)",
+  "type": "definition",
+  "question": "Definieren Sie die Begriffe Fehler (error), Defekt/Fehlerzustand (fault) und Ausfall (failure) und beschreiben Sie ihren Zusammenhang.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville Kap. 11 'Reliability Engineering' sowie IEEE-/ISTQB-Terminologie.",
+  "rubric": [
+    {"id": 1, "criterion": "error korrekt: menschlicher Irrtum (z.B. des Entwicklers)", "points": 1},
+    {"id": 2, "criterion": "fault korrekt: dadurch entstandener Defekt/Fehlerzustand im System (im Code)", "points": 1},
+    {"id": 3, "criterion": "failure korrekt: beobachtbares Abweichen vom Soll-Verhalten zur Laufzeit", "points": 1},
+    {"id": 4, "criterion": "Zusammenhang/Kausalkette: Irrtum -> Defekt -> (bei Ausführung) Ausfall", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-016-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Ein Fehler (error) ist ein menschlicher Irrtum, etwa ein Denkfehler des Entwicklers beim Programmieren. Dieser Irrtum hinterlässt einen Defekt oder Fehlerzustand (fault) im Code, also die fehlerhafte Stelle selbst. Ein Ausfall (failure) ist schließlich das nach außen beobachtbare Abweichen vom geforderten Verhalten, das auftritt, wenn die defekte Stelle zur Laufzeit ausgeführt wird. Der Zusammenhang ist eine Kausalkette: Der menschliche Irrtum erzeugt einen Defekt im System, und dieser Defekt führt bei seiner Ausführung zu einem Ausfall."
+    },
+    {
+      "answer_id": "se-016-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Mit error meint man den Irrtum eines Menschen, zum Beispiel ein falsches Verständnis des Entwicklers. Daraus wird ein fault, also ein Defekt im Programmtext. Wird dieser Defekt ausgeführt und das Programm verhält sich anders als gefordert, spricht man von einem failure, dem Ausfall. Die drei hängen ursächlich zusammen: aus dem Irrtum entsteht der Defekt, und der Defekt zeigt sich bei der Ausführung als Ausfall."
+    },
+    {
+      "answer_id": "se-016-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Ein failure ist das sichtbare Fehlverhalten zur Laufzeit. Es wird verursacht durch einen fault, den Defekt im Code, der wiederum auf einen error, den menschlichen Irrtum, zurückgeht. Damit ergibt sich die Kette Irrtum, Defekt, Ausfall: Der Mensch irrt, hinterlässt eine fehlerhafte Stelle, und diese schlägt bei Ausführung als Ausfall durch."
+    },
+    {
+      "answer_id": "se-016-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Ein error ist ein menschlicher Irrtum, ein fault der daraus folgende Defekt im Code und ein failure das fehlerhafte Verhalten, das man zur Laufzeit beobachtet."
+    },
+    {
+      "answer_id": "se-016-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [2, 3],
+      "text": "Ein fault ist eine fehlerhafte Stelle im Programmcode. Wird sie ausgeführt, kann es zu einem failure kommen, also dazu, dass sich das Programm falsch verhält."
+    },
+    {
+      "answer_id": "se-016-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [3],
+      "text": "Ein failure ist, wenn das Programm abstürzt oder etwas Falsches tut. Error und fault sind dagegen einfach zwei englische Wörter für genau dasselbe, nämlich diesen Absturz."
+    },
+    {
+      "answer_id": "se-016-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Die drei Begriffe beschreiben die Schweregrade eines Tickets im Bugtracker: error ist niedrig, fault ist mittel und failure ist die höchste Prioritätsstufe, bei der sofort reagiert werden muss. Man ordnet jedes gemeldete Problem in eine dieser Stufen ein."
+    },
+    {
+      "answer_id": "se-016-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "error, fault und failure sind drei Compiler-Meldungen: error stoppt die Übersetzung, fault ist eine Warnung und failure heißt, dass das Programm nicht verlinkt werden konnte."
+    },
+    {
+      "answer_id": "se-016-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das sind die drei Phasen eines Stromausfalls im Rechenzentrum: erst der error, dann der fault und am Ende das komplette failure, wenn die Server ausgehen."
+    }
+  ]
+}

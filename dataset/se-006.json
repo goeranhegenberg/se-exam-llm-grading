@@ -1,0 +1,61 @@
+{
+  "question_id": "se-006",
+  "topic": "Vorgehensmodelle: Wasserfall vs. iterativ/agil",
+  "type": "begruendung",
+  "question": "Charakterisieren Sie das Wasserfallmodell und nennen Sie einen typischen Nachteil. Grenzen Sie es gegen ein iteratives bzw. agiles Vorgehen ab und nennen Sie einen Vorteil des iterativen Vorgehens.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an UZH-Musterklausur SE, Aufgabe 1.2, sowie Sommerville, Software Engineering.",
+  "rubric": [
+    {"id": 1, "criterion": "Wasserfallmodell korrekt charakterisiert (sequenzielles Phasenmodell, Phasen werden nacheinander durchlaufen)", "points": 1},
+    {"id": 2, "criterion": "Ein typischer Nachteil des Wasserfallmodells genannt (z.B. späte Fehlererkennung, geringe Flexibilität, Anforderungen müssen früh feststehen)", "points": 1},
+    {"id": 3, "criterion": "Iteratives/agiles Vorgehen korrekt beschrieben (inkrementell, in mehreren Zyklen, frühe lauffähige Teilergebnisse)", "points": 1},
+    {"id": 4, "criterion": "Ein Vorteil des iterativen Vorgehens genannt (z.B. frühes Feedback, bessere Reaktion auf Änderungen)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-006-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Das Wasserfallmodell ist ein sequenzielles Phasenmodell, bei dem die Phasen wie Analyse, Entwurf, Implementierung und Test streng nacheinander durchlaufen werden. Ein typischer Nachteil ist, dass Fehler oder geänderte Anforderungen oft erst spät auffallen, weil die Anforderungen schon zu Beginn vollständig feststehen müssen und Rücksprünge schwierig sind. Beim iterativen bzw. agilen Vorgehen wird die Software dagegen inkrementell in mehreren Zyklen entwickelt, sodass früh lauffähige Teilergebnisse entstehen. Ein Vorteil daran ist, dass man frühes Feedback erhält und flexibler auf Änderungen reagieren kann."
+    },
+    {
+      "answer_id": "se-006-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Beim Wasserfallmodell werden die Entwicklungsphasen strikt der Reihe nach abgearbeitet, eine Phase beginnt erst, wenn die vorige abgeschlossen ist. Nachteilig ist, dass spät erkannte Fehler teuer werden und das Modell unflexibel ist, wenn sich Anforderungen ändern. Ein iteratives Vorgehen liefert die Software dagegen schrittweise in mehreren Durchläufen mit frühen Zwischenständen. Sein Vorteil ist die Möglichkeit, laufend Rückmeldungen einzuholen und Anpassungen vorzunehmen."
+    },
+    {
+      "answer_id": "se-006-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Iteratives Vorgehen entwickelt das System inkrementell in mehreren Zyklen und hat den Vorteil, dass früh Feedback möglich ist und Änderungen leicht einfließen. Im Gegensatz dazu steht das Wasserfallmodell, ein sequenzielles Phasenmodell, dessen Phasen strikt nacheinander ablaufen. Dessen Nachteil ist gerade die geringe Flexibilität: Fehler und neue Anforderungen lassen sich nur schwer und spät berücksichtigen."
+    },
+    {
+      "answer_id": "se-006-teil-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 3],
+      "text": "Das Wasserfallmodell ist ein Phasenmodell, bei dem die einzelnen Phasen nacheinander abgearbeitet werden. Beim iterativen Vorgehen entwickelt man die Software stattdessen schrittweise in mehreren Zyklen mit Zwischenergebnissen."
+    },
+    {
+      "answer_id": "se-006-teil-para1", "points": 2, "level": "teil", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 3],
+      "text": "Beim Wasserfallmodell laufen die Phasen streng sequenziell ab. Das iterative Modell unterscheidet sich davon, indem es in mehreren aufeinanderfolgenden Iterationen inkrementell entwickelt."
+    },
+    {
+      "answer_id": "se-006-teil-reform1", "points": 2, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 3],
+      "text": "Wasserfall = eine Phase nach der anderen, der Reihe nach. Iterativ = man macht es in mehreren Runden Stück für Stück."
+    },
+    {
+      "answer_id": "se-006-null-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Beim Wasserfallmodell arbeitet man in kurzen Sprints und passt den Plan ständig an, während man beim agilen Modell alle Phasen genau einmal streng nacheinander durchläuft."
+    },
+    {
+      "answer_id": "se-006-null-para1", "points": 0, "level": "null", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [],
+      "text": "Das Wasserfallmodell ist das besonders flexible Modell mit täglichen Anpassungen, und das agile Vorgehen ist das starre, bei dem alles vorher festgelegt wird."
+    },
+    {
+      "answer_id": "se-006-null-reform1", "points": 0, "level": "null", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Der Unterschied ist nur die Teamgröße: Wasserfall macht man allein, agil macht man immer mit genau zehn Leuten."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "question_id": "se-107",
+  "topic": "Architectural Tactics",
+  "type": "anwendung",
+  "question": "Eine Motorsteuerungs-Architektur (engine control) enthält folgende Komponenten: Eine Monitor-Komponente ist über die Schnittstellen Reset und Heartbeat mit einer Complex-Control-Komponente verbunden und meldet über FailureMode an eine Selection-Komponente. Sensordaten gehen sowohl an die Complex Control als auch an eine Simple Control; beide liefern ihre Ausgaben an die Selection-Komponente, die die Aktoren ansteuert. Monitor und Selection besitzen zusätzlich eine einfache eigene Steuerungsfähigkeit. Wie heißen die beiden architectural tactics, die in dieser Architektur realisiert wurden?",
+  "max_points": 2,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 7. Bewertungsschema: je korrekt benannter Taktik 1 P.; unpräzise Alternativen (z.B. Fault Recovery statt Redundancy) geben keinen Punkt.",
+  "rubric": [
+    {"id": 1, "criterion": "Heartbeat als Taktik genannt", "points": 1},
+    {"id": 2, "criterion": "Redundancy (Redundanz) als Taktik genannt", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-107-a-base", "points": 1, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "Die erste Taktik ist Heartbeat. Die Monitor-Komponente überwacht über das Heartbeat-Interface, ob die Complex Control noch lebt (Fault Detection). Die zweite Taktik ist Failover bzw. Fault Recovery, weil bei einem erkannten Fehler über die Selection auf die Simple Control umgeschaltet wird."
+    },
+    {
+      "answer_id": "se-107-b-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Die beiden verwendeten Taktiken sind Monitoring und Selection, weil die Monitor-Komponente das System überwacht und die Selection-Komponente die richtige Steuerung auswählt."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "question_id": "se-014",
+  "topic": "Technische Schuld",
+  "type": "erklaerung",
+  "question": "Erklären Sie den Begriff 'technische Schuld' (technical debt): was damit gemeint ist, wie sie entsteht und welche Folgen sie hat.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville Kap. 9 'Software Evolution' sowie W. Cunningham (Technical-Debt-Metapher).",
+  "rubric": [
+    {"id": 1, "criterion": "Definition: Folgekosten durch bewusst oder unbewusst suboptimale/schnelle Lösungen", "points": 1},
+    {"id": 2, "criterion": "Schuld-/Zins-Metapher: muss später 'zurückgezahlt' werden, sonst wächst der Aufwand", "points": 1},
+    {"id": 3, "criterion": "Ursachen genannt (Zeitdruck, Abkürzungen, fehlende Tests/Doku, Alt-Abhängigkeiten)", "points": 1},
+    {"id": 4, "criterion": "Folgen/Umgang: erschwert künftige Änderungen; Abbau durch Refactoring/Management", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-014-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Technische Schuld bezeichnet die späteren Folgekosten, die entstehen, wenn man im Entwurf oder Code bewusst oder unbewusst eine schnelle, suboptimale Lösung wählt statt der sauberen. Die Metapher der Schuld besagt, dass diese Abkürzung wie ein Kredit ist: Man muss sie später durch Nacharbeit 'zurückzahlen', und je länger man wartet, desto höher werden die 'Zinsen' in Form von Mehraufwand. Sie entsteht typischerweise durch Zeitdruck, fehlende Tests oder Dokumentation und veraltete Abhängigkeiten. Die Folge ist, dass künftige Änderungen immer schwerer und riskanter werden; abgebaut wird sie durch gezieltes Refactoring und bewusstes Management."
+    },
+    {
+      "answer_id": "se-014-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Mit technischer Schuld meint man den Nachteil, den man sich einhandelt, wenn man eine Sache schnell und unsauber statt richtig löst. Wie bei einem Darlehen zahlt man dafür später drauf, und der Aufwand wächst mit der Zeit, wenn man die Schuld nicht tilgt. Auslöser sind meist enge Deadlines, weggelassene Tests oder alte, nicht gepflegte Bibliotheken. In der Folge wird das System zunehmend schwerer zu ändern, weshalb man die Schuld durch Refactoring planvoll abbauen sollte."
+    },
+    {
+      "answer_id": "se-014-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Wer unter Zeitdruck Abkürzungen nimmt, Tests und Doku weglässt oder auf alten Abhängigkeiten sitzen bleibt, baut technische Schuld auf, also die Folgekosten einer bewusst unsauberen Lösung. Wie ein Kredit muss sie zurückgezahlt werden, sonst steigen die Zinsen als wachsender Mehraufwand. Das macht spätere Änderungen teuer und fehleranfällig, weshalb man die Schuld durch Refactoring aktiv managen muss."
+    },
+    {
+      "answer_id": "se-014-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Technische Schuld sind die späteren Kosten einer schnellen, unsauberen Lösung. Wie eine echte Schuld muss man sie irgendwann zurückzahlen, sonst wird es teurer. Sie entsteht vor allem durch Zeitdruck und weggelassene Tests."
+    },
+    {
+      "answer_id": "se-014-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 4],
+      "text": "Technische Schuld bedeutet, dass man durch eine unsaubere Umsetzung Nachteile aufbaut. Das führt dazu, dass spätere Änderungen schwieriger werden, und man muss es irgendwann mit Aufräumarbeiten beheben."
+    },
+    {
+      "answer_id": "se-014-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [3],
+      "text": "Technische Schuld entsteht durch Zeitdruck und schludrige Arbeit im Projekt. Konkret meint der Begriff die Geldsumme, die ein Projekt am Ende über das Budget hinaus gekostet hat."
+    },
+    {
+      "answer_id": "se-014-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Technische Schuld bezeichnet die Lizenzgebühren und Wartungsverträge, die ein Unternehmen für die eingesetzte Software und Hardware an seine Anbieter zahlen muss. Steigen diese laufenden Kosten, spricht man von hoher technischer Schuld."
+    },
+    {
+      "answer_id": "se-014-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Technische Schuld ist die Anzahl offener Tickets im Bugtracker. Hat ein Team mehr als hundert offene Tickets, gilt das Projekt als überschuldet und muss eingestellt werden."
+    },
+    {
+      "answer_id": "se-014-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist die Pflicht, dass Entwickler nach Feierabend unbezahlt nacharbeiten müssen, wenn sie tagsüber zu langsam programmiert haben."
+    }
+  ]
+}

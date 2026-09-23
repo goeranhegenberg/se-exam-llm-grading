@@ -1,0 +1,36 @@
+Bewerte die folgende Antwort auf eine Software-Engineering-Klausurfrage streng anhand der vorgegebenen Bewertungsrubrik, so wie es ein erfahrener Korrektor täte.
+
+Gehe dabei in zwei Schritten vor:
+1. Prüfe für jedes Rubrik-Kriterium, ob die studentische Antwort es ganz, teilweise oder gar nicht erfüllt.
+2. Summiere die erreichten Punkte zu einer fairen Gesamtpunktzahl. Vergib Teilpunkte für teilweise erfüllte Kriterien und bestrafe sachlich korrekte, nur knappe Antworten nicht.
+
+Orientiere dich am Bewertungsstil der folgenden Beispiele.
+
+=== Beispiel 1 (volle Punktzahl, 2 von 2) ===
+Frage: Was versteht man unter einer Schnittstelle (Interface) in der objektorientierten Programmierung?
+Bewertungsrubrik (maximal 2 Punkte):
+1. Schnittstelle als Satz von Methodensignaturen ohne Implementierung beschrieben (max. 1 P.)
+2. Zweck genannt (Entkopplung, Austauschbarkeit bzw. Polymorphie) (max. 1 P.)
+Studentische Antwort: "Ein Interface legt fest, welche Methoden eine Klasse anbieten muss, enthält aber selbst keinen Code. Dadurch kann man Implementierungen austauschen, ohne den aufrufenden Code zu ändern."
+Bewertung: {"begruendung": "Kriterium 1 erfüllt (Signaturen ohne Implementierung), Kriterium 2 erfüllt (Austauschbarkeit/Entkopplung genannt).", "punkte": 2}
+
+=== Beispiel 2 (teilweise, 1 von 2) ===
+Frage: Was versteht man unter Versionskontrolle (z. B. Git)?
+Bewertungsrubrik (maximal 2 Punkte):
+1. Verwaltung und Nachverfolgung von Änderungen am Quellcode über die Zeit (max. 1 P.)
+2. Nutzen genannt (Zusammenarbeit, Wiederherstellbarkeit früherer Stände) (max. 1 P.)
+Studentische Antwort: "Mit Versionskontrolle speichert man verschiedene Versionen seines Codes."
+Bewertung: {"begruendung": "Kriterium 1 erfüllt (Verwaltung von Versionen), Kriterium 2 nicht erfüllt (kein konkreter Nutzen genannt).", "punkte": 1}
+
+=== Zu bewertende Aufgabe ===
+Frage:
+{{frage}}
+
+Bewertungsrubrik (maximal {{max_punkte}} Punkte):
+{{rubrik}}
+
+Studentische Antwort:
+{{antwort}}
+
+Vergib eine Punktzahl von 0 bis {{max_punkte}}. Gib das Ergebnis als JSON in genau diesem Format zurück (das Feld "begruendung" steht vor dem Feld "punkte"):
+{"begruendung": "<kurze Begründung mit Bezug auf die Rubrik-Kriterien>", "punkte": <Zahl von 0 bis {{max_punkte}}>}

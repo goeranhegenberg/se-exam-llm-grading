@@ -1,0 +1,12 @@
+[run 20260908T082502Z] Modell=openai/gpt-oss-120b (tertiary) Versionen=['v5_rubrik'] Concurrency=8
+  Datensatz: 5 Fragen, 35 Antworten -> 105 Modellaufrufe
+  Ausgabe: results/raw_real/grading_tertiary.jsonl
+  25/105 Aufrufe (Parse-Fehler: 2, API-Fehler: 0)
+  50/105 Aufrufe (Parse-Fehler: 3, API-Fehler: 0)
+  75/105 Aufrufe (Parse-Fehler: 3, API-Fehler: 0)
+  100/105 Aufrufe (Parse-Fehler: 3, API-Fehler: 0)
+  105/105 Aufrufe (Parse-Fehler: 3, API-Fehler: 0)
+--- fertig ---
+  Aufrufe: 105, Parse-Fehler: 3, API-Fehler: 0
+  Tokens: prompt=112300, completion=45119, reasoning=38948
+  Ergebnisdatei: results/raw_real/grading_tertiary.jsonl

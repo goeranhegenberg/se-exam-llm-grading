@@ -1,0 +1,61 @@
+{
+  "question_id": "se-003",
+  "topic": "Äquivalenzklassenmethode",
+  "type": "anwendung",
+  "question": "Was versteht man beim Testen unter der Äquivalenzklassenmethode, und warum reduziert sie die Anzahl nötiger Testfälle? Geben Sie ein kurzes Beispiel.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an UZH-Musterklausur SE, Aufgabe 2.6a (Black-Box-Testentwurf).",
+  "rubric": [
+    {"id": 1, "criterion": "Prinzip: Aufteilung des Eingabebereichs in Klassen mit erwartet gleichem Programmverhalten", "points": 1},
+    {"id": 2, "criterion": "Unterscheidung gültige vs. ungültige Äquivalenzklassen genannt", "points": 1},
+    {"id": 3, "criterion": "Begründung der Reduktion: ein Repräsentant je Klasse genügt, daher weniger Testfälle", "points": 1},
+    {"id": 4, "criterion": "Konkretes, korrektes Beispiel (Wertebereich mit gültiger und ungültiger Klasse)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-003-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Bei der Äquivalenzklassenmethode teilt man den Eingabebereich einer Funktion in Klassen auf, deren Werte das Programm voraussichtlich gleich behandelt. Dabei unterscheidet man gültige und ungültige Äquivalenzklassen. Die Zahl der Testfälle sinkt, weil pro Klasse ein einziger Repräsentant genügt, da für die übrigen Werte der Klasse dasselbe Verhalten erwartet wird. Beispiel: Akzeptiert ein Eingabefeld Altersangaben von 0 bis 120, bildet man die gültige Klasse 0 bis 120 sowie die ungültigen Klassen 'kleiner als 0' und 'größer als 120' und testet je einen Wert daraus."
+    },
+    {
+      "answer_id": "se-003-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Die Methode gruppiert die möglichen Eingaben in Äquivalenzklassen, also Mengen von Werten, die zum selben erwarteten Verhalten führen. Man trennt dabei zulässige von unzulässigen Klassen. Weil innerhalb einer Klasse jeder Wert gleich behandelt werden sollte, reicht ein Stellvertreter pro Klasse, wodurch deutlich weniger Testfälle nötig sind. Zum Beispiel bei einem Monatsfeld: gültige Klasse 1 bis 12, ungültige Klassen 0 und 13 und größer."
+    },
+    {
+      "answer_id": "se-003-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Ein Beispiel vorweg: Für ein Feld, das Noten von 1 bis 6 akzeptiert, bildet man die gültige Klasse 1 bis 6 und die ungültigen Klassen kleiner 1 und größer 6. Dahinter steht das Prinzip, den Eingabebereich in Klassen mit gleichem erwartetem Verhalten zu zerlegen und in gültige und ungültige zu unterteilen. Da ein Repräsentant je Klasse ausreicht, sinkt die Zahl der nötigen Testfälle erheblich."
+    },
+    {
+      "answer_id": "se-003-teil-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 3],
+      "text": "Bei der Äquivalenzklassenbildung unterteilt man die möglichen Eingaben in Gruppen, bei denen man dasselbe Verhalten des Programms erwartet. Dadurch braucht man weniger Testfälle, weil ein Vertreter pro Gruppe ausreicht."
+    },
+    {
+      "answer_id": "se-003-teil-para1", "points": 2, "level": "teil", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 3],
+      "text": "Man fasst Eingaben, die voraussichtlich gleich verarbeitet werden, zu Klassen zusammen. Statt alle Werte zu prüfen, testet man nur einen Repräsentanten pro Klasse, was die Zahl der Testfälle reduziert."
+    },
+    {
+      "answer_id": "se-003-teil-reform1", "points": 2, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 3],
+      "text": "Im Prinzip steckt man Eingaben, die gleich behandelt werden, in dieselbe Schublade und testet dann nur einen Wert pro Schublade. Spart Testfälle."
+    },
+    {
+      "answer_id": "se-003-null-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Die Äquivalenzklassenmethode bedeutet, dass man wirklich jeden einzelnen möglichen Eingabewert nacheinander durchtestet, um ganz sicher zu gehen, dass nichts übersehen wird."
+    },
+    {
+      "answer_id": "se-003-null-para1", "points": 0, "level": "null", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [],
+      "text": "Bei dieser Methode probiert man einfach alle Eingaben vollständig aus, damit jeder Wert mindestens einmal getestet wurde."
+    },
+    {
+      "answer_id": "se-003-null-reform1", "points": 0, "level": "null", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist eine Methode, bei der man die Variablen im Code gleich benennt, damit sie äquivalent sind und der Compiler weniger Fehler meldet."
+    }
+  ]
+}

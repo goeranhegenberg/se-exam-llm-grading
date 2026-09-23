@@ -1,0 +1,25 @@
+{
+  "question_id": "se-111",
+  "topic": "Reguläre Ausdrücke",
+  "type": "anwendung",
+  "question": "Der folgende reguläre Ausdruck definiert eine Sprache von Identifiers, aufgebaut aus kleinen Buchstaben und Unterstrichen:\n\n(\"_\" | [\"a\"-\"z\"])*\n\nSchlagen Sie eine Verbesserung dieses Ausdrucks vor, sodass ein Identifier nicht mehr nur aus Unterstrichen bestehen kann (wenn er also mit Unterstrichen beginnt, muss er einige Buchstaben und möglicherweise weitere Unterstriche gemischt enthalten).",
+  "max_points": 5,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 10. Bewertungsschema: 5 P. komplett korrekt, 4 P. bei kleinen Schwächen, 2 P. bei richtiger Richtung.",
+  "rubric": [
+    {"id": 1, "criterion": "Grundidee korrekt: der Ausdruck erzwingt mindestens einen Buchstaben im Identifier", "points": 2},
+    {"id": 2, "criterion": "Ausdruck weitgehend korrekt, höchstens kleine Schwächen (z.B. einzelne eigentlich zulässige Identifier ausgeschlossen)", "points": 2},
+    {"id": 3, "criterion": "Ausdruck vollständig korrekt: akzeptiert genau alle Mischungen aus Buchstaben und Unterstrichen mit mindestens einem Buchstaben", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-111-a-base", "points": 4, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "(\"_\" | [\"a\"-\"z\"])* [\"a\"-\"z\"]\n\nEine Vorraussetzung ist, dass der Identifier mit einem Buchstaben endet. Dadurch enthält jeder korrekte Identifier mindestens einen Buchstaben und kann nicht mehr nur aus Unterstrichen bestehen, davor sind Buchstaben und Unterstriche ganz beliebig gemischt erlaubt."
+    },
+    {
+      "answer_id": "se-111-b-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "\"_\"* [\"a\"-\"z\"]+\n\nDamit muss nach den Unterstrichen mindestens ein Buchstabe kommen, also kann der Identifier nicht mehr nur aus Unterstrichen bestehen."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "question_id": "se-009",
+  "topic": "Zyklomatische Komplexität",
+  "type": "anwendung",
+  "question": "Der Kontrollflussgraph einer Methode hat 9 Kanten und 8 Knoten (eine zusammenhängende Komponente). Berechnen Sie die zyklomatische Komplexität nach McCabe und interpretieren Sie das Ergebnis kurz.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville, Software Engineering, Kap. 8, sowie McCabe (1976), Cyclomatic Complexity.",
+  "rubric": [
+    {"id": 1, "criterion": "Korrekte Formel genannt (M = E - N + 2P bzw. Anzahl Entscheidungen + 1)", "points": 1},
+    {"id": 2, "criterion": "Werte korrekt eingesetzt (E=9, N=8, P=1)", "points": 1},
+    {"id": 3, "criterion": "Korrektes Ergebnis: M = 3", "points": 1},
+    {"id": 4, "criterion": "Sinnvolle Interpretation (Zahl unabhängiger Pfade / Mindestzahl an Testfällen / Komplexitätsmaß)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-009-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Nach McCabe gilt M = E - N + 2P. Mit E = 9 Kanten, N = 8 Knoten und P = 1 Komponente ergibt sich M = 9 - 8 + 2 = 3. Die zyklomatische Komplexität ist also 3. Das bedeutet, dass es drei linear unabhängige Pfade durch die Methode gibt, weshalb man mindestens drei Testfälle braucht, um alle Pfade abzudecken; zugleich ist 3 ein eher niedriger, gut wartbarer Komplexitätswert."
+    },
+    {
+      "answer_id": "se-009-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Die Formel lautet M = E - N + 2P. Eingesetzt mit 9 Kanten, 8 Knoten und einer Komponente bekomme ich M = 9 - 8 + 2 = 3. Eine Komplexität von 3 heißt, dass drei unabhängige Pfade existieren und damit drei Testfälle das Minimum für vollständige Pfadabdeckung sind, was insgesamt für eine überschaubare Methode spricht."
+    },
+    {
+      "answer_id": "se-009-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Das Ergebnis ist M = 3, denn 9 - 8 + 2*1 = 3 nach der McCabe-Formel M = E - N + 2P. Drei ist die Anzahl der unabhängigen Pfade und damit die Mindestanzahl an Testfällen; der Wert ist niedrig, die Methode also gut testbar."
+    },
+    {
+      "answer_id": "se-009-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "M = E - N + 2P = 9 - 8 + 2 = 3. Die zyklomatische Komplexität ist also 3."
+    },
+    {
+      "answer_id": "se-009-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 4],
+      "text": "Man nimmt die Formel M = E - N + 2P. Die Komplexität gibt an, wie viele unabhängige Pfade es gibt und wie viele Testfälle man mindestens braucht. Beim Einsetzen komme ich auf einen Wert von 4."
+    },
+    {
+      "answer_id": "se-009-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [3],
+      "text": "Die zyklomatische Komplexität ist 3. Man berechnet sie, indem man einfach die Anzahl der Knoten im Kontrollflussgraphen durch zwei teilt und aufrundet."
+    },
+    {
+      "answer_id": "se-009-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Die zyklomatische Komplexität ergibt sich als Produkt aus Kanten und Knoten, also 9 * 8 = 72. Ein Wert von 72 zeigt eine extrem komplexe Methode an, die dringend aufgeteilt werden sollte."
+    },
+    {
+      "answer_id": "se-009-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Die zyklomatische Komplexität misst, wie viele Zeilen Code die Methode hat. Bei 8 Knoten sind das ungefähr 8 Codezeilen, also ist die Komplexität 8."
+    },
+    {
+      "answer_id": "se-009-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das kann man ohne den genauen Quelltext nicht sagen, weil man dafür wissen müsste, wie viele Variablen die Methode benutzt."
+    }
+  ]
+}

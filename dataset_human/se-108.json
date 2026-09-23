@@ -1,0 +1,40 @@
+{
+  "question_id": "se-108",
+  "topic": "Entwurfsmuster: Abstract Factory",
+  "type": "anwendung",
+  "question": "Sie entwickeln ein Programm, das Daten aus Datenbanken ausliest und wieder in Datenbanken schreibt. Sie haben sich entschieden, Ihre Datenbankzugriffe mit zwei verschiedenen Klassen zu modularisieren: eine Klasse zum Lesen und eine Klasse zum Schreiben. Da Ihr Programm verschiedene Datenbanktypen unterstützen soll (z.B. MySQL, MongoDB), implementieren Sie datenbankspezifische Lese- und Schreibeklassen für jede unterstützte Datenbank. Um sicherzustellen, dass sich das Programm wie gewünscht verhält, müssen Sie sicherstellen, dass zur Laufzeit nur kompatible Lese- und Schreibeklassen instanziiert und verwendet werden (z.B. darf ein MySQLReader nur mit einem MySQLWriter verwendet werden).\n\nWie lösen Sie dieses Problem? Schlagen Sie ein Entwurfsmuster vor und erklären Sie, wie es das gegebene Problem löst. Nehmen Sie dabei auch Bezug auf die Klassen, die das Entwurfsmuster bereitstellt, und welche Konzepte aus der Beschreibung sich welchen dieser Klassen zuordnen lassen.",
+  "max_points": 4,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 8.",
+  "rubric": [
+    {"id": 1, "criterion": "Passendes Entwurfsmuster genannt: Abstract Factory", "points": 1},
+    {"id": 2, "criterion": "Muster korrekt erklärt (abstrakte Fabrik mit Erzeugungsmethoden, konkrete Fabriken, abstrakte und konkrete Produkte; eine Fabrik erzeugt Familien zusammengehöriger Objekte)", "points": 1},
+    {"id": 3, "criterion": "Zuordnung zum Beispiel und Begründung (z.B. MySQLFactory erzeugt MySQLReader und MySQLWriter; da alle Produkte aus derselben konkreten Fabrik stammen, sind sie garantiert kompatibel)", "points": 2}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-108-a-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Man nimmt das Abstract Factory Pattern. Es besteht aus einer abstrakten Fabrik, die Methoden zum Erzeugen mehrerer zusammengehöriger Produkte vorgibt, konkreten Fabriken, die diese Methoden implementieren, sowie abstrakten und konkreten Produktklassen. Der Client arbeitet nur mit den abstrakten Schnittstellen und bekommt so immer eine konsistente Produktfamilie."
+    },
+    {
+      "answer_id": "se-108-b-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Das Singleton Pattern löst das Problem. Es stellt sicher, dass es von jeder Datenbankklasse immer nur genau eine Instanz gibt. So können keine inkompatiblen Reader und Writer gleichzeitig existieren, weil immer nur ein Objekt da ist."
+    },
+    {
+      "answer_id": "se-108-c-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Das Problem löst das Abstract-Factory-Muster. Es stellt eine abstrakte Fabrik bereit, die Erzeugungsmethoden für eine ganze Familie zusammengehöriger Produkte deklariert, hier createReader() und createWriter(). Für jede Produktfamilie gibt es eine konkrete Fabrik, die diese Methoden implementiert: Eine MySQLFactory erzeugt MySQLReader und MySQLWriter, eine MongoDBFactory erzeugt MongoDBReader und MongoDBWriter. Reader und Writer sind dabei die abstrakten Produkte, die datenbankspezifischen Klassen die konkreten Produkte. Der Client arbeitet nur mit der abstrakten Fabrik und den abstrakten Produkten. Da alle Objekte zur Laufzeit aus derselben konkreten Fabrik stammen, ist garantiert, dass nur kompatible Reader/Writer-Paare instanziiert werden."
+    },
+    {
+      "answer_id": "se-108-d-base", "points": 3, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [2, 3],
+      "text": "Eine Factory Method passt hier gut. Für jede Datenbank gibt es eine eigene Fabrikklasse (MySQLFactory, MongoDBFactory), die sowohl den Reader als auch den Writer der jeweiligen Datenbank erzeugt, dazu ein gemeinsames Fabrik-Interface mit createReader() und createWriter(). Die Fabriken liefern also zusammengehörige Objektfamilien. Weil ein Programmteil immer nur eine dieser Fabriken benutzt, passen Reader und Writer garantiert zusammen."
+    },
+    {
+      "answer_id": "se-108-e-base", "points": 1, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "Das Abstract Factory Pattern kann man benutzen. Damit kann man Objekte erzeugen, ohne den new-Operator direkt zu verwenden. Die Factory-Klasse hat eine Methode, der man z.B. einen String übergibt, und die dann je nach Parameter einen MySQLReader oder einen MongoDBReader zurückgibt. So ist die Objekterzeugung immer an einer zentralen Stelle."
+    }
+  ]
+}

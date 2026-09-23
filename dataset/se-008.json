@@ -1,0 +1,61 @@
+{
+  "question_id": "se-008",
+  "topic": "Regressionstest",
+  "type": "erklaerung",
+  "question": "Erklären Sie, was ein Regressionstest ist, wann er durchgeführt wird und welchen Zweck er verfolgt.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville, Software Engineering (10. Aufl.), Kap. 8 'Software Testing'.",
+  "rubric": [
+    {"id": 1, "criterion": "Definition: erneutes Ausführen bereits bestehender Tests", "points": 1},
+    {"id": 2, "criterion": "Anlass/Zeitpunkt: nach einer Änderung am Code (Bugfix, Erweiterung, Refactoring)", "points": 1},
+    {"id": 3, "criterion": "Zweck: sicherstellen, dass bisher funktionierende Funktionalität nicht (unbeabsichtigt) kaputtgeht", "points": 1},
+    {"id": 4, "criterion": "Bezug zur Automatisierung / CI (häufige Wiederholung nur sinnvoll automatisiert)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-008-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Ein Regressionstest ist das erneute Ausführen bereits vorhandener Testfälle. Er wird durchgeführt, nachdem am Code etwas geändert wurde, etwa nach einem Bugfix, einer Erweiterung oder einem Refactoring. Sein Zweck ist sicherzustellen, dass die bisher funktionierende Funktionalität durch die Änderung nicht unbeabsichtigt beschädigt wurde. Weil das bei jeder Änderung anfällt, werden Regressionstests sinnvollerweise automatisiert und in einer CI-Pipeline ausgeführt."
+    },
+    {
+      "answer_id": "se-008-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Beim Regressionstest lässt man die schon bestehende Testsuite noch einmal laufen, und zwar immer dann, wenn am Programm etwas verändert wurde. Damit will man verhindern, dass eine neue Änderung an einer anderen, vorher korrekten Stelle einen Fehler einführt. Da man das ständig wiederholen muss, lohnt sich das praktisch nur automatisiert, weshalb es typischerweise in der Continuous Integration läuft."
+    },
+    {
+      "answer_id": "se-008-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Damit eine Codeänderung nichts bereits Funktionierendes zerstört, führt man Regressionstests durch. Das sind dieselben Tests wie zuvor, die nach jeder Änderung erneut ausgeführt werden. Praktisch geht das nur automatisiert, etwa über eine CI, weil die Suite sonst zu selten liefe."
+    },
+    {
+      "answer_id": "se-008-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Ein Regressionstest führt die bestehenden Tests nach einer Änderung am Code noch einmal aus, um zu prüfen, ob etwas kaputtgegangen ist, das vorher lief. So fängt man unbeabsichtigte Nebenwirkungen einer Änderung ab."
+    },
+    {
+      "answer_id": "se-008-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 3],
+      "text": "Beim Regressionstest werden alte Tests wiederholt, damit man merkt, wenn vorher funktionierende Teile plötzlich nicht mehr gehen."
+    },
+    {
+      "answer_id": "se-008-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [2],
+      "text": "Regressionstests macht man nach einer Codeänderung. Dabei schreibt man für die geänderte Stelle komplett neue Testfälle, die das neue Verhalten abdecken."
+    },
+    {
+      "answer_id": "se-008-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Ein Regressionstest misst, wie stark sich die Antwortzeiten der Anwendung unter steigender Last verschlechtern, und gehört damit zu den Lasttests, die die Skalierbarkeit des Systems bewerten."
+    },
+    {
+      "answer_id": "se-008-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Ein Regressionstest ist ein statistisches Verfahren, mit dem man aus den Testergebnissen eine Trendlinie berechnet, um die zukünftige Fehlerzahl vorherzusagen."
+    },
+    {
+      "answer_id": "se-008-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist der Test, den man ganz am Anfang vor dem ersten Release einmal macht, um zu schauen, ob sich das Programm überhaupt starten lässt."
+    }
+  ]
+}

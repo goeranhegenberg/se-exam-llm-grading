@@ -1,0 +1,30 @@
+{
+  "question_id": "se-104",
+  "topic": "Prozesskategorien",
+  "type": "anwendung",
+  "question": "Betrachten Sie die folgende Beschreibung der Firma Bionsoft:\n\n\"Bionsoft ist ein führendes Softwareunternehmen im Medizinbereich. Üblicherweise treffen sie ihre Kunden nur einmal, um die Anforderungen an ein Produkt zu definieren. Danach benötigen sie bis zu 36 Monate, um die Lösung zu implementieren und zu testen. In ihren letzten Projekten hatten sie ernste Probleme bei der Integration, da sich die Laufzeitumgebung während der Entwicklung erheblich verändert hat. Nun starten sie ein neues Projekt, bei dem sich nicht nur die Umgebung, sondern wegen einer hochdynamischen Situation auch die Anforderungen ändern werden.\"\n\nIn der Vorlesung wurden Software-Engineering-Prozesse in zwei grobe Kategorien eingeteilt. Identifizieren Sie diese Kategorie für Bionsoft und begründen Sie Ihre Entscheidung.",
+  "max_points": 3,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 5.",
+  "rubric": [
+    {"id": 1, "criterion": "Kategorie korrekt identifiziert: plangetrieben (plan-based/plan-driven)", "points": 1},
+    {"id": 2, "criterion": "Als Begründung die einmalige Anforderungserhebung zu Projektbeginn angeführt", "points": 1},
+    {"id": 3, "criterion": "Als Begründung den langen sequenziellen Entwicklungszyklus ohne Iterationen und Kundenfeedback angeführt", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-104-a-base", "points": 3, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Bionsoft folgt einem plangetriebenen Prozess (plan-based). Das erkennt man daran, dass die Anforderungen nur ein einziges Mal zu Projektbeginn mit dem Kunden erhoben werden und anschließend bis zu 36 Monate ohne weitere Kundeneinbindung implementiert und getestet wird. Die Phasen werden also im Voraus geplant und sequenziell abgearbeitet, ohne Iterationen oder Zwischenfeedback. Daher kommen dann auch die Integrationsprobleme, weil Änderungen der Umgebung erst am Ende auffallen."
+    },
+    {
+      "answer_id": "se-104-b-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 3],
+      "text": "Bionsoft ist plangetrieben (plan-based) unterwegs. Das sieht man daran, dass ihre Projekte sehr lange dauern und alles in einem Stück durchgezogen wird"
+    },
+    {
+      "answer_id": "se-104-c-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Bionsoft arbeitet agil, weil sie sich an eine hochdynamische Situation anpassen müssen und sich die Anforderungen bei ihnen ständig ändern. Agile Prozesse sind genau für solche Situationen gedacht."
+    }
+  ]
+}

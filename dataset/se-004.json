@@ -1,0 +1,61 @@
+{
+  "question_id": "se-004",
+  "topic": "Funktionale vs. nicht-funktionale Anforderungen",
+  "type": "vergleich",
+  "question": "Erklären Sie den Unterschied zwischen funktionalen und nicht-funktionalen Anforderungen und geben Sie für jede der beiden Arten ein Beispiel an.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an UZH-Musterklausur SE, Aufgabe 2.1 (Anforderungsanalyse).",
+  "rubric": [
+    {"id": 1, "criterion": "Funktionale Anforderung korrekt beschrieben (was das System leisten soll, welche Funktionen es bereitstellt)", "points": 1},
+    {"id": 2, "criterion": "Passendes Beispiel für eine funktionale Anforderung", "points": 1},
+    {"id": 3, "criterion": "Nicht-funktionale Anforderung korrekt beschrieben (Qualitäts- bzw. Rahmenbedingungen wie Leistung, Sicherheit, Benutzbarkeit)", "points": 1},
+    {"id": 4, "criterion": "Passendes Beispiel für eine nicht-funktionale Anforderung", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-004-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Funktionale Anforderungen legen fest, was das System konkret tun soll, also welche Funktionen es bereitstellt. Ein Beispiel ist: Das System muss es dem Nutzer ermöglichen, sich mit Benutzername und Passwort anzumelden. Nicht-funktionale Anforderungen beschreiben dagegen Qualitäts- und Rahmenbedingungen wie Leistung, Sicherheit oder Benutzbarkeit. Ein Beispiel ist: Die Anmeldung muss in weniger als zwei Sekunden abgeschlossen sein."
+    },
+    {
+      "answer_id": "se-004-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Eine funktionale Anforderung sagt, welche konkrete Leistung bzw. welches Verhalten das System erbringen muss, etwa: Das System soll Rechnungen als PDF exportieren können. Eine nicht-funktionale Anforderung betrifft hingegen die Güte und die Randbedingungen, also Eigenschaften wie Performanz, Verfügbarkeit oder Bedienbarkeit, zum Beispiel: Das System muss eine Verfügbarkeit von 99,9 Prozent erreichen."
+    },
+    {
+      "answer_id": "se-004-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Als Beispiele dienen 'Der Nutzer kann nach Produkten suchen' (funktional) und 'Die Suche liefert in höchstens einer Sekunde ein Ergebnis' (nicht-funktional). Der Unterschied: Funktionale Anforderungen beschreiben die eigentlichen Funktionen des Systems, während nicht-funktionale Anforderungen Qualitätsmerkmale und Rahmenbedingungen wie Geschwindigkeit, Sicherheit oder Benutzbarkeit festlegen."
+    },
+    {
+      "answer_id": "se-004-teil-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 3],
+      "text": "Funktionale Anforderungen beschreiben, welche Funktionen ein System bereitstellen soll. Nicht-funktionale Anforderungen betreffen dagegen Qualitätsmerkmale und Rahmenbedingungen wie Leistung oder Sicherheit."
+    },
+    {
+      "answer_id": "se-004-teil-para1", "points": 2, "level": "teil", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 3],
+      "text": "Bei funktionalen Anforderungen geht es darum, was das System können muss. Nicht-funktionale Anforderungen legen demgegenüber fest, wie gut es das tun muss, also Qualitätsaspekte und Rahmenbedingungen."
+    },
+    {
+      "answer_id": "se-004-teil-reform1", "points": 2, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 3],
+      "text": "Funktional = was das System macht. Nicht-funktional = die Qualität drumherum, also so Sachen wie Geschwindigkeit oder Sicherheit."
+    },
+    {
+      "answer_id": "se-004-null-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Funktionale Anforderungen sind diejenigen, die unbedingt umgesetzt werden müssen, und nicht-funktionale Anforderungen sind optional und können bei Zeitmangel einfach weggelassen werden."
+    },
+    {
+      "answer_id": "se-004-null-para1", "points": 0, "level": "null", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [],
+      "text": "Der Unterschied ist die Wichtigkeit: funktionale Anforderungen sind Pflicht, nicht-funktionale sind nur nettes Beiwerk und unverbindlich."
+    },
+    {
+      "answer_id": "se-004-null-reform1", "points": 0, "level": "null", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Funktionale Anforderungen schreibt der Programmierer, nicht-funktionale schreibt der Tester am Ende des Projekts."
+    }
+  ]
+}

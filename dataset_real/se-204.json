@@ -1,0 +1,128 @@
+{
+  "question_id": "se-204",
+  "topic": "Scrum",
+  "short_label": "Scrum",
+  "type": "definition",
+  "question": "Nennen Sie die Rollen/Ereignisse/Artefakte/Bestandteile des Scrum-Modells.",
+  "max_points": 6,
+  "source_note": "Softwaretechnik-I-Klausur, Hochschule Merseburg, SS 2026; sieben anonymisierte Bögen, wortgetreu transkribiert (inkl. Rechtschreibfehlern, englischen Passagen und leeren Feldern). Aufgabe 4.",
+  "rubric": [
+    {
+      "id": 1,
+      "criterion": "Rolle Product Owner genannt",
+      "points": 1
+    },
+    {
+      "id": 2,
+      "criterion": "Rolle Scrum Master genannt",
+      "points": 1
+    },
+    {
+      "id": 3,
+      "criterion": "Rolle Entwickler bzw. Entwicklungsteam genannt",
+      "points": 1
+    },
+    {
+      "id": 4,
+      "criterion": "Mindestens ein Ereignis als Bestandteil genannt (Sprint, Sprint Planning, Daily Scrum, Sprint Review, Sprint-Retrospektive)",
+      "points": 1
+    },
+    {
+      "id": 5,
+      "criterion": "Artefakt Product Backlog genannt",
+      "points": 1
+    },
+    {
+      "id": 6,
+      "criterion": "Artefakt Sprint Backlog oder Increment genannt",
+      "points": 1
+    }
+  ],
+  "answers": [
+    {
+      "answer_id": "se-204-bogen1",
+      "points": 2,
+      "level": "teil",
+      "variant": "bogen-1",
+      "operation": "base",
+      "rubric_fulfilled": [
+        2,
+        3
+      ],
+      "text": "Bestandteile: Srum master, project Teams, Entwicklungsteam"
+    },
+    {
+      "answer_id": "se-204-bogen2",
+      "points": 0,
+      "level": "null",
+      "variant": "bogen-2",
+      "operation": "base",
+      "rubric_fulfilled": [],
+      "text": ""
+    },
+    {
+      "answer_id": "se-204-bogen3",
+      "points": 3,
+      "level": "teil",
+      "variant": "bogen-3",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3
+      ],
+      "text": "Rollen: Scrum master\nprodukowner\nEntwickler"
+    },
+    {
+      "answer_id": "se-204-bogen4",
+      "points": 0,
+      "level": "null",
+      "variant": "bogen-4",
+      "operation": "base",
+      "rubric_fulfilled": [],
+      "text": ""
+    },
+    {
+      "answer_id": "se-204-bogen5",
+      "points": 4,
+      "level": "teil",
+      "variant": "bogen-5",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "text": "Das Scrum Modell ist ein Verfahren zur Softwareherstellung.\nEs besteht aus “Sprints”, Sprint-Backlog, Sprint-Reviews, Dayli-Scrum. Es ist ein agiles Modell, Product Owner, und Scrum Master sind Schlüsselpersonen."
+    },
+    {
+      "answer_id": "se-204-bogen6",
+      "points": 3,
+      "level": "teil",
+      "variant": "bogen-6",
+      "operation": "base",
+      "rubric_fulfilled": [
+        2,
+        3,
+        4
+      ],
+      "text": "Entwickler, Kaufer, Softwar Enginerer, scrum master\nscrum master regielt wie die Projekt lauft und überpruft, ob alles richtig ist.\nscrrum arbeitet in kleine schritten (sprints)\n* scrum ist mehr flixebel und besere für Anwendungssysten, wo in spätere phasen etwas ändern will.\n* ein modell von scrum ist agile\n* funktionsfähige software wird kurzen Iterationen breitgestellt"
+    },
+    {
+      "answer_id": "se-204-bogen7",
+      "points": 5,
+      "level": "teil",
+      "variant": "bogen-7",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3,
+        5,
+        6
+      ],
+      "text": "* Die Rollen von Scrum:\nProduct Owner: Priorisiert Product Backlog\nScrum Master: Kontrolliert Sprint Prozesse\nEntwickler: Zuständig für die Entwicklung (increment, programmierung)\n* Bestandteile:\nProduct Backlog: List aller Anforderungen\nSprint Backlog: enthält den aktuellen Zustand des Projekts\nIncrement: Ergebniss nach einem Sprint"
+    }
+  ]
+}

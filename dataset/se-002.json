@@ -1,0 +1,61 @@
+{
+  "question_id": "se-002",
+  "topic": "Black-Box- vs. White-Box-Test",
+  "type": "vergleich",
+  "question": "Erläutern Sie den Unterschied zwischen Black-Box- und White-Box-Tests. Nennen Sie außerdem für jedes der beiden Verfahren je ein typisches Testentwurfsverfahren bzw. Überdeckungskriterium.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an UZH-Musterklausur SE, Aufgabe 2.6, und das Testentwurf-Skript von G. Bonin (esb-dev).",
+  "rubric": [
+    {"id": 1, "criterion": "Black-Box korrekt: Test gegen die Spezifikation bzw. das nach außen sichtbare Verhalten, ohne Kenntnis der internen Struktur", "points": 1},
+    {"id": 2, "criterion": "White-Box korrekt: Test anhand der internen Programmstruktur bzw. des Quellcodes", "points": 1},
+    {"id": 3, "criterion": "Ein Black-Box-Verfahren genannt (z.B. Äquivalenzklassenbildung oder Grenzwertanalyse)", "points": 1},
+    {"id": 4, "criterion": "Ein White-Box-Kriterium genannt (z.B. Anweisungs-, Zweig- oder Pfadüberdeckung)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-002-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Beim Black-Box-Test wird die Software nur über ihre Spezifikation und ihr nach außen sichtbares Verhalten getestet, ohne dass man den Quellcode kennt. Beim White-Box-Test nutzt man dagegen die innere Struktur des Programms, also den Code, um Testfälle abzuleiten. Ein typisches Black-Box-Verfahren ist die Äquivalenzklassenbildung, ein typisches White-Box-Kriterium die Zweigüberdeckung."
+    },
+    {
+      "answer_id": "se-002-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Der Black-Box-Test betrachtet das Programm von außen: getestet wird gegen die geforderte Funktionalität, ohne Blick in die Implementierung. Der White-Box-Test stützt sich hingegen auf die interne Code-Struktur. Als Black-Box-Technik bietet sich die Grenzwertanalyse an, als White-Box-Maß die Anweisungsüberdeckung."
+    },
+    {
+      "answer_id": "se-002-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Als Beispielverfahren dienen die Äquivalenzklassenbildung (Black-Box) und die Pfadüberdeckung (White-Box). Der Unterschied der beiden Testarten: White-Box leitet die Testfälle aus dem internen Aufbau des Codes ab, während Black-Box ausschließlich auf der Spezifikation und dem beobachtbaren Verhalten aufsetzt, ohne den Code zu kennen."
+    },
+    {
+      "answer_id": "se-002-teil-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Black-Box-Tests prüfen das Programm nur über sein äußeres Verhalten anhand der Spezifikation, ohne den Code zu betrachten. White-Box-Tests dagegen schauen in den Quellcode hinein und leiten die Tests aus der internen Struktur ab."
+    },
+    {
+      "answer_id": "se-002-teil-para1", "points": 2, "level": "teil", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Beim Black-Box-Verfahren kennt man die innere Umsetzung nicht und testet nur gegen die geforderte Funktion. Beim White-Box-Verfahren kennt man den Code und nutzt dessen Struktur für den Testentwurf."
+    },
+    {
+      "answer_id": "se-002-teil-reform1", "points": 2, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2],
+      "text": "Black-Box heißt: man sieht den Code nicht und testet einfach, ob rauskommt, was laut Anforderung rauskommen soll. White-Box heißt: man kennt den Code und richtet die Tests danach aus."
+    },
+    {
+      "answer_id": "se-002-null-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Beim Black-Box-Test schaut man genau in den Quellcode hinein und prüft jede Zeile. Der White-Box-Test wird vom Kunden durchgeführt, der das Programm nur von außen bedient."
+    },
+    {
+      "answer_id": "se-002-null-para1", "points": 0, "level": "null", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [],
+      "text": "Black-Box-Tests sind Tests, bei denen man den kompletten Code Zeile für Zeile durchliest. White-Box-Tests macht hingegen der Endnutzer, ohne den Code zu sehen."
+    },
+    {
+      "answer_id": "se-002-null-reform1", "points": 0, "level": "null", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Der Unterschied ist eigentlich nur die Farbe der Testumgebung: Black-Box läuft im dunklen Modus der IDE, White-Box im hellen Modus."
+    }
+  ]
+}

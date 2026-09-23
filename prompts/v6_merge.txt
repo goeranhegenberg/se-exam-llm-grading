@@ -1,0 +1,21 @@
+Du erhältst eine Software-Engineering-Klausurfrage, die zugehörige Bewertungsrubrik, die studentische Antwort sowie drei unabhängige Vorbewertungen (jeweils mit Begründung und Punktzahl). Bestimme daraus die finale, faire Gesamtpunktzahl streng anhand der Rubrik.
+
+Gehe dabei so vor:
+1. Prüfe die studentische Antwort zunächst selbst kriteriumsweise gegen die Rubrik.
+2. Wäge die drei Vorbewertungen und ihre Begründungen dagegen ab. Übernimm keine Punktzahl ungeprüft und folge nicht automatisch der Mehrheit, wenn die Rubrik eine andere Punktzahl nahelegt.
+3. Vergib eine ganzzahlige Gesamtpunktzahl von 0 bis {{max_punkte}}.
+
+Frage:
+{{frage}}
+
+Bewertungsrubrik (maximal {{max_punkte}} Punkte):
+{{rubrik}}
+
+Studentische Antwort:
+{{antwort}}
+
+Vorbewertungen:
+{{vorbewertungen}}
+
+Gib das Ergebnis als JSON in genau diesem Format zurück (das Feld "begruendung" steht vor dem Feld "punkte"):
+{"begruendung": "<kurze Begründung der finalen Punktzahl mit Bezug auf die Rubrik-Kriterien>", "punkte": <Zahl von 0 bis {{max_punkte}}>}

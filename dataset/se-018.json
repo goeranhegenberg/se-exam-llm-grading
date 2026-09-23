@@ -1,0 +1,61 @@
+{
+  "question_id": "se-018",
+  "topic": "Refactoring",
+  "type": "erklaerung",
+  "question": "Erklären Sie, was unter Refactoring verstanden wird: Ziel, typisches Vorgehen und Abgrenzung zu anderen Code-Änderungen.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an M. Fowler, Refactoring, sowie Sommerville Kap. 9 'Software Evolution'.",
+  "rubric": [
+    {"id": 1, "criterion": "Definition: Änderung der internen Struktur ohne Änderung des beobachtbaren Verhaltens", "points": 1},
+    {"id": 2, "criterion": "Ziel: bessere Lesbarkeit/Wartbarkeit/Struktur (interne Qualität)", "points": 1},
+    {"id": 3, "criterion": "Vorgehen: kleine Schritte, durch Tests abgesichert", "points": 1},
+    {"id": 4, "criterion": "Abgrenzung: keine neue Funktionalität und keine Bugfixes; Funktionalität bleibt gleich", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-018-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Refactoring ist das Ändern der internen Struktur von Code, ohne dass sich sein nach außen beobachtbares Verhalten ändert. Das Ziel ist es, die interne Qualität zu verbessern, also Lesbarkeit, Struktur und Wartbarkeit zu erhöhen. Typischerweise geht man dabei in vielen kleinen, einzeln nachvollziehbaren Schritten vor und sichert jeden Schritt durch automatisierte Tests ab, damit das Verhalten garantiert gleich bleibt. Abzugrenzen ist Refactoring von normalen Änderungen: Es fügt keine neue Funktionalität hinzu und behebt keine Bugs, sondern lässt die Funktionalität bewusst unverändert."
+    },
+    {
+      "answer_id": "se-018-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Beim Refactoring baut man den inneren Aufbau des Codes um, ohne sein äußeres Verhalten anzutasten. Man will damit die Wartbarkeit und Verständlichkeit verbessern. Praktisch arbeitet man in kleinen Schritten und lässt nach jedem die Tests laufen, um sicherzugehen, dass alles noch genauso funktioniert. Es ist ausdrücklich kein Hinzufügen von Features und kein Beheben von Fehlern, die Funktion bleibt dieselbe."
+    },
+    {
+      "answer_id": "se-018-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Refactoring fügt bewusst keine Funktion hinzu und behebt keine Bugs, das Verhalten bleibt identisch. Stattdessen verbessert es nur die innere Struktur für bessere Lesbarkeit und Wartbarkeit. Man macht das in kleinen, durch Tests abgesicherten Schritten, sodass das beobachtbare Verhalten unverändert erhalten bleibt."
+    },
+    {
+      "answer_id": "se-018-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Refactoring heißt, die Struktur des Codes zu verbessern, ohne sein Verhalten zu ändern. Ziel ist bessere Wartbarkeit und Lesbarkeit. Man geht in kleinen Schritten vor und prüft mit Tests, dass nichts kaputtgeht."
+    },
+    {
+      "answer_id": "se-018-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Beim Refactoring räumt man den Code auf, damit er übersichtlicher und leichter zu warten ist, ohne dass sich das Verhalten des Programms ändert."
+    },
+    {
+      "answer_id": "se-018-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [3],
+      "text": "Refactoring macht man in kleinen Schritten mit Tests. Es bedeutet, das Programm um neue Funktionen zu erweitern und dabei den alten Code an die neuen Anforderungen anzupassen."
+    },
+    {
+      "answer_id": "se-018-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Refactoring bezeichnet das Übersetzen des Quellcodes von einer Programmiersprache in eine andere, etwa von Java nach Kotlin, wobei die Funktionalität erhalten bleibt. Man nutzt es vor allem bei der Modernisierung von Altsystemen, um die Sprache zu wechseln."
+    },
+    {
+      "answer_id": "se-018-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Refactoring ist das Komprimieren des Quellcodes, sodass möglichst wenige Zeilen entstehen und die Datei kleiner wird, damit das Programm schneller startet."
+    },
+    {
+      "answer_id": "se-018-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist das Zurücksetzen des Codes auf eine ältere Version aus der Versionsverwaltung, wenn ein neues Feature nicht funktioniert hat."
+    }
+  ]
+}

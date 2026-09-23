@@ -1,0 +1,61 @@
+{
+  "question_id": "se-017",
+  "topic": "Integrationstest: Top-Down vs. Bottom-Up",
+  "type": "vergleich",
+  "question": "Vergleichen Sie die Integrationsstrategien Top-Down und Bottom-Up. Erklären Sie jeweils das Vorgehen, die benötigten Hilfsmittel und je einen Vor- oder Nachteil.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville Kap. 8 'Software Testing' (Integration Testing).",
+  "rubric": [
+    {"id": 1, "criterion": "Kontext korrekt: Integrationstest prüft das Zusammenspiel mehrerer Module", "points": 1},
+    {"id": 2, "criterion": "Top-Down korrekt: von oberen Modulen abwärts; benötigt Stubs/Platzhalter für untere", "points": 1},
+    {"id": 3, "criterion": "Bottom-Up korrekt: von unteren Modulen aufwärts; benötigt Treiber/Driver", "points": 1},
+    {"id": 4, "criterion": "Sinnvoller Vor-/Nachteil-Vergleich (z.B. frühe Gesamtsicht vs. früh stabile Basis)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-017-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Der Integrationstest prüft, ob mehrere Module korrekt zusammenspielen. Beim Top-Down-Vorgehen beginnt man mit den oberen Steuermodulen und arbeitet sich nach unten vor; für die noch nicht integrierten unteren Module braucht man Stubs als Platzhalter. Beim Bottom-Up-Vorgehen startet man umgekehrt bei den Basismodulen und integriert nach oben; dafür braucht man Treiber (Driver), die die oberen Aufrufer simulieren. Ein Vorteil von Top-Down ist, dass man früh eine lauffähige Gesamt- und Bedienlogik sieht; ein Vorteil von Bottom-Up ist, dass die grundlegenden Bausteine früh gründlich getestet und stabil sind."
+    },
+    {
+      "answer_id": "se-017-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Beim Integrationstest geht es um das Zusammenwirken der Komponenten. Top-Down heißt, von den obersten Modulen nach unten zu integrieren, wobei fehlende untere Teile durch Stubs ersetzt werden. Bottom-Up dreht das um und beginnt unten, wozu man Treiber schreibt, die die oberen Module nachbilden. Top-Down liefert früh ein Gefühl für das Gesamtsystem, Bottom-Up dagegen früh verlässliche Grundbausteine."
+    },
+    {
+      "answer_id": "se-017-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Wer unten anfängt (Bottom-Up), testet die Basismodule zuerst und braucht dafür Treiber; das macht die Grundlagen früh stabil. Wer oben anfängt (Top-Down), braucht Stubs für die unteren Module und hat dafür früh eine Gesamtsicht. Beides sind Strategien des Integrationstests, der das Zusammenspiel der Module absichert."
+    },
+    {
+      "answer_id": "se-017-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Der Integrationstest prüft das Zusammenspiel der Module. Top-Down integriert von oben nach unten und nutzt Stubs für die unteren Module, Bottom-Up integriert von unten nach oben und nutzt Treiber für die oberen."
+    },
+    {
+      "answer_id": "se-017-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 4],
+      "text": "Beim Integrationstest schaut man, ob die Module zusammen funktionieren. Top-Down und Bottom-Up unterscheiden sich in der Reihenfolge, von oben oder von unten; bei Top-Down sieht man das Gesamtsystem früher."
+    },
+    {
+      "answer_id": "se-017-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [2],
+      "text": "Bei Top-Down fängt man oben an und braucht Stubs für die unteren Module. Bottom-Up ist dagegen kein Integrationstest, sondern bezeichnet das Schreiben der Benutzerdokumentation von hinten nach vorne."
+    },
+    {
+      "answer_id": "se-017-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Top-Down und Bottom-Up sind zwei Vorgehensweisen der Anforderungserhebung: Bei Top-Down befragt man zuerst die Geschäftsführung und arbeitet sich zu den Sachbearbeitern vor, bei Bottom-Up umgekehrt. Mit dem Testen von Modulen hat das nichts zu tun."
+    },
+    {
+      "answer_id": "se-017-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Top-Down bedeutet, dass man den Quelltext von der ersten bis zur letzten Zeile liest, und Bottom-Up, dass man ihn rückwärts liest, um Tippfehler zu finden."
+    },
+    {
+      "answer_id": "se-017-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das sind zwei Menüpunkte in der Entwicklungsumgebung, mit denen man den Programmtext nach oben oder unten scrollt."
+    }
+  ]
+}

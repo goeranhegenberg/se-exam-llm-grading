@@ -1,0 +1,25 @@
+{
+  "question_id": "se-109",
+  "topic": "Entwurfsmuster: Observer",
+  "type": "anwendung",
+  "question": "Die Temperatur eines Kühlraums muss einen bestimmten Wert halten, um sicherzustellen, dass das darin aufbewahrte Essen nicht verdirbt. Da bereits kleine Temperaturschwankungen zu großen Problemen führen können, sollen die Angestellten eines Restaurants automatisch benachrichtigt werden, wenn die Temperatursensoren des Kühlraums eine Änderung feststellen.\n\nWie lösen Sie dieses Problem programmatisch? Schlagen Sie ein Entwurfsmuster vor und erklären Sie, wie es das gegebene Problem löst. Nehmen Sie dabei auch Bezug auf die Klassen, die das Entwurfsmuster bereitstellt, und welche Konzepte aus der Beschreibung sich welchen dieser Klassen zuordnen lassen.",
+  "max_points": 4,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 8.",
+  "rubric": [
+    {"id": 1, "criterion": "Passendes Entwurfsmuster genannt: Observer (Beobachter)", "points": 1},
+    {"id": 2, "criterion": "Muster korrekt erklärt (Subject verwaltet registrierte Observer und benachrichtigt sie bei Zustandsänderung über notify/update; Observer-Interface)", "points": 1},
+    {"id": 3, "criterion": "Zuordnung zum Beispiel (Temperatursensor/Kühlraum als Subject, Angestellte bzw. deren Benachrichtigungsgeräte als Observer)", "points": 2}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-109-a-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Hier bietet sich das Observer-Muster an. Es definiert eine 1-zu-n-Abhängigkeit zwischen einem Subject und beliebig vielen Observern. Das Subject bietet Methoden zum An- und Abmelden von Observern (attach/detach) und benachrichtigt bei jeder Zustandsänderung alle registrierten Observer über notify, das deren update-Methode aufruft. Die Observer implementieren dafür ein gemeinsames Observer-Interface. Im Beispiel ist der Kühlraum mit seinen Temperatursensoren das konkrete Subject, dessen Zustand die gemessene Temperatur ist. Die Angestellten, praktisch deren Benachrichtigungs-Clients, sind die konkreten Observer, die sich beim Sensor registrieren. Meldet der Sensor eine Änderung, werden alle Angestellten automatisch informiert, ohne dass der Sensor die Empfänger konkret kennen muss. Das hält Sensor und Benachrichtigungslogik lose gekoppelt."
+    },
+    {
+      "answer_id": "se-109-b-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Das löst man mit dem Observer Pattern. Es gibt ein Subject, das eine Liste von Beobachtern verwaltet. Die Observer implementieren ein Interface mit einer update-Methode und registrieren sich beim Subject. Sobald sich der Zustand des Subjects ändert, ruft es notify auf und alle registrierten Observer werden benachrichtigt. In dem Beispiel sind die Angestellten das Subject und der Temperatursensor ist der Observer, der die Angestellten beobachtet und bei Änderungen Bescheid gibt."
+    }
+  ]
+}

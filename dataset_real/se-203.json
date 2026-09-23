@@ -1,0 +1,101 @@
+{
+  "question_id": "se-203",
+  "topic": "Aggregation und Komposition",
+  "short_label": "Aggr./Komp.",
+  "type": "vergleich",
+  "question": "Erläutern Sie den Unterschied zwischen einer Aggregation und einer Komposition. (gerne anhand eines Beispiels)",
+  "max_points": 2,
+  "source_note": "Softwaretechnik-I-Klausur, Hochschule Merseburg, SS 2026; sieben anonymisierte Bögen, wortgetreu transkribiert (inkl. Rechtschreibfehlern, englischen Passagen und leeren Feldern). Aufgabe 3.",
+  "rubric": [
+    {
+      "id": 1,
+      "criterion": "Aggregation als lose Beziehung beschrieben: der Teil existiert unabhängig vom Ganzen",
+      "points": 1
+    },
+    {
+      "id": 2,
+      "criterion": "Komposition als starke Beziehung beschrieben: der Teil existiert nicht ohne das Ganze",
+      "points": 1
+    }
+  ],
+  "answers": [
+    {
+      "answer_id": "se-203-bogen1",
+      "points": 2,
+      "level": "voll",
+      "variant": "bogen-1",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2
+      ],
+      "text": "der Unterschied zwischen Aggregation und Komposition liegt darin, dass beim A → B\nAggregation\nA könnte ohne B existieren zum Beispiel ein Tortoise ist A und Creep (eine Gruppe von Tortoise) ist B\nTortoise kann in eine Gruppe Leben und existiert auch ohne diese Gruppe bei Komposition ist genau anders zum Beispiel ein Lobby in einer Bibliothek, wurde die Bibliothek zerlegt existiert die Lobby nicht mehr"
+    },
+    {
+      "answer_id": "se-203-bogen2",
+      "points": 0,
+      "level": "null",
+      "variant": "bogen-2",
+      "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Composition: “has-a” relation, existing of objects is not depend on each other. without car, wheels still there\nAggregation: is a strong depending relation of object. One cannot exist without the other."
+    },
+    {
+      "answer_id": "se-203-bogen3",
+      "points": 2,
+      "level": "voll",
+      "variant": "bogen-3",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2
+      ],
+      "text": "Komposition: ein stark Beziehung, das teil steht nich ohne ganz\nz.B. Rau und Haus\nAggregtion: ein leicht Beziehung, das teil steht ohne ganz\nKäse und Pizza"
+    },
+    {
+      "answer_id": "se-203-bogen4",
+      "points": 0,
+      "level": "null",
+      "variant": "bogen-4",
+      "operation": "base",
+      "rubric_fulfilled": [],
+      "text": ""
+    },
+    {
+      "answer_id": "se-203-bogen5",
+      "points": 2,
+      "level": "voll",
+      "variant": "bogen-5",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2
+      ],
+      "text": "Diese Begriﬀe beschreiben Beziehungen zwischen Klassen.\nAggregation ist eine relativ lose Bindung (z.B. Spieler in einer Mannschaft)\nDer Spieler kann auch ohne die Mannschaft existieren; die Mannschaft auch ohne den expliziten Spieler.\nKomposition ist eine stärkere Bindung (z.B. Zimmer eines Hauses)\nDie Zimmer sind von Haus abhängig; wenn das Haus abgerissen wird, verschwinden auch die Zimmer"
+    },
+    {
+      "answer_id": "se-203-bogen6",
+      "points": 2,
+      "level": "voll",
+      "variant": "bogen-6",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2
+      ],
+      "text": "Komposition, Ein Klass kann nicht existieren ohne die andere Klass und Es ist echt teil von die andere “Haupt” Klass.\nz.b. Zimmer und Hause. Hier können wir sehen, das es kann nicht sein, ein zimmer ohne haus zu haben.\nAggregation: Ein Klass ist teil von ander Klasse, aber Klasse kann auch ohne die Haupt Klasse existieren.\nz.b. Arzt und Krankenhaus"
+    },
+    {
+      "answer_id": "se-203-bogen7",
+      "points": 2,
+      "level": "voll",
+      "variant": "bogen-7",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2
+      ],
+      "text": "Aggregation & Composition sind Beispiele von Beziehungen zwischen zwei Klassen. Der Unterschied liegt darin, dass bei Aggregation Teile unabhängig existieren können. als Beispiel Team und Spieler. Bei Compositionen hängen die Teile vom ganzen ab. z.B. ein fenster kann nicht ohne zimmer existieren."
+    }
+  ]
+}

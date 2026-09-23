@@ -1,0 +1,61 @@
+{
+  "question_id": "se-015",
+  "topic": "Continuous Integration",
+  "type": "begruendung",
+  "question": "Was versteht man unter Continuous Integration (CI)? Begründen Sie, welche Vorteile diese Praxis einem Entwicklungsteam bringt.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville Kap. 25/26 (Configuration Management / DevOps) sowie M. Fowler, Continuous Integration.",
+  "rubric": [
+    {"id": 1, "criterion": "Definition: Entwickler integrieren ihre Änderungen häufig (mind. täglich) in eine gemeinsame Codebasis", "points": 1},
+    {"id": 2, "criterion": "Automatischer Build und automatisierte Tests bei jeder Integration", "points": 1},
+    {"id": 3, "criterion": "Vorteil: Integrationsfehler werden früh erkannt (schnelles Feedback), keine 'Integration Hell'", "points": 1},
+    {"id": 4, "criterion": "Vorteil: stets lauffähiger/auslieferbarer Stand, höhere Qualität", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-015-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Continuous Integration bedeutet, dass die Entwickler ihre Änderungen sehr häufig, mindestens täglich, in eine gemeinsame Codebasis einspielen. Bei jeder Integration läuft automatisch ein Build und eine automatisierte Testsuite. Der Vorteil ist, dass Integrationsfehler sofort und in kleinen Häppchen auffallen, statt sich bis zu einer schmerzhaften Integration am Projektende anzustauen. Außerdem bleibt der gemeinsame Stand dadurch jederzeit lauffähig und potenziell auslieferbar, was die Qualität und das Vertrauen ins System erhöht."
+    },
+    {
+      "answer_id": "se-015-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Bei CI führen alle im Team ihre Arbeitsstände regelmäßig und engmaschig in einem zentralen Repository zusammen. Jede Zusammenführung stößt automatisch das Bauen und Testen an. Dadurch zeigen sich Konflikte und Fehler beim Zusammenspiel sofort und nicht erst geballt am Schluss. Als Nebeneffekt existiert immer eine grüne, lieferbare Version, was die Produktqualität stabil hält."
+    },
+    {
+      "answer_id": "se-015-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Der größte Gewinn von CI ist schnelles Feedback: Probleme beim Zusammenführen tauchen früh auf, und es gibt stets einen lauffähigen Stand. Möglich wird das, weil die Entwickler ihre Änderungen mindestens täglich in eine gemeinsame Basis integrieren und dabei jedes Mal automatisch gebaut und getestet wird."
+    },
+    {
+      "answer_id": "se-015-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Continuous Integration heißt, dass man seinen Code häufig in ein gemeinsames Repository einspielt und dabei automatisch ein Build samt Tests läuft. So merkt man Integrationsprobleme früh, statt sie sich bis zum Schluss aufzustauen."
+    },
+    {
+      "answer_id": "se-015-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 3],
+      "text": "Bei CI bringt das Team seinen Code oft zusammen. Das hat den Vorteil, dass man Fehler beim Zusammenführen schneller findet, weil man nicht erst monatelang getrennt arbeitet."
+    },
+    {
+      "answer_id": "se-015-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [2],
+      "text": "Bei Continuous Integration läuft bei jeder Änderung automatisch der Build mit den Tests. Gemeint ist damit, dass die fertige Software ohne Unterbrechung rund um die Uhr beim Kunden läuft."
+    },
+    {
+      "answer_id": "se-015-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Continuous Integration ist ein Architekturstil, bei dem alle Funktionen in einem einzigen, durchgehend laufenden Prozess integriert sind, statt sie auf mehrere Microservices zu verteilen. Das spart Netzwerkkommunikation und macht das System schneller."
+    },
+    {
+      "answer_id": "se-015-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "CI bedeutet, dass ein Mitarbeiter durchgehend von Hand prüft, ob die neuen Anforderungen des Kunden gut zum bestehenden Vertrag passen, und diese bei Bedarf nachverhandelt."
+    },
+    {
+      "answer_id": "se-015-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist die Vorschrift, dass man im Team nur eine einzige Programmiersprache verwenden darf, damit der Code überall zusammenpasst."
+    }
+  ]
+}

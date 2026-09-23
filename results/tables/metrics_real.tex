@@ -1,0 +1,16 @@
+\begin{tabular}{lrrrrr}
+\toprule
+System & MAE & NMAE & Exakt & $\pm$1 & Lauf-$\sigma$ \\
+\midrule
+V1 Baseline (GLM 5.2) & 0.83 & 0.111 & 68.6\% & 80.0\% & 0.05 \\
+V2 Begr. (GLM 5.2) & 0.86 & 0.122 & 60.0\% & 85.7\% & 0.26 \\
+V3 Thinking (GLM 5.2) & 0.69 & 0.104 & 57.1\% & 82.9\% & 0.14 \\
+V4 Few-Shot (GLM 5.2) & 0.57 & 0.090 & 60.0\% & 82.9\% & 0.18 \\
+V5 Rubrik (GLM 5.2) & 0.10 & 0.013 & 91.4\% & 100.0\% & 0.04 \\
+\midrule
+Mistral Small 4 (V5) & 0.17 & 0.026 & 82.9\% & 100.0\% & 0.16 \\
+GPT-OSS 120B (V5) & 0.11 & 0.011 & 91.4\% & 97.1\% & 0.12 \\
+\midrule
+\textbf{Ensemble (V6, Median)} & 0.09 & 0.009 & 91.4\% & 100.0\% & 0.07 \\
+\bottomrule
+\end{tabular}

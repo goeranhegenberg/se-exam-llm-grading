@@ -1,0 +1,24 @@
+{
+  "question_id": "se-110",
+  "topic": "Positive und negative Testfälle",
+  "type": "begruendung",
+  "question": "Handelt es sich beim folgenden Testfall um einen positiven oder einen negativen Testfall? Warum? (Hinweis: Die Funktion Math.floorDiv(x, y) gibt den größten Integer-Wert zurück, der kleiner oder gleich x/y ist.)\n\n@Test\npublic void test(){\n    int dividend = 2;\n    int divisor = 0;\n\n    assertThrows(\n        ArithmeticException.class, ()-> Math.floorDiv(dividend, divisor)\n    );\n}",
+  "max_points": 2,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 9.",
+  "rubric": [
+    {"id": 1, "criterion": "Als negativen Testfall eingeordnet", "points": 1},
+    {"id": 2, "criterion": "Korrekte Begründung: Der Test prüft den Fehlerfall einer ungültigen Eingabe (Division durch 0 muss eine Exception auslösen)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-110-a-base", "points": 1, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "Das ist ein negativer Testfall, weil bei dem Test ein Fehler herauskommt, der Test also darauf abzielt, dass das Programm fehlschlägt."
+    },
+    {
+      "answer_id": "se-110-b-base", "points": 2, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Es handelt sich um einen negativen Testfall. Er testet gezielt eine ungültige Eingabe (Division durch 0) und prüft, ob das System diesen Fehlerfall korrekt behandelt, nämlich indem eine ArithmeticException geworfen wird. Es wird also nicht das normale Verhalten, sondern das definierte Fehlerverhalten getestet."
+    }
+  ]
+}

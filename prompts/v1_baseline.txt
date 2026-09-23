@@ -1,0 +1,12 @@
+Bewerte die folgende Antwort auf eine Software-Engineering-Klausurfrage.
+
+Frage:
+{{frage}}
+
+Studentische Antwort:
+{{antwort}}
+
+Vergib eine Punktzahl von 0 bis {{max_punkte}}, die widerspiegelt, wie vollständig und fachlich korrekt die Antwort die Frage beantwortet.
+
+Gib das Ergebnis als JSON in genau diesem Format zurück:
+{"punkte": <Zahl von 0 bis {{max_punkte}}>}

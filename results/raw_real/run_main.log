@@ -1,0 +1,28 @@
+[run 20260908T081354Z] Modell=z-ai/glm-5.2 (main) Versionen=['v1_baseline', 'v2_begruendung', 'v3_thinking', 'v4_fewshot', 'v5_rubrik'] Concurrency=8
+  Datensatz: 5 Fragen, 35 Antworten -> 525 Modellaufrufe
+  Ausgabe: results/raw_real/grading_main.jsonl
+  25/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  50/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  75/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  100/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  125/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  150/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  175/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  200/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  225/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  250/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  275/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  300/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  325/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  350/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  375/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  400/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  425/525 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  450/525 Aufrufe (Parse-Fehler: 2, API-Fehler: 0)
+  475/525 Aufrufe (Parse-Fehler: 4, API-Fehler: 0)
+  500/525 Aufrufe (Parse-Fehler: 5, API-Fehler: 0)
+  525/525 Aufrufe (Parse-Fehler: 8, API-Fehler: 0)
+--- fertig ---
+  Aufrufe: 525, Parse-Fehler: 8, API-Fehler: 0
+  Tokens: prompt=361515, completion=188021, reasoning=142955
+  Ergebnisdatei: results/raw_real/grading_main.jsonl

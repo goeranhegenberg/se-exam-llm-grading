@@ -1,0 +1,183 @@
+{
+  "question_id": "se-205",
+  "topic": "Architekturstile (Szenario)",
+  "short_label": "Architektur",
+  "type": "begruendung",
+  "question": "Szenario:\nPeter und Petra sind zwei Informatik Absolventen und möchten wissen, wie viel die Häuser Ihrer Nachbarn Wert sind. Gleichzeitig möchten sie im Idealfall einen Service anbieten, um nach ihrem Studium Geld zu verdienen. Sie sind zu zweit und haben ein sehr begrenztes Budget. Um den Wert einer Immobilie zu ermitteln, können unterschiedliche Daten als Grundlage zusammen ausgewertet werden. Dabei spielen Region, Haustyp, Größe, Baujahr, Sanierungszustand, Jahr letzter Sanierung eine große Rolle. Speziell sind die Regionen und das Umfeld, wie Anbindung an den ÖPNV, Schulen, Kitas, große Unternehmen oder auch touristische Ziele wichtig. Zur besseren Nutzbarkeit und um überhaupt Ergebnisse zu erhalten, ist es Anfangs einfach aufgebaut und nicht vorhandene Daten werden ignoriert um trotzdem aus den vorhandenen Informationen einen Wert anzuzeigen. Als Grundlage schauen Sie bei GovData nach den Daten und können fast alle Daten finden. Lediglich Sanierungszustand scheint nicht öffentlich abrufbar zu sein und soll in Zukunft über Bilder von Google Street View geschätzt werden.\n\nAufgabe:\n1. Wie können Peter und Petra mit dem Aufbau Ihres Systems starten und welche Softwarearchitektur kann sinnvoll sein? Begründen Sie Ihren Vorschlag!\n2. Welcher Nachteil ergibt sich aus der Nutzung Ihres vorgeschlagenen Architekturstils? Begründen Sie!\n3. Betrachten Sie 2 weitere Architekturstile und vergleichen Sie diese mit dem in Teilaufgabe 1 ausgewähltem Architekturstil. Bitte nehmen sie Bezug zum Szenario!\n4. Welche Risiken sind bei Nutzung von API Services zu bedenken? (z. B. von Googles APIs)\n5. Nennen Sie zwei nicht-funktionale Anforderungen, die in diesem Szenario die Architekturentscheidung besonders beeinflussen, und begründen Sie jeweils kurz. (Modularität und Benutzbarkeit sind bereits von Peter und Petra erfasst)",
+  "max_points": 10,
+  "source_note": "Softwaretechnik-I-Klausur, Hochschule Merseburg, SS 2026; sieben anonymisierte Bögen, wortgetreu transkribiert (inkl. Rechtschreibfehlern, englischen Passagen und leeren Feldern). Aufgabe 5.",
+  "rubric": [
+    {
+      "id": 1,
+      "criterion": "Ein konkreter Architekturstil für den Start benannt (Teilaufgabe 1)",
+      "points": 1
+    },
+    {
+      "id": 2,
+      "criterion": "Wahl mit Bezug zum Szenario begründet (kleines Team, begrenztes Budget, einfacher Start)",
+      "points": 1
+    },
+    {
+      "id": 3,
+      "criterion": "Nachteil des gewählten Stils genannt (Teilaufgabe 2)",
+      "points": 1
+    },
+    {
+      "id": 4,
+      "criterion": "Nachteil begründet",
+      "points": 1
+    },
+    {
+      "id": 5,
+      "criterion": "Erster weiterer Architekturstil benannt (Teilaufgabe 3)",
+      "points": 1
+    },
+    {
+      "id": 6,
+      "criterion": "Zweiter weiterer Architekturstil benannt",
+      "points": 1
+    },
+    {
+      "id": 7,
+      "criterion": "Vergleich der Stile mit Bezug zum Szenario",
+      "points": 1
+    },
+    {
+      "id": 8,
+      "criterion": "Mindestens ein Risiko von API-Services genannt (Teilaufgabe 4)",
+      "points": 1
+    },
+    {
+      "id": 9,
+      "criterion": "Zwei nicht-funktionale Anforderungen genannt (Teilaufgabe 5)",
+      "points": 1
+    },
+    {
+      "id": 10,
+      "criterion": "Nicht-funktionale Anforderungen begründet",
+      "points": 1
+    }
+  ],
+  "answers": [
+    {
+      "answer_id": "se-205-bogen1",
+      "points": 6,
+      "level": "teil",
+      "variant": "bogen-1",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        9
+      ],
+      "text": "1) Modulith mach sinn, weil diese Struktur einfach zu deployen ist, hat auch eine klarer Struktur und auch Gute Wartbarkeit, und passt Peter und Petra weil Sie zu zweit sind\n2) Nachteil wäre Netzwerkkommunikation und schlechtes Skalierbarkeit\n5) Portabilität, Performanz\n3)\nModulith | Monolith | Microservice\neinfach zu debuggen | einfache deployment | Hohe Komplexität\nschwer zu skalieren | schwer zu skalieren | unabhängige Skalierbarkeit\n... | Keine Netzwerk | Hohe Netzwerkkommunikation Aufwand\nhat Bessere und Klarer Struktur als Monolith | Mit Zeit entstehen viele technische Schulden | verschiedene Technologie möglich"
+    },
+    {
+      "answer_id": "se-205-bogen2",
+      "points": 5,
+      "level": "teil",
+      "variant": "bogen-2",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3,
+        4,
+        9
+      ],
+      "text": "1) Software architecture should be use is Microservices\nReason: 1. Extendability: they want to have a fast demo by ignoring missing datas and integrate later via Googlestreetview\nA service of showing renovation status or payment service can be intergrated later and connect to current system via APIs\nMaintainability: easier for them to maintain the system by maintain every single Service as it grows.\n2) Disadvantage: Complexity: Requires knowledge about network, API, . . . and good, clean code structure.\n3)\n4)\n5) Non-functional requirements:\n1. Users can be able to acess via Mobile or desktop\n2. Application need Internet connection"
+    },
+    {
+      "answer_id": "se-205-bogen3",
+      "points": 6,
+      "level": "teil",
+      "variant": "bogen-3",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        3,
+        4,
+        5,
+        8,
+        9
+      ],
+      "text": "1) Modulith: da das Software wird in meherer Modul aufgeteilt, und löst Kopplung\n2) muss alle Modull gleichzeitig Deployed\nKann langsam, da den Modullenüber APIs Kommunizieren\n3) Microservice\n4) Sicherheit, Stabilität\n5) zuvelässigkeit, Perfonce"
+    },
+    {
+      "answer_id": "se-205-bogen4",
+      "points": 6,
+      "level": "teil",
+      "variant": "bogen-4",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "text": "1) I would recommend here from chasing microservices architecture, because it consists from multiple independent services of each service has it is own reponipility.\n2) 1, Network communication overhead 2. Code errors handling\n3)\nlayered architectured | pipes and filters | microservices\nclear structure | clear data flow | clear responsibility\nperformance overhead | performance overhead | network communication overhead\n4) network communication overhead\n5) Performance, maintainability"
+    },
+    {
+      "answer_id": "se-205-bogen5",
+      "points": 10,
+      "level": "voll",
+      "variant": "bogen-5",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "text": "1) Da sie nur zu zweit sind bietet sich ein monolithischer Aufbau an. Das System ist am Anfang kostengünstig und relativ einfach zu konstruieren.\n2) Die skalierbarkeit eines monolithen ist schlecht, da der Platz für Veränderungen und Erweiterungen fehlt.\n3)\n• Microservices ist eine Alternative, welche Aufgrund von wenig Programmierern nur schwer umzusetzen ist, würde aber das Problem mit der skallierbarkeit lösen\n• Die layered Architecture ist auch eine Möglichkeit, wird aber bei großen Daten und komplexer Logik zu langen Ladezeiten führen.\n4) Die externen APIs sind meistens hinter einer Paywall, was das Budget des Projektes sprengen könnte.\nEbenfalls müssen die Nutzungsbedingungen eingehalten werden, der Bereitsteller der API ist als Stakeholder einzubeziehen.\nEine fehlerhafte Verwendung der API kann zu Sicherheitsproblemen führen.\n5) Performance: Das System darf nur begrenzte Resourcen verwenden (CPU, RAM, Speicher)\nSicherheit: Der Wert von Häusern sind sensible Daten, die nicht an unbefugte gelangen sollen."
+    },
+    {
+      "answer_id": "se-205-bogen6",
+      "points": 8,
+      "level": "teil",
+      "variant": "bogen-6",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "text": "1) modular monolith:\nBegründung: Sie haben klein Team, begrez budget und meiste Projekte starten mit modular monolith, dann machen sie es in microservices und haben kein erfahrung oder fähigkeit etwas kompliziert wie microservices zubilden.\n2) Alles in ein Anwendung, das bedutet ein fehler kann viele teile “bereiche” des Software beeinflussen.\nBei modular monolith muss man sehr dizipline sein,\nEs ist schwer zu skalieren.\n3) microservices, layerd Architectur\nmicroservices ist sehr kompliziert, aber modular monolith einfacher\nmicroservices ist gut skalierbar aber modular monolithe nicht\nlayerd architektur kann langsamm sein, wegen die viele schichten.\nmodular monolith ist schneller als layerd architektur\n4) Sicherheit\n5) Wartbarkeit\nSicherheit"
+    },
+    {
+      "answer_id": "se-205-bogen7",
+      "points": 9,
+      "level": "teil",
+      "variant": "bogen-7",
+      "operation": "base",
+      "rubric_fulfilled": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10
+      ],
+      "text": "1) Peter und Petra können mit dem Aufbau ihres Systems starten, indem Sie eine einfache Softwarearchitektur auswählen, weil Sie eine einfach angebaute Struktur, ohne die Integration von vielen Daten nutzen wollen. In diesem Sinne ist Monolith sehr sinnvoll, da sie die Vorteile bietet, eine einfache und einheitliche und schnelle Kommunikation im Team, was eigentlich zu Peter und Petra passt, weil sie bessere Nutzbarkeit und Ergebnisse priorisieren.\n2) Aus der Nutzung von Monolith ergeben sich zwei hauptnachteile:\n• Die Integration von mehreren Daten ist schwer, weil es um eine einheitliche Architektur geht (keine verteilte und isolierte Einheit)\n• keine skallierbarkeit möglich, weil monolith nur für einfache, nicht komplexe Systeme geeignet.\n3) Architekturstil 1: Microservices bieten den vorteil, architektur in verteilte Services isoliert testbar, wartbar und skalierbar. layered architektur als zweiter architekturstil bietet auch den vorteil isoliert testbar, wartbar und skalierbar, weil sie auf die Trennung von Verantwortlichkeiten basiert.\n4) Risiken bei der Nutzung von API Services: fehleranfälligkeit und Sicherheit\n5) Zwei nicht funktionale Anforderungen sind: Skallierbarkeit und Performance, weil daws System nach integration von Daten aus mehreren Quellen die gleiche Performance halten sollte (Antwortzeit)"
+    }
+  ]
+}

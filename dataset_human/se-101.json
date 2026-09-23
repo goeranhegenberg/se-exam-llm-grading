@@ -1,0 +1,24 @@
+{
+  "question_id": "se-101",
+  "topic": "Software-Begriff",
+  "type": "definition",
+  "question": "Was ist Software? Geben Sie eine Definition an.",
+  "max_points": 2,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 1.",
+  "rubric": [
+    {"id": 1, "criterion": "Programme bzw. ausführbare Anweisungen als Kernbestandteil genannt", "points": 1},
+    {"id": 2, "criterion": "Definition umfasst mehr als nur Code (zugehörige Daten, Konfiguration und/oder Dokumentation)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-101-a-base", "points": 1, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "Software ist der Code bzw. die Programme, die auf einem Computer laufen. Also alles was man am Rechner nicht anfassen kann, im Gegensatz zur Hardware."
+    },
+    {
+      "answer_id": "se-101-b-base", "points": 2, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Software bezeichnet Computerprogramme, also ausführbare Anweisungen, zusammen mit den zugehörigen Daten, Konfigurationsdateien und der Dokumentation, die für Betrieb und Wartung des Systems benötigt werden. Software ist also mehr als nur der Quellcode."
+    }
+  ]
+}

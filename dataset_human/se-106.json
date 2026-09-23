@@ -1,0 +1,24 @@
+{
+  "question_id": "se-106",
+  "topic": "Framework vs. Bibliothek",
+  "type": "vergleich",
+  "question": "Was ist der Unterschied zwischen einem Framework und einer Bibliothek?",
+  "max_points": 4,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 7.",
+  "rubric": [
+    {"id": 1, "criterion": "Bibliothek und Framework jeweils kurz und korrekt beschrieben", "points": 2},
+    {"id": 2, "criterion": "Unterschied im Kontrollfluss herausgearbeitet: das Programm ruft die Bibliothek auf, das Framework ruft den eigenen Code auf und gibt Programmstruktur/Kontrollfluss vor (Inversion of Control)", "points": 2}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-106-a-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Eine Bibliothek ist eine Sammlung wiederverwendbarer Funktionen und Klassen, die eine Anwendung bei Bedarf aufruft. Ein Framework ist ein wiederverwendbares Anwendungsgerüst, das die Grundstruktur einer Anwendung vorgibt und an definierten Erweiterungspunkten mit eigenem Code gefüllt wird. Der entscheidende Unterschied liegt im Kontrollfluss. Bei einer Bibliothek behält mein Programm die Kontrolle und ruft die Bibliotheksfunktionen auf. Beim Framework ist es umgekehrt, das Framework steuert den Ablauf und ruft meinen Code auf (Inversion of Control, oft als Hollywood-Prinzip bezeichnet: don't call us, we call you)."
+    },
+    {
+      "answer_id": "se-106-b-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "Eine Bibliothek ist eine Sammlung von fertigen Funktionen und Klassen, die man in seinem Programm benutzen kann, z.B. für Mathe oder Datenstrukturen. Ein Framework ist ein Grundgerüst für eine ganze Anwendung, in das man seinen eigenen Code einbaut, z.B. Spring. Ein Framework ist also im Prinzip wie eine sehr große Bibliothek mit mehr Funktionalität."
+    }
+  ]
+}

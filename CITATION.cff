@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this benchmark or code, please cite it as below."
+title: "se-exam-llm-grading: Benchmark und Prompt-System zur automatischen Bewertung von Software-Engineering-Klausurantworten"
+type: software
+authors:
+  - family-names: Hegenberg
+    given-names: "Göran"
+    affiliation: "Universität Leipzig"
+year: 2026
+repository-code: "https://github.com/goeranhegenberg/se-exam-llm-grading"
+license: MIT
+preferred-citation:
+  type: generic
+  title: "Automatische und konsistente Bewertung von Software-Engineering-Klausuren mittels Prompt Engineering"
+  authors:
+    - family-names: Hegenberg
+      given-names: "Göran"
+  year: 2026
+  notes: "Seminararbeit, Seminar Prompting, Agents, and RAG in Software Engineering (PARSE 2026), Universität Leipzig"

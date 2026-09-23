@@ -1,0 +1,61 @@
+{
+  "question_id": "se-012",
+  "topic": "Anwendungsfall (Use Case)",
+  "type": "anwendung",
+  "question": "Beschreiben Sie für einen Geldautomaten den Anwendungsfall 'Geld abheben'. Nennen Sie den Akteur und sein Ziel, skizzieren Sie ein typisches Hauptszenario in Schritten und geben Sie ein sinnvolles Alternativ- bzw. Fehlerszenario an.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an Sommerville Kap. 5 'Requirements Engineering / System Modeling' (Use Cases).",
+  "rubric": [
+    {"id": 1, "criterion": "Akteur korrekt benannt (Kunde/Karteninhaber)", "points": 1},
+    {"id": 2, "criterion": "Ziel/Auslöser klar (Bargeld erhalten)", "points": 1},
+    {"id": 3, "criterion": "Plausibles Hauptszenario in nachvollziehbaren Schritten (Karte, PIN, Betrag, Ausgabe)", "points": 1},
+    {"id": 4, "criterion": "Sinnvolles Alternativ-/Fehlerszenario (falsche PIN, zu wenig Guthaben o. ä.)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-012-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Akteur ist der Karteninhaber (Bankkunde), sein Ziel ist es, Bargeld abzuheben. Hauptszenario: Der Kunde steckt die Karte ein, gibt seine PIN ein, das System prüft sie, der Kunde wählt den Betrag, das System prüft die Deckung und die Geldverfügbarkeit, gibt das Geld und die Karte aus und bucht den Betrag ab. Als Alternativ- bzw. Fehlerszenario kommt etwa eine dreimal falsch eingegebene PIN in Frage: Dann wird die Karte eingezogen und der Vorgang abgebrochen; ebenso denkbar ist eine Ablehnung wegen unzureichender Kontodeckung."
+    },
+    {
+      "answer_id": "se-012-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Der Anwendungsfall hat als Akteur den Bankkunden, der an Bargeld kommen möchte. Im normalen Ablauf führt er die Karte ein, authentifiziert sich per PIN, gibt den gewünschten Betrag an, das System verifiziert Konto und Kassenbestand und gibt anschließend Geld und Karte aus. Geht etwas schief, etwa weil das Konto nicht gedeckt ist, bricht der Automat ab und gibt die Karte ohne Auszahlung zurück."
+    },
+    {
+      "answer_id": "se-012-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Ziel des Kunden (Akteur) ist die Bargeldauszahlung. Ein Fehlerfall wäre eine falsche PIN, nach mehrfacher Fehleingabe wird die Karte gesperrt. Im Erfolgsfall läuft es so: Karte einführen, PIN eingeben und prüfen lassen, Betrag wählen, Deckung prüfen, Geld und Karte ausgeben, Konto belasten."
+    },
+    {
+      "answer_id": "se-012-teil-reform1", "points": 3, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Der Akteur ist der Kunde, der Bargeld bekommen will. Ablauf: Karte rein, PIN eingeben, Betrag auswählen, Geld wird ausgegeben und das Konto belastet. So bekommt der Kunde sein Geld."
+    },
+    {
+      "answer_id": "se-012-teil-para2", "points": 2, "level": "teil", "variant": "paraphrase-2", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Der Karteninhaber möchte Geld abheben. Er geht zum Automaten und holt sich seinen Wunschbetrag, den er dann in bar in der Hand hält."
+    },
+    {
+      "answer_id": "se-012-teil-base", "points": 1, "level": "teil", "variant": "base-weak", "operation": "base",
+      "rubric_fulfilled": [4],
+      "text": "Wenn die PIN dreimal falsch ist, wird die Karte einbehalten. Den Anwendungsfall steuert der Bankangestellte, der im Hintergrund jede Auszahlung manuell freigibt."
+    },
+    {
+      "answer_id": "se-012-null-llmaug", "points": 0, "level": "null", "variant": "llm-aug-1", "operation": "llm_augmented",
+      "rubric_fulfilled": [],
+      "text": "Der Anwendungsfall 'Geld abheben' beschreibt, wie die Bank am Monatsende die Zinsen für alle Konten berechnet und automatisch gutschreibt. Akteur ist das Buchhaltungssystem, das im Batch-Lauf über Nacht alle Salden aktualisiert."
+    },
+    {
+      "answer_id": "se-012-null-base", "points": 0, "level": "null", "variant": "base-null", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Ein Anwendungsfall ist ein Stück Quellcode, das die Auszahlungslogik in Java implementiert. Man schreibt dafür eine Methode abheben(betrag), die den Kontostand reduziert."
+    },
+    {
+      "answer_id": "se-012-null-reform2", "points": 0, "level": "null", "variant": "reform-2", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Das ist das Diagramm, in dem man die Gehäusemaße und die Tastenanordnung des Geldautomaten festlegt, damit die Hardware gebaut werden kann."
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "question_id": "se-005",
+  "topic": "MVC-Architekturmuster",
+  "type": "erklaerung",
+  "question": "Erklären Sie das Model-View-Controller-Muster (MVC): Welche drei Komponenten gibt es und welche Aufgabe hat jede? Nennen Sie außerdem einen Vorteil des Musters.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an LMU-Übung Softwaretechnik (Entwurfs-/Architekturmuster) sowie Standardliteratur.",
+  "rubric": [
+    {"id": 1, "criterion": "Model korrekt beschrieben (verwaltet die Daten und die Anwendungslogik)", "points": 1},
+    {"id": 2, "criterion": "View korrekt beschrieben (zuständig für die Darstellung/Präsentation)", "points": 1},
+    {"id": 3, "criterion": "Controller korrekt beschrieben (nimmt Eingaben entgegen, steuert und vermittelt zwischen Model und View)", "points": 1},
+    {"id": 4, "criterion": "Ein nachvollziehbarer Vorteil genannt (z.B. Trennung der Belange, Austauschbarkeit der Oberfläche, parallele Entwicklung)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-005-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "MVC besteht aus drei Komponenten. Das Model verwaltet die Daten und die eigentliche Anwendungslogik. Die View ist für die Darstellung dieser Daten gegenüber dem Nutzer zuständig. Der Controller nimmt die Benutzereingaben entgegen, steuert den Ablauf und vermittelt zwischen Model und View. Ein Vorteil ist die klare Trennung der Belange: Die Oberfläche kann ausgetauscht oder unabhängig von der Logik weiterentwickelt werden."
+    },
+    {
+      "answer_id": "se-005-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Im MVC-Muster hält das Model die Daten und die Logik der Anwendung. Die View kümmert sich um die Präsentation, also wie die Informationen angezeigt werden. Der Controller verarbeitet die Eingaben des Nutzers und koordiniert Model und View. Der Nutzen liegt darin, dass Darstellung und Logik voneinander entkoppelt sind, sodass man die Benutzeroberfläche leichter ändern kann."
+    },
+    {
+      "answer_id": "se-005-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Ein Vorteil von MVC ist die Entkopplung von Oberfläche und Logik, wodurch man beide getrennt entwickeln kann. Die drei Komponenten sind: der Controller, der Eingaben entgegennimmt und zwischen den Teilen vermittelt; die View, die für die Anzeige zuständig ist; und das Model, das die Daten und die Anwendungslogik enthält."
+    },
+    {
+      "answer_id": "se-005-teil-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Beim MVC-Muster enthält das Model die Daten und die Logik der Anwendung. Die View ist dafür da, diese Daten für den Nutzer darzustellen."
+    },
+    {
+      "answer_id": "se-005-teil-para1", "points": 2, "level": "teil", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Das Model im MVC verwaltet die eigentlichen Daten und die Verarbeitungslogik. Die View übernimmt die Darstellung dieser Daten auf dem Bildschirm."
+    },
+    {
+      "answer_id": "se-005-teil-reform1", "points": 2, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2],
+      "text": "Model = die Daten und die Logik. View = das, was man auf dem Bildschirm sieht, also die Anzeige."
+    },
+    {
+      "answer_id": "se-005-null-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "MVC ist ein Testverfahren, bei dem man das Model, die View und den Controller getrennt voneinander kompiliert, um Syntaxfehler früher zu finden."
+    },
+    {
+      "answer_id": "se-005-null-para1", "points": 0, "level": "null", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [],
+      "text": "Mit MVC bezeichnet man eine Methode des Testens, bei der die drei Teile einzeln übersetzt werden, damit der Compiler weniger Fehler ausgibt."
+    },
+    {
+      "answer_id": "se-005-null-reform1", "points": 0, "level": "null", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "MVC steht für drei Versionsnummern eines Programms: Model 1, View 2 und Controller 3, die nacheinander veröffentlicht werden."
+    }
+  ]
+}

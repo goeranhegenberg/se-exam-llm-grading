@@ -1,0 +1,61 @@
+{
+  "question_id": "se-001",
+  "topic": "Kopplung und Kohäsion",
+  "type": "erklaerung",
+  "question": "Definieren Sie die Begriffe Kopplung und Kohäsion. Geben Sie an, in welche Richtung sich beide Größen bei einem guten Software-Entwurf bewegen sollten, und begründen Sie kurz, warum.",
+  "max_points": 4,
+  "source_note": "In Anlehnung an UZH-Musterklausur Software Engineering, Aufgabe 1.4.",
+  "rubric": [
+    {"id": 1, "criterion": "Kohäsion korrekt definiert (Maß für den inneren Zusammenhalt bzw. die fachliche Geschlossenheit eines Moduls)", "points": 1},
+    {"id": 2, "criterion": "Kopplung korrekt definiert (Grad der gegenseitigen Abhängigkeit zwischen Modulen)", "points": 1},
+    {"id": 3, "criterion": "Zielrichtung genannt: hohe Kohäsion und niedrige Kopplung", "points": 1},
+    {"id": 4, "criterion": "Begründung über Wartbarkeit/Änderbarkeit (lokale Änderungen, wenige Seiteneffekte)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-001-voll-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Kohäsion beschreibt, wie stark die Bestandteile eines Moduls inhaltlich zusammengehören, also wie geschlossen ein Modul genau eine Aufgabe erfüllt. Kopplung bezeichnet dagegen den Grad der Abhängigkeit zwischen verschiedenen Modulen. Bei einem guten Entwurf strebt man eine hohe Kohäsion und eine niedrige Kopplung an. Der Grund ist, dass sich Änderungen dann lokal auf ein Modul beschränken und nicht unkontrolliert auf andere Module durchschlagen, was Wartung und Verständlichkeit verbessert."
+    },
+    {
+      "answer_id": "se-001-voll-para1", "points": 4, "level": "voll", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "Mit Kohäsion ist gemeint, wie eng die Elemente innerhalb eines Moduls zusammenhängen und auf eine klare Aufgabe ausgerichtet sind. Kopplung meint, wie sehr einzelne Module voneinander abhängen. Anzustreben ist viel Kohäsion bei gleichzeitig wenig Kopplung. So bleiben Anpassungen überschaubar, weil ein Modul geändert werden kann, ohne viele andere anfassen zu müssen, was den Wartungsaufwand senkt."
+    },
+    {
+      "answer_id": "se-001-voll-reorder1", "points": 4, "level": "voll", "variant": "reorder-1", "operation": "reorder",
+      "rubric_fulfilled": [1, 2, 3, 4],
+      "text": "In einem guten Entwurf will man wenig Kopplung und viel Kohäsion. Kopplung ist dabei das Maß für die gegenseitige Abhängigkeit der Module, Kohäsion das Maß für den inneren Zusammenhalt eines einzelnen Moduls. Der Vorteil dieser Zielrichtung: Änderungen bleiben lokal und die Module sind leichter zu verstehen und zu warten, weil sie nicht stark miteinander verflochten sind."
+    },
+    {
+      "answer_id": "se-001-teil-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Kohäsion ist der innere Zusammenhalt eines Moduls, also wie gut die Teile eines Moduls zusammenpassen. Kopplung ist die Abhängigkeit zwischen den verschiedenen Modulen."
+    },
+    {
+      "answer_id": "se-001-teil-para1", "points": 2, "level": "teil", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [1, 2],
+      "text": "Unter Kohäsion versteht man, wie stark die Inhalte eines Moduls inhaltlich zusammengehören. Kopplung beschreibt dagegen, wie stark zwei Module voneinander abhängig sind."
+    },
+    {
+      "answer_id": "se-001-teil-reform1", "points": 2, "level": "teil", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [1, 2],
+      "text": "Kohäsion = wie sehr gehört das Zeug in einem Modul zusammen. Kopplung = wie stark die Module voneinander abhängen."
+    },
+    {
+      "answer_id": "se-001-null-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Kopplung bedeutet, dass der Code gut lesbar und sauber formatiert ist, und Kohäsion ist die Anzahl der Klassen in einem Projekt."
+    },
+    {
+      "answer_id": "se-001-null-para1", "points": 0, "level": "null", "variant": "paraphrase-1", "operation": "paraphrase",
+      "rubric_fulfilled": [],
+      "text": "Mit Kohäsion meint man die Lesbarkeit des Quellcodes, und Kopplung gibt an, wie viele Zeilen ein Modul ungefähr hat."
+    },
+    {
+      "answer_id": "se-001-null-reform1", "points": 0, "level": "null", "variant": "reform-1", "operation": "partial_reformulation",
+      "rubric_fulfilled": [],
+      "text": "Kopplung und Kohäsion sind zwei Diagrammtypen in UML, mit denen man den zeitlichen Programmablauf darstellt."
+    }
+  ]
+}

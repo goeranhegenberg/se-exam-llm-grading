@@ -1,0 +1,35 @@
+{
+  "question_id": "se-102",
+  "topic": "Generic Programming",
+  "type": "erklaerung",
+  "question": "Erläutern Sie kurz die Idee hinter Generic Software Engineering (auch bekannt als Generic Programming).",
+  "max_points": 4,
+  "source_note": "RUB-Klausur Software Engineering WS 2021/22 (Prof. Berger), Aufgabe 3.",
+  "rubric": [
+    {"id": 1, "criterion": "Kernidee getroffen: Code wird unabhängig von konkreten Typen geschrieben, Typen werden zu Parametern und erst bei der Verwendung festgelegt", "points": 2},
+    {"id": 2, "criterion": "Konkretes Beispiel genannt (z.B. generische Container wie List<T>, generische Klassen/Methoden in Java)", "points": 1},
+    {"id": 3, "criterion": "Zentraler Vorteil korrekt erläutert (z.B. Wiederverwendbarkeit: einmal implementieren, für beliebige Typen nutzbar; Typsicherheit zur Compilezeit)", "points": 1}
+  ],
+  "answers": [
+    {
+      "answer_id": "se-102-a-base", "points": 2, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1],
+      "text": "Generic Programming bedeutet, dass man beim Programmieren die konkreten Typen weglassen kann und Code schreibt, der mit verschiedenen Typen funktioniert, statt sich auf einen bestimmten Typ festzulegen."
+    },
+    {
+      "answer_id": "se-102-b-base", "points": 0, "level": "null", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [],
+      "text": "Generic Software Engineering bedeutet, dass man Software möglichst generisch entwickelt, also als Standartsoftware, die man an viele verschiedene Kunden verkaufen kann, statt eine Individuallösung für einen einzelnen Kunden zu bauen. Dadurch spart man Entwicklungskosten, weil man das Produkt nur einmal bauen muss."
+    },
+    {
+      "answer_id": "se-102-c-base", "points": 4, "level": "voll", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2, 3],
+      "text": "Bei Generic Programming schreibt man Code, der nicht auf einen konkreten Datentyp festgelegt ist. Der Typ wird als Parameter behandelt und erst bei der Verwendung eingesetzt, in Java z.B. eine List<T>, die mit String oder Integer instanziiert werden kann. Der zentrale Vorteil ist die Wiederverwendbarkeit. Ein Algorithmus oder Container muss nur einmal implementiert werden und funktioniert für beliebige Typen, bei gleichzeitiger Typsicherheit zur Compilezeit."
+    },
+    {
+      "answer_id": "se-102-d-base", "points": 3, "level": "teil", "variant": "base", "operation": "base",
+      "rubric_fulfilled": [1, 2],
+      "text": "Die Idee ist, Code von konkreten Datentypen zu entkoppeln. Der Typ wird zum Parameter, in Java z.B. über <T> bei generischen Klassen und Methoden. Das ist praktisch, weil man insgesamt weniger Code schreiben muss."
+    }
+  ]
+}
