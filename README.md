@@ -224,10 +224,18 @@ konfigurierbar; berichtet wird stets das tatsächlich verwendete Modell.
   *(Frage, Punktstufe)*. Die Teil-Stufe der zwölf erweiterten Fragen enthält
   bewusst Antworten mit 1, 2 und 3 Punkten; unter der alten Gruppierung hätte
   selbst ein perfekter Bewerter Para-σ = 0,18 gehabt. Korrekt gruppiert:
-  Para-σ (GLM) 0,018 → 0,006 (V1 → V5), Robustheit 0,036 → 0,012;
-  Mistral 0,060/0,143 → 0,006/0,012.
-* Neue Tabelle `results/tables/metrics_models.tex` (beide Modelle, alle
-  Kennzahlen inkl. Robustheit) ersetzt im Paper `metrics_main` + `metrics_sensitivity`.
+  Gruppen mit nur einer Antwort (Teil-Stufe der erweiterten Fragen) tragen
+  nichts bei. Para-σ (GLM) 0,034 → 0,011 (V1 → V5), Robustheit 0,036 → 0,012;
+  Mistral 0,112/0,143 → 0,011/0,012.
+* `results/tables/metrics_models.tex` (beide Modelle, alle Kennzahlen inkl.
+  Robustheit) ersetzt die früheren Tabellen `metrics_main`/`metrics_sensitivity`;
+  nicht mehr im Paper verwendete Abbildungen (MAE-/Para-σ-Balken, Boxplot,
+  Balken je System/Aufgabe der authentischen Antworten) entfallen.
+* Auswertungscode konsolidiert (`eval/analyze.py` stellt Laden, Kennzahlen,
+  Systemlisten, Tabellen-/Abbildungsausgabe für alle Reports bereit;
+  `src/runner.py`, `config.sampling_for`, `util.parse_pred`, Thinking-Schalter im
+  Client); `real_summary.json` zählt jetzt auch per Regex gerettete Antworten
+  (`n_parse_salvaged`).
 * Neue Synthese-Abbildung `python -m eval.overview_figure` →
   `results/figures/exact_overview.pdf` (exakte Quote V1–V6 auf allen drei
   Datensätzen; liest `summary.json`, `human_summary.json`, `real_summary.json`).

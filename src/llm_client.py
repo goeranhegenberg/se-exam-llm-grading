@@ -1,13 +1,14 @@
-"""Modellanbindung (OpenAI) sowie ein deterministischer Mock-Client.
+"""Modellanbindung (OpenAI-kompatibel) sowie ein deterministischer Mock-Client.
 
-Der ``GradingClient`` kapselt die OpenAI-Chat-Completions-API inklusive
-JSON-Modus, Wiederholungslogik (Backoff) und Token-Erfassung. Der
+Der ``GradingClient`` kapselt die Chat-Completions-API inklusive JSON-Modus,
+Wiederholungslogik (Backoff), Thinking-Schalter und Token-Erfassung. Der
 ``MockClient`` erzeugt reproduzierbare Pseudo-Bewertungen ohne Netzwerkzugriff
 und dient ausschließlich dem Testen der Pipeline -- seine Werte dürfen NICHT in
 die Arbeit übernommen werden.
 """
 import hashlib
 import json
+import sys
 
 from openai import (
     APIConnectionError,
@@ -23,8 +24,11 @@ from tenacity import (
     wait_exponential,
 )
 
+from . import config as cfg
+
+
 class _BadResponse(Exception):
-    """Antwort ohne brauchbaren Inhalt (z.B. OpenRouter/Gemini liefern bei einem
+    """Antwort ohne brauchbaren Inhalt (z.B. OpenRouter liefert bei einem
     Upstream-Hiccup gelegentlich ``finish_reason='error'`` mit abgeschnittenem
     oder leerem Inhalt). Wird wie ein transienter Fehler behandelt und erneut
     versucht -- sonst gingen einzelne Aufrufe als nicht-parsbar verloren."""
@@ -40,10 +44,16 @@ class GradingClient:
         if base_url:
             kwargs["base_url"] = base_url
         self.client = OpenAI(**kwargs)
-        # Zusätzliche, nicht-OpenAI-Standard-Felder im Request-Body (z.B. bei
-        # OpenRouter ``{"reasoning": {"enabled": false}}``, um das modell-native
-        # "Thinking" abzuschalten -- für die Konsistenz-/Determinismus-Studie).
+        # Zusätzliche, nicht-OpenAI-Standard-Felder im Request-Body, die bei
+        # jedem Aufruf mitgeschickt werden (i.d.R. leer).
         self.extra_body = extra_body or None
+
+    @staticmethod
+    def thinking_body(enabled):
+        """Request-Felder, mit denen der Anbieter (OpenRouter) das modell-native
+        Thinking an- bzw. abschaltet. Nur hier bekannt, damit die Runner
+        anbieterneutral ein Boolean übergeben können."""
+        return {"reasoning": {"enabled": bool(enabled)}}
 
     @retry(
         reraise=True,
@@ -52,7 +62,7 @@ class GradingClient:
         retry=retry_if_exception_type(_RETRYABLE),
     )
     def _call(self, model, system, user, temperature, top_p, max_tokens, seed,
-              json_mode, extra_body=None):
+              json_mode, extra_body):
         kwargs = dict(
             model=model,
             messages=[
@@ -67,11 +77,8 @@ class GradingClient:
             kwargs["seed"] = seed
         if json_mode:
             kwargs["response_format"] = {"type": "json_object"}
-        # Pro-Aufruf-Override (z.B. reasoning an/aus je Prompt-Version) hat Vorrang
-        # vor einem ggf. global gesetzten extra_body.
-        eb = extra_body if extra_body is not None else self.extra_body
-        if eb:
-            kwargs["extra_body"] = eb
+        if extra_body:
+            kwargs["extra_body"] = extra_body
         resp = self.client.chat.completions.create(**kwargs)
         choice = resp.choices[0] if resp.choices else None
         content = choice.message.content if (choice and choice.message) else None
@@ -84,10 +91,15 @@ class GradingClient:
         return resp
 
     def grade(self, model, system, user, temperature=0.0, top_p=1.0,
-              max_tokens=900, seed=None, json_mode=True, extra_body=None,
+              max_tokens=900, seed=None, json_mode=True, thinking=None,
               **_ignored):
+        """Einen Bewertungsaufruf ausführen. ``thinking`` (Boolean) schaltet das
+        modell-native Thinking je Aufruf; ``None`` lässt den Anbieter-Default."""
+        extra_body = dict(self.extra_body or {})
+        if thinking is not None:
+            extra_body.update(self.thinking_body(thinking))
         resp = self._call(model, system, user, temperature, top_p, max_tokens,
-                          seed, json_mode, extra_body=extra_body)
+                          seed, json_mode, extra_body)
         choice = resp.choices[0]
         usage = {}
         if resp.usage:
@@ -119,7 +131,7 @@ class MockClient:
               max_points=None, **_ignored):
         gt = int(ground_truth) if ground_truth is not None else 0
         # Reproduzierbares "Rauschen" aus dem Prompt-Hash; bei temperature>0 wird
-        # zusätzlich variiert, um Mehrfach-Sampling (Self-Consistency) zu testen.
+        # zusätzlich variiert, um Mehrfach-Sampling zu testen.
         h = int(hashlib.sha1((user + f"|{temperature}").encode("utf-8")).hexdigest(), 16)
         delta = (h % (2 * self.noise + 1)) - self.noise if self.noise else 0
         pred = gt + delta
@@ -136,3 +148,19 @@ class MockClient:
             "model": f"mock::{model}",
             "finish_reason": "stop",
         }
+
+
+def make_client(conf, mock=False, noise=1):
+    """Client aus der Konfiguration bauen; bricht mit klarer Meldung ab, wenn
+    für den echten Betrieb kein API-Key hinterlegt ist."""
+    if mock:
+        return MockClient(noise=noise)
+    api_key = cfg.get_api_key()
+    if not api_key:
+        sys.exit("FEHLER: Kein API-Key gefunden. Trage einen gültigen "
+                 "OPENROUTER_API_KEY (oder OPENAI_API_KEY) in .env ein "
+                 "(siehe .env.example).")
+    provider = conf.get("provider", {})
+    return GradingClient(api_key,
+                         base_url=provider.get("base_url") or cfg.get_base_url(),
+                         extra_body=provider.get("extra_body"))

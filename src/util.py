@@ -1,6 +1,16 @@
-"""Hilfsfunktionen zum robusten Parsen von Modellausgaben."""
+"""Hilfsfunktionen zum robusten Parsen von Modellausgaben und zum Lesen der
+JSONL-Rohdaten."""
 import json
 import re
+
+
+def iter_jsonl(path):
+    """Alle nicht-leeren Zeilen einer JSONL-Datei als Dicts liefern."""
+    with open(path, encoding="utf-8") as fh:
+        for line in fh:
+            line = line.strip()
+            if line:
+                yield json.loads(line)
 
 
 def extract_json(text):
@@ -47,48 +57,52 @@ def coerce_points(value):
         return None
 
 
-_RE_PUNKTE_GESAMT = re.compile(r'"punkte_gesamt"\s*:\s*(-?\d+(?:[.,]\d+)?)')
-_RE_PUNKTE = re.compile(r'"punkte"\s*:\s*(-?\d+(?:[.,]\d+)?)')
+_POINT_KEYS = ("punkte_gesamt", "punkte")
+_RE_POINTS = [re.compile(rf'"{k}"\s*:\s*(-?\d+(?:[.,]\d+)?)') for k in _POINT_KEYS]
 
 
 def salvage_points(text):
     """Rettungsanker, wenn ``extract_json`` an einer Modellantwort scheitert.
 
-    Manche Modelle (z.B. GLM 5.2 mit aktiviertem Thinking) mischen vereinzelt ein
-    korruptes Fremdzeichen ins JSON, sodass es nicht mehr strikt parsbar ist; die
-    eigentliche Punktzahl steht aber unbeschädigt im Text. Diese Funktion zieht
-    die Gesamtpunktzahl per Regex heraus (bevorzugt ``punkte_gesamt``, sonst das
-    erste ``punkte``-Feld). Gibt ``None`` zurück, wenn nichts Plausibles
-    gefunden wird.
+    Manche Modelle (GLM 5.2 mit aktiviertem Thinking im JSON-Modus) liefern
+    JSON mit korrupten Schlüsseln (z.B. ``{"begru{": ...``), sodass es nicht
+    strikt parsbar ist; das Punktefeld steht aber unbeschädigt im Text. Diese
+    Funktion zieht die Gesamtpunktzahl per Regex heraus (bevorzugt
+    ``punkte_gesamt``, sonst das erste ``punkte``-Feld). Gibt ``None``
+    zurück, wenn nichts Plausibles gefunden wird. Gerettete Antworten werden
+    im Record als ``parse_salvaged`` markiert und in der Auswertung gezählt.
     """
     if not text:
         return None
-    m = _RE_PUNKTE_GESAMT.search(text) or _RE_PUNKTE.search(text)
-    return coerce_points(m.group(1).replace(",", ".")) if m else None
+    for rx in _RE_POINTS:
+        m = rx.search(text)
+        if m:
+            return coerce_points(m.group(1).replace(",", "."))
+    return None
 
 
 def extract_points(obj):
-    """Liest die Gesamtpunktzahl aus einem geparsten Bewertungs-Objekt.
-
-    Unterstützt das Baseline-Format (``punkte``) und das strukturierte Format
-    (``punkte_gesamt``). Fällt notfalls auf die Summe der Kriteriumspunkte
-    zurück.
-    """
+    """Liest die Gesamtpunktzahl aus einem geparsten Bewertungs-Objekt
+    (``punkte_gesamt`` oder ``punkte``)."""
     if not isinstance(obj, dict):
         return None
-    for key in ("punkte_gesamt", "punkte"):
+    for key in _POINT_KEYS:
         if key in obj:
             p = coerce_points(obj[key])
             if p is not None:
                 return p
-    if isinstance(obj.get("kriterien"), list):
-        total = 0.0
-        any_ok = False
-        for k in obj["kriterien"]:
-            p = coerce_points(k.get("punkte")) if isinstance(k, dict) else None
-            if p is not None:
-                total += p
-                any_ok = True
-        if any_ok:
-            return total
     return None
+
+
+def parse_pred(text):
+    """Punktzahl aus einer Modellantwort: strikt (JSON) und sonst per Regex.
+
+    Liefert ``(punkte, gerettet)``; ``punkte`` ist ``None``, wenn auch der
+    Rettungsanker nichts findet.
+    """
+    obj, ok = extract_json(text)
+    pred = extract_points(obj) if ok else None
+    if pred is not None:
+        return pred, False
+    pred = salvage_points(text)
+    return pred, pred is not None

@@ -48,6 +48,17 @@ def iter_answer_items(questions):
             yield q, a
 
 
+def answer_meta(q, a):
+    """Die Frage-/Antwort-Felder, die jeder Ergebnis-Record mitführt."""
+    return {
+        "question_id": q["question_id"], "topic": q["topic"], "qtype": q["type"],
+        "max_points": q["max_points"], "answer_id": a["answer_id"],
+        "level": a["level"], "variant": a["variant"], "operation": a["operation"],
+        "gt_points": a["points"], "answer_chars": len(a["text"]),
+        "answer_words": len(a["text"].split()),
+    }
+
+
 def dataset_summary(questions):
     """Kennzahlen des Datensatzes für Logging und Tabellen."""
     n_answers = sum(len(q["answers"]) for q in questions)

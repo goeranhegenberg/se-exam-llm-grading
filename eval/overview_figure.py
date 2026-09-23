@@ -1,31 +1,27 @@
-"""Synthese-Abbildung: exakte Uebereinstimmung des Hauptmodells je Prompt-Version
-auf allen drei Datensaetzen (Benchmark, menschlich verfasst, authentisch) sowie
-der Ensemble-Median (V6). Liest die drei summary-Dateien der Auswertungen.
+"""Synthese-Abbildung (Abbildung 1): exakte Uebereinstimmung des Hauptmodells
+je Prompt-Version auf allen drei Datensaetzen (Benchmark, menschlich verfasst,
+authentisch) sowie der Ensemble-Median (V6). Liest die drei Summary-Dateien
+der Auswertungen.
 
-Aufruf (aus implementation/):
+Aufruf (aus dem Paketverzeichnis):
     python -m eval.overview_figure
 """
 import argparse
 import json
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 
+from eval.analyze import COLORS, ENSEMBLE, VERSION_LABEL, new_figure, save_figure
 from src.config import resolve_path
 
-VERSIONS = ["v1_baseline", "v2_begruendung", "v3_thinking", "v4_fewshot",
-            "v5_rubrik", "v6_median"]
-XLABELS = ["V1\nBaseline", "V2\nBegr.", "V3\nThinking", "V4\nFew-Shot",
-           "V5\nRubrik", "V6\nEnsemble"]
-DATASETS = [("results/summary.json", "Benchmark (162)", "#4C72B0"),
-            ("results/human_summary.json", "menschlich verfasst (33)", "#55A868"),
-            ("results/real_summary.json", "authentisch (35)", "#C44E52")]
+SYSTEMS = [("main", v) for v in VERSION_LABEL] + [ENSEMBLE]
+XLABELS = [lab.replace(" ", "\n", 1) for lab in VERSION_LABEL.values()] + ["V6\nEnsemble"]
+DATASETS = [("results/summary.json", "Benchmark (162)", COLORS["main"]),
+            ("results/human_summary.json", "menschlich verfasst (33)", COLORS["other"]),
+            ("results/real_summary.json", "authentisch (35)", COLORS["ensemble"])]
 
 
-def _exact(summary, version):
-    model = "ensemble" if version == "v6_median" else "main"
+def exact_of(summary, model, version):
     for m in summary["metrics"]:
         if m["model_label"] == model and m["prompt_version"] == version:
             return 100 * m["exact"]
@@ -37,12 +33,12 @@ def main(argv=None):
     p.add_argument("--out", default="results/figures/exact_overview.pdf")
     args = p.parse_args(argv)
 
-    x = np.arange(len(VERSIONS))
+    x = np.arange(len(SYSTEMS))
     width = 0.8 / len(DATASETS)
-    fig, ax = plt.subplots(figsize=(5.2, 2.5))
+    fig, ax = new_figure((5.2, 2.5))
     for i, (path, label, color) in enumerate(DATASETS):
         summary = json.loads(resolve_path(path).read_text(encoding="utf-8"))
-        vals = [_exact(summary, v) for v in VERSIONS]
+        vals = [exact_of(summary, *s) for s in SYSTEMS]
         pos = x + (i - (len(DATASETS) - 1) / 2) * width
         ax.bar(pos, vals, width, label=label, color=color)
         for xp, val in zip(pos, vals):
@@ -55,15 +51,11 @@ def main(argv=None):
     ax.set_ylim(0, 112)
     ax.set_yticks([0, 20, 40, 60, 80, 100])
     ax.tick_params(axis="y", labelsize=7)
-    ax.axvline(4.5, color="grey", lw=0.6, ls=":")
+    ax.axvline(len(SYSTEMS) - 1.5, color="grey", lw=0.6, ls=":")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=3,
               fontsize=6.5, frameon=False)
-    fig.tight_layout()
-    out = resolve_path(args.out)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out)
-    fig.savefig(out.with_suffix(".png"), dpi=150)
-    print("Abbildung geschrieben:", out)
+    save_figure(fig, args.out)
+    print("Abbildung geschrieben:", resolve_path(args.out))
 
 
 if __name__ == "__main__":

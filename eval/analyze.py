@@ -1,14 +1,13 @@
-"""Wertet die JSONL-Rohdaten der Bewertungsläufe aus.
+"""Wertet die JSONL-Rohdaten des Benchmark-Laufs aus und stellt die
+gemeinsamen Bausteine (Laden, Punkt-Schätzwerte, Kennzahlen, Tabellen- und
+Abbildungsausgabe, Anzeigenamen) für alle Auswertungsskripte bereit.
 
 Erzeugt:
-  * results/tables/metrics_main.tex        -- Metriken je Prompt-Version (Hauptmodell)
-  * results/tables/metrics_sensitivity.tex -- Modellvergleich (Haupt- vs. Zweitmodell)
-  * results/tables/metrics_models.tex      -- beide Modelle, alle Kennzahlen inkl. Robustheit
-  * results/tables/dataset_stats.tex       -- Kennzahlen des Datensatzes
-  * results/figures/mae_by_version.pdf     -- MAE je Prompt-Version
-  * results/figures/confusion_best.pdf     -- Konfusionsmatrix (Punktstufen) der besten Version
-  * results/figures/boxplot_levels.pdf     -- Streuung der vergebenen Punkte je Punktstufe
-  * results/summary.json                   -- alle Kennzahlen maschinenlesbar
+  * results/tables/metrics_models.tex   -- beide Modelle, alle Kennzahlen (Tabelle 2)
+  * results/tables/dataset_stats.tex    -- Kennzahlen des Datensatzes
+  * results/figures/confusion_best.pdf  -- Konfusionsmatrix über die Punktstufen
+                                           (Hauptmodell, alle Versionen gepoolt)
+  * results/summary.json                -- alle Kennzahlen maschinenlesbar
 
 Aufruf:
     python -m eval.analyze                 # liest results/raw/*.jsonl
@@ -16,62 +15,86 @@ Aufruf:
 """
 import argparse
 import json
-import re
-from pathlib import Path
+import math
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from src.config import resolve_path
+from src.util import iter_jsonl
 
 LEVELS = ["null", "teil", "voll"]
 LEVEL_LABEL = {"null": "0 P.", "teil": "Teil", "voll": "voll"}
+
+# --------------------------------------------------------------------------- #
+# Anzeigenamen (einzige Quelle für Tabellen, Abbildungen und Konsolenausgaben)
+# --------------------------------------------------------------------------- #
+VERSION_LABEL = {
+    "v1_baseline": "V1 Baseline",
+    "v2_begruendung": "V2 Begr.",
+    "v3_thinking": "V3 Thinking",
+    "v4_fewshot": "V4 Few-Shot",
+    "v5_rubrik": "V5 Rubrik",
+}
+MODEL_NAME = {"main": "GLM 5.2", "sensitivity": "Mistral Small 4",
+              "tertiary": "GPT-OSS 120B"}
+GRADERS = ["main", "sensitivity", "tertiary"]
+# Kurzschlüssel und Namen der Bewerter in den Uneinigkeits-Statistiken
+GRADER_KEY = {"main": "glm", "sensitivity": "mis", "tertiary": "oss", "ensemble": "med"}
+GRADER_NAME = {"main": "GLM", "sensitivity": "Mistral", "tertiary": "GPT-OSS",
+               "ensemble": "Median"}
+ENSEMBLE = ("ensemble", "v6_median")
+COLORS = {"main": "#4C72B0", "other": "#55A868", "ensemble": "#C44E52",
+          "extra": "#8172B2"}
+
+# Systeme (model_label, prompt_version, Anzeigename) der Vergleichstabellen
+MAIN_SYSTEMS = [("main", v, f"{lab} ({MODEL_NAME['main']})")
+                for v, lab in VERSION_LABEL.items()]
+V5_SYSTEMS = [(m, "v5_rubrik", f"{MODEL_NAME[m]} (V5)") for m in GRADERS]
+ENSEMBLE_SYSTEM = (*ENSEMBLE, "Ensemble (V6, Median)")
 
 
 # --------------------------------------------------------------------------- #
 # Laden und Aggregieren
 # --------------------------------------------------------------------------- #
 def load_raw(raw_arg):
+    """Rohdaten (eine JSONL-Datei oder alle ``*.jsonl`` eines Verzeichnisses)
+    als DataFrame; im Verzeichnismodus werden Mock-Testläufe (``_mock_`` im
+    Dateinamen) ausgeblendet, damit sie die Auswertung nicht verfälschen."""
     path = resolve_path(raw_arg)
-    # Im Verzeichnismodus Mock-Testläufe ausblenden, damit sie die echte
-    # Auswertung nicht verfälschen (eine konkret angegebene Datei wird genutzt).
     files = (sorted(p for p in path.glob("*.jsonl") if "_mock_" not in p.name)
              if path.is_dir() else [path])
-    rows = []
-    for fp in files:
-        with open(fp, encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    rows.append(json.loads(line))
+    rows = [r for fp in files for r in iter_jsonl(fp)]
     if not rows:
         raise FileNotFoundError(f"Keine Rohdaten unter {path} gefunden.")
     return pd.DataFrame(rows)
 
 
+PE_KEYS = ["model_label", "prompt_version", "question_id", "answer_id"]
+PE_META = ["topic", "qtype", "max_points", "level", "variant", "operation",
+           "gt_points", "answer_chars"]
+
+
 def point_estimates(df):
     """Pro (Modell, Version, Antwort) einen Punkt-Schätzwert (Median der gültigen
-    Samples) und die Streuung über die Wiederholungen berechnen."""
-    keys = ["model_label", "prompt_version", "question_id", "answer_id"]
-    meta = ["topic", "qtype", "max_points", "level", "variant", "operation",
-            "gt_points", "answer_chars"]
-    recs = []
-    for key_vals, g in df.groupby(keys):
-        ok = g[g["parse_ok"] == True]  # noqa: E712
-        preds = ok["pred_points"].astype(float).tolist()
-        rec = dict(zip(keys, key_vals))
-        first = g.iloc[0]
-        for m in meta:
-            rec[m] = first.get(m)
-        rec["n_samples"] = len(g)
-        rec["n_ok"] = len(preds)
-        rec["pe"] = float(np.median(preds)) if preds else np.nan
-        rec["run_std"] = float(np.std(preds)) if len(preds) > 1 else 0.0
-        recs.append(rec)
-    return pd.DataFrame(recs)
+    Wiederholungen, ``pe``) und die Streuung über die Wiederholungen
+    (``run_std``) berechnen."""
+    ok = df[df["parse_ok"].astype(bool)]
+    est = ok.groupby(PE_KEYS)["pred_points"].agg(
+        pe="median", n_ok="size",
+        run_std=lambda s: float(np.std(s.astype(float))) if len(s) > 1 else 0.0)
+    meta = df.groupby(PE_KEYS).agg(n_samples=("parse_ok", "size"),
+                                   **{m: (m, "first") for m in PE_META})
+    pe = meta.join(est).reset_index()
+    pe["n_ok"] = pe["n_ok"].fillna(0).astype(int)
+    pe["run_std"] = pe["run_std"].fillna(0.0)
+    return pe
+
+
+def exact_rate(v):
+    """Anteil der Antworten, deren gerundeter Schätzwert den Referenzwert trifft."""
+    v = v.dropna(subset=["pe"])
+    return float((v["pe"].round() == v["gt_points"]).mean()) if len(v) else float("nan")
 
 
 def _safe_corr(x, y):
@@ -82,37 +105,34 @@ def _safe_corr(x, y):
 
 
 def metrics_for(pe):
-    """Kennzahlen für eine Teilmenge (eine Modell/Version-Kombination)."""
+    """Kennzahlen für eine Teilmenge (eine Modell/Version-Kombination).
+
+    Para-σ und Robustheit beziehen sich auf Formulierungsvarianten derselben
+    Frage mit GLEICHER Referenzpunktzahl (nur dort ist Streuung ein Fehler);
+    Gruppen mit einer einzigen Antwort tragen nichts bei. Datensätze ohne
+    Varianten erhalten ``None``.
+    """
     v = pe.dropna(subset=["pe"])
     if v.empty:
         return None
     err = v["pe"] - v["gt_points"]
     abs_err = err.abs()
-    # Paraphrasen-Streuung: Streuung der Schätzwerte über Varianten derselben
-    # Frage mit GLEICHER Referenzpunktzahl. Nicht nach Punktstufe gruppieren:
-    # Die Teil-Stufe der erweiterten Fragen enthält bewusst Antworten mit
-    # 1, 2 und 3 Punkten, dort hätte selbst ein perfekter Bewerter Streuung.
-    para = v.groupby(["question_id", "gt_points"])["pe"].std(ddof=0).dropna()
-    # Robustheit: Abweichung der punkterhaltenden Varianten von ihrer
-    # Basis-Antwort (gleiche Frage, gleiche Referenzpunktzahl)
-    robust = []
-    for _, grp in v.groupby(["question_id", "gt_points"]):
-        base = grp[grp["operation"] == "base"]["pe"]
-        if base.empty:
-            continue
-        b = base.iloc[0]
-        for _, r in grp[grp["operation"] != "base"].iterrows():
-            robust.append(abs(r["pe"] - b))
+    grp = v.groupby(["question_id", "gt_points"])["pe"]
+    para = grp.std(ddof=0)[grp.size() > 1]
+    base = v[v["operation"] == "base"].groupby(["question_id", "gt_points"])["pe"].first()
+    var = v[v["operation"] != "base"].set_index(["question_id", "gt_points"])["pe"]
+    robust = np.abs(var.to_numpy() - base.reindex(var.index).to_numpy())
+    robust = robust[~np.isnan(robust)]
     return {
         "n": int(len(v)),
         "parse_rate": float(v["n_ok"].sum() / v["n_samples"].sum()),
         "mae": float(abs_err.mean()),
         "rmse": float(np.sqrt((err ** 2).mean())),
-        "exact": float((v["pe"].round() == v["gt_points"]).mean()),
+        "exact": exact_rate(v),
         "within1": float((abs_err <= 1.0).mean()),
         "run_std": float(v["run_std"].mean()),
-        "para_std": float(para.mean()) if len(para) else 0.0,
-        "robustness": float(np.mean(robust)) if robust else 0.0,
+        "para_std": float(para.mean()) if len(para) else None,
+        "robustness": float(robust.mean()) if len(robust) else None,
         "len_bias": _safe_corr(v["answer_chars"], err),
     }
 
@@ -127,176 +147,175 @@ def metrics_table(pe):
     return pd.DataFrame(rows)
 
 
+def system_rows(pe, systems, extra=None):
+    """Kennzahlen je System ``(model_label, prompt_version, label)`` inklusive
+    exakter Quote je Punktstufe; ``extra(sub)`` liefert zusätzliche Spalten."""
+    rows = []
+    for model, version, label in systems:
+        sub = pe[(pe["model_label"] == model) & (pe["prompt_version"] == version)]
+        if sub.empty:
+            continue
+        m = metrics_for(sub)
+        m.update({"label": label, "model_label": model, "prompt_version": version})
+        for lvl in LEVELS:
+            m[f"exact_{lvl}"] = exact_rate(sub[sub["level"] == lvl])
+        if extra:
+            m.update(extra(sub))
+        rows.append(m)
+    return pd.DataFrame(rows)
+
+
+def by_answer(pe, model, version):
+    sub = pe[(pe["model_label"] == model) & (pe["prompt_version"] == version)]
+    return sub.set_index(["question_id", "answer_id"])
+
+
+def disagreement_stats(pe, print_prefix="  "):
+    """Antworten, über die die drei V5-Bewerter uneinig sind, und die exakte
+    Quote jedes Systems auf dieser Teilmenge. ``None``, wenn kein Ensemble-Lauf
+    vorliegt."""
+    med = by_answer(pe, *ENSEMBLE)
+    if med.empty:
+        return None
+    cols = {GRADER_KEY[g]: by_answer(pe, g, "v5_rubrik")["pe"] for g in GRADERS}
+    comp = pd.DataFrame({**cols, "med": med["pe"], "gt": med["gt_points"]}).dropna()
+    dis = comp[comp[[GRADER_KEY[g] for g in GRADERS]].round().nunique(axis=1) > 1]
+    print(f"\nUneinige Antworten: {len(dis)}/{len(comp)} "
+          f"({100*len(dis)/len(comp):.1f}%)")
+    stats = {"n": int(len(dis)), "total": int(len(comp))}
+    for g in GRADERS + ["ensemble"]:
+        key = GRADER_KEY[g]
+        if len(dis):
+            acc = float((dis[key].round() == dis["gt"]).mean())
+            print(f"{print_prefix}exakt auf Uneinigkeits-Subset [{GRADER_NAME[g]:8}]: {100*acc:.1f}%")
+            stats[f"exact_{key}"] = acc
+    return stats
+
+
 # --------------------------------------------------------------------------- #
 # Punktstufen / Konfusionsmatrix
 # --------------------------------------------------------------------------- #
-def predicted_level(pe_value, level_map):
-    """Schätzwert der nächstgelegenen Punktstufe zuordnen (skaleninvariant)."""
-    best, bestd = None, None
-    for lvl, val in level_map.items():
-        d = abs(pe_value - val)
-        if bestd is None or d < bestd:
-            best, bestd = lvl, d
-    return best
-
-
 def confusion(pe_one):
-    """3x3-Konfusionsmatrix über Punktstufen für eine Modell/Version-Teilmenge."""
-    level_maps = {}
-    for qid, grp in pe_one.groupby("question_id"):
-        level_maps[qid] = {r["level"]: r["gt_points"] for _, r in grp.iterrows()}
+    """3x3-Konfusionsmatrix über Punktstufen: jeder Schätzwert wird der
+    nächstgelegenen Punktstufe seiner Frage zugeordnet (skaleninvariant)."""
+    level_pts = pe_one.groupby(["question_id", "level"])["gt_points"].first()
     mat = np.zeros((len(LEVELS), len(LEVELS)), dtype=int)
     for _, r in pe_one.dropna(subset=["pe"]).iterrows():
-        pl = predicted_level(r["pe"], level_maps[r["question_id"]])
-        mat[LEVELS.index(r["level"]), LEVELS.index(pl)] += 1
+        lm = level_pts[r["question_id"]]
+        pred = min(lm.index, key=lambda l: abs(r["pe"] - lm[l]))
+        mat[LEVELS.index(r["level"]), LEVELS.index(pred)] += 1
     return mat
 
 
 # --------------------------------------------------------------------------- #
 # Ausgabe: Tabellen und Abbildungen
 # --------------------------------------------------------------------------- #
-VERSION_LABEL = {
-    "v1_baseline": "V1 Baseline",
-    "v2_begruendung": "V2 Begr.",
-    "v3_thinking": "V3 Thinking",
-    "v4_fewshot": "V4 Few-Shot",
-    "v5_rubrik": "V5 Rubrik",
-}
-
-
 def _fmt(x, nd=2):
-    if x is None or (isinstance(x, float) and np.isnan(x)):
+    if x is None or (isinstance(x, float) and math.isnan(x)):
         return "--"
     return f"{x:.{nd}f}"
 
 
-def write_metrics_main(mt, out):
-    main = mt[mt["model_label"] == "main"].copy()
-    if main.empty:
-        main = mt.copy()
-    main["order"] = main["prompt_version"].map(
-        {v: i for i, v in enumerate(VERSION_LABEL)}).fillna(99)
-    main = main.sort_values("order")
-    lines = [r"\begin{tabular}{lrrrrr}", r"\toprule",
-             r"Prompt-Version & MAE & Exakt & $\pm$1 & Lauf-$\sigma$ & Para-$\sigma$ \\",
-             r"\midrule"]
-    for _, r in main.iterrows():
-        lines.append(
-            f"{VERSION_LABEL.get(r['prompt_version'], r['prompt_version'])} & "
-            f"{_fmt(r['mae'])} & {_fmt(100*r['exact'],1)}\\% & "
-            f"{_fmt(100*r['within1'],1)}\\% & {_fmt(r['run_std'])} & "
-            f"{_fmt(r['para_std'])} \\\\")
-    lines += [r"\bottomrule", r"\end{tabular}"]
-    out.write_text("\n".join(lines), encoding="utf-8")
+def metric_cells(r):
+    """Standard-Spalten MAE, Exakt, ±1, Lauf-σ einer Kennzahlen-Zeile."""
+    return [_fmt(r["mae"]), f"{_fmt(100*r['exact'], 1)}\\%",
+            f"{_fmt(100*r['within1'], 1)}\\%", _fmt(r["run_std"])]
 
 
-_MODEL_DISPLAY = {
-    "z-ai/glm-5.2": "GLM 5.2",
-    "mistralai/mistral-small-2603": "Mistral Small 4",
-    "openai/gpt-oss-120b": "GPT-OSS 120B",
-}
-
-
-def _short_model(name):
-    if not name:
-        return "?"
-    if name in _MODEL_DISPLAY:
-        return _MODEL_DISPLAY[name]
-    s = re.sub(r"-\d{4}-\d{2}-\d{2}$", "", str(name))
-    return s.split("/")[-1]
-
-
-def write_metrics_sensitivity(mt, label_map, out):
-    """Pivot: je Prompt-Version eine Zeile, je Modell MAE + exakte Quote."""
-    models = [m for m in ["main", "sensitivity"] if m in set(mt["model_label"])]
-    if not models:
-        models = sorted(mt["model_label"].unique())[:2]
-    versions = [v for v in VERSION_LABEL if v in set(mt["prompt_version"])]
-    colspec = "l" + "rr" * len(models)
-    header = "Version"
-    for m in models:
-        sm = _short_model(label_map.get(m, m))
-        header += (f" & \\makecell{{MAE\\\\({sm})}}"
-                   f" & \\makecell{{Exakt\\\\({sm})}}")
+def write_tabular(out, colspec, header, rows, midrule_after=(), bold=()):
+    """LaTeX-``tabular`` (booktabs) schreiben. ``rows`` sind ``(label, cells)``;
+    nach den Labels in ``midrule_after`` folgt ein ``\\midrule``, Labels in
+    ``bold`` werden fett gesetzt."""
     lines = [r"\begin{tabular}{" + colspec + "}", r"\toprule", header + r" \\",
              r"\midrule"]
-    for v in versions:
-        row = VERSION_LABEL.get(v, v)
-        for m in models:
-            sub = mt[(mt["model_label"] == m) & (mt["prompt_version"] == v)]
-            if sub.empty:
-                row += " & -- & --"
-            else:
-                r0 = sub.iloc[0]
-                row += f" & {_fmt(r0['mae'])} & {_fmt(100*r0['exact'],1)}\\%"
-        lines.append(row + r" \\")
-    lines += [r"\bottomrule", r"\end{tabular}"]
-    out.write_text("\n".join(lines), encoding="utf-8")
-
-
-def write_metrics_models(mt, label_map, out):
-    """Beide Modelle untereinander, je Prompt-Version eine Zeile: Korrektheit,
-    Konsistenz (Lauf-/Para-sigma) und Robustheit in einer Tabelle."""
-    models = [m for m in ["main", "sensitivity"] if m in set(mt["model_label"])]
-    versions = [v for v in VERSION_LABEL if v in set(mt["prompt_version"])]
-    lines = [r"\begin{tabular}{lrrrrrr}", r"\toprule",
-             r"Version & MAE & Exakt & $\pm$1 & Lauf-$\sigma$ & Para-$\sigma$ & Rob. \\",
-             r"\midrule"]
-    for i, m in enumerate(models):
-        if i:
+    for label, cells in rows:
+        shown = rf"\textbf{{{label}}}" if label in bold else label
+        lines.append(" & ".join([shown, *cells]) + r" \\")
+        if label in midrule_after:
             lines.append(r"\midrule")
-        lines.append(r"\multicolumn{7}{l}{\emph{" + _short_model(label_map.get(m, m))
-                     + r"}} \\")
-        for v in versions:
-            sub = mt[(mt["model_label"] == m) & (mt["prompt_version"] == v)]
-            if sub.empty:
-                continue
-            r0 = sub.iloc[0]
-            lines.append(
-                f"{VERSION_LABEL.get(v, v)} & {_fmt(r0['mae'])} & "
-                f"{_fmt(100*r0['exact'],1)}\\% & {_fmt(100*r0['within1'],1)}\\% & "
-                f"{_fmt(r0['run_std'])} & {_fmt(r0['para_std'], 3)} & "
-                f"{_fmt(r0['robustness'], 3)} \\\\")
     lines += [r"\bottomrule", r"\end{tabular}"]
+    out = resolve_path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines), encoding="utf-8")
+    print(f"Tabelle geschrieben: {out}")
 
 
-def write_dataset_stats(pe, out):
-    base = pe[pe["model_label"] == pe["model_label"].iloc[0]]
-    n_q = base["question_id"].nunique()
-    n_ans = base["answer_id"].nunique()
-    n_var = base[base["operation"] != "base"]["answer_id"].nunique()
-    lines = [r"\begin{tabular}{lr}", r"\toprule", r"Kennzahl & Wert \\", r"\midrule",
-             f"Fragen & {n_q} \\\\",
-             f"Antworten gesamt & {n_ans} \\\\",
-             f"davon Basis-Antworten & {n_ans - n_var} \\\\",
-             f"davon Varianten & {n_var} \\\\",
-             f"Punktstufen je Frage & {base['level'].nunique()} \\\\",
-             r"\bottomrule", r"\end{tabular}"]
-    out.write_text("\n".join(lines), encoding="utf-8")
+def write_summary(out, summary):
+    """Kennzahlen als JSON; NaN wird zu ``null`` (gültiges JSON)."""
+    def clean(o):
+        if isinstance(o, float) and math.isnan(o):
+            return None
+        if isinstance(o, dict):
+            return {k: clean(v) for k, v in o.items()}
+        if isinstance(o, list):
+            return [clean(v) for v in o]
+        return o
+    out = resolve_path(out)
+    out.write_text(json.dumps(clean(summary), ensure_ascii=False, indent=2),
+                   encoding="utf-8")
+    print(f"Summary geschrieben: {out}")
 
 
-def plot_mae(mt, out):
-    main = mt[mt["model_label"] == "main"]
-    if main.empty:
-        main = mt
-    order = [v for v in VERSION_LABEL if v in set(main["prompt_version"])]
-    vals = [main[main["prompt_version"] == v]["mae"].iloc[0] for v in order]
-    fig, ax = plt.subplots(figsize=(5.2, 2.8))
-    ax.bar([VERSION_LABEL[v] for v in order], vals, color="#4C72B0")
-    ax.set_ylabel("MAE (Punkte)")
-    ax.set_title("Mittlerer absoluter Fehler je Prompt-Version")
-    for i, val in enumerate(vals):
-        ax.text(i, val, _fmt(val), ha="center", va="bottom", fontsize=8)
-    plt.xticks(rotation=20, ha="right")
+def save_figure(fig, out):
+    """Abbildung als PDF (fürs Paper) und PNG (zur Kontrolle) speichern."""
+    import matplotlib.pyplot as plt
+    out = resolve_path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
     fig.savefig(out)
     fig.savefig(out.with_suffix(".png"), dpi=150)
     plt.close(fig)
 
 
+def new_figure(figsize):
+    """matplotlib erst hier laden: Skripte, die nur Tabellen schreiben,
+    brauchen es nicht."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    return plt.subplots(figsize=figsize)
+
+
+def write_metrics_models(mt, out):
+    """Beide Modelle untereinander, je Prompt-Version eine Zeile: Korrektheit,
+    Konsistenz (Lauf-/Para-σ) und Robustheit in einer Tabelle."""
+    lines = [r"\begin{tabular}{lrrrrrr}", r"\toprule",
+             r"Version & MAE & Exakt & $\pm$1 & Lauf-$\sigma$ & Para-$\sigma$ & Rob. \\",
+             r"\midrule"]
+    for i, m in enumerate(k for k in ("main", "sensitivity") if k in set(mt["model_label"])):
+        if i:
+            lines.append(r"\midrule")
+        lines.append(r"\multicolumn{7}{l}{\emph{" + MODEL_NAME[m] + r"}} \\")
+        for v, label in VERSION_LABEL.items():
+            sub = mt[(mt["model_label"] == m) & (mt["prompt_version"] == v)]
+            if sub.empty:
+                continue
+            r0 = sub.iloc[0]
+            cells = metric_cells(r0) + [_fmt(r0["para_std"], 3), _fmt(r0["robustness"], 3)]
+            lines.append(" & ".join([label, *cells]) + r" \\")
+    lines += [r"\bottomrule", r"\end{tabular}"]
+    out = resolve_path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines), encoding="utf-8")
+    print(f"Tabelle geschrieben: {out}")
+
+
+def write_dataset_stats(pe, out):
+    base = pe[pe["model_label"] == pe["model_label"].iloc[0]]
+    n_ans = base["answer_id"].nunique()
+    n_var = base[base["operation"] != "base"]["answer_id"].nunique()
+    lines = [r"\begin{tabular}{lr}", r"\toprule", r"Kennzahl & Wert \\", r"\midrule",
+             f"Fragen & {base['question_id'].nunique()} \\\\",
+             f"Antworten gesamt & {n_ans} \\\\",
+             f"davon Basis-Antworten & {n_ans - n_var} \\\\",
+             f"davon Varianten & {n_var} \\\\",
+             f"Punktstufen je Frage & {base['level'].nunique()} \\\\",
+             r"\bottomrule", r"\end{tabular}"]
+    resolve_path(out).write_text("\n".join(lines), encoding="utf-8")
+
+
 def plot_confusion(mat, title, out):
-    fig, ax = plt.subplots(figsize=(3.6, 3.2))
+    fig, ax = new_figure((3.6, 3.2))
     im = ax.imshow(mat, cmap="Blues")
     ax.set_xticks(range(len(LEVELS)))
     ax.set_yticks(range(len(LEVELS)))
@@ -310,52 +329,12 @@ def plot_confusion(mat, title, out):
             ax.text(j, i, int(mat[i, j]), ha="center", va="center",
                     color="white" if mat[i, j] > mat.max() / 2 else "black")
     fig.colorbar(im, fraction=0.046, pad=0.04)
-    fig.tight_layout()
-    fig.savefig(out)
-    fig.savefig(out.with_suffix(".png"), dpi=150)
-    plt.close(fig)
-
-
-def plot_para_by_version(mt, out):
-    """Paraphrasen-Streuung (Para-sigma) je Prompt-Version fuer das Hauptmodell.
-
-    Informativere Alternative zur MAE-Grafik: zeigt, wie die
-    Formulierungsabhaengigkeit der Bewertung mit zunehmender Prompt-Struktur
-    abnimmt (kleiner ist besser)."""
-    main = mt[mt["model_label"] == "main"]
-    if main.empty:
-        main = mt
-    order = [v for v in VERSION_LABEL if v in set(main["prompt_version"])]
-    vals = [main[main["prompt_version"] == v]["para_std"].iloc[0] for v in order]
-    fig, ax = plt.subplots(figsize=(5.2, 2.8))
-    ax.bar([VERSION_LABEL[v] for v in order], vals, color="#55A868")
-    ax.set_ylabel(r"Para-$\sigma$ (Punkte)")
-    ax.set_title("Paraphrasen-Streuung je Prompt-Version")
-    for i, val in enumerate(vals):
-        ax.text(i, val, _fmt(val), ha="center", va="bottom", fontsize=8)
-    plt.xticks(rotation=20, ha="right")
-    fig.tight_layout()
-    fig.savefig(out)
-    fig.savefig(out.with_suffix(".png"), dpi=150)
-    plt.close(fig)
-
-
-def plot_boxplot_levels(pe_one, title, out):
-    data = [pe_one[pe_one["level"] == l]["pe"].dropna().tolist() for l in LEVELS]
-    fig, ax = plt.subplots(figsize=(4.2, 2.8))
-    ax.boxplot(data, tick_labels=[LEVEL_LABEL[l] for l in LEVELS])
-    ax.set_xlabel("wahre Punktstufe")
-    ax.set_ylabel("vergebene Punkte")
-    ax.set_title(title)
-    fig.tight_layout()
-    fig.savefig(out)
-    fig.savefig(out.with_suffix(".png"), dpi=150)
-    plt.close(fig)
+    save_figure(fig, out)
 
 
 # --------------------------------------------------------------------------- #
 def main(argv=None):
-    p = argparse.ArgumentParser(description="Auswertung der Bewertungsläufe.")
+    p = argparse.ArgumentParser(description="Auswertung des Benchmark-Laufs.")
     p.add_argument("--raw", default="results/raw")
     p.add_argument("--results-dir", default="results")
     args = p.parse_args(argv)
@@ -363,50 +342,25 @@ def main(argv=None):
     df = load_raw(args.raw)
     pe = point_estimates(df)
     mt = metrics_table(pe)
-
     res = resolve_path(args.results_dir)
     (res / "tables").mkdir(parents=True, exist_ok=True)
-    (res / "figures").mkdir(parents=True, exist_ok=True)
 
-    label_map = df.groupby("model_label")["model_requested"].first().to_dict()
-    write_metrics_main(mt, res / "tables" / "metrics_main.tex")
-    write_metrics_sensitivity(mt, label_map, res / "tables" / "metrics_sensitivity.tex")
-    write_metrics_models(mt, label_map, res / "tables" / "metrics_models.tex")
+    write_metrics_models(mt, res / "tables" / "metrics_models.tex")
     write_dataset_stats(pe, res / "tables" / "dataset_stats.tex")
-
-    # Beste Version (Hauptmodell) = niedrigster MAE -- für summary.json/Text.
-    main_mt = mt[mt["model_label"] == "main"]
-    if main_mt.empty:
-        main_mt = mt
-    best_version = main_mt.sort_values("mae").iloc[0]["prompt_version"]
-
-    # Für Konfusionsmatrix/Boxplot: Hauptmodell über ALLE Versionen gepoolt --
-    # repräsentatives Gesamtbild (inkl. der wenigen Fehler) statt einer einzelnen,
-    # womöglich perfekten Version.
-    main_label = "main" if "main" in set(pe["model_label"]) else pe["model_label"].iloc[0]
-    pe_main = pe[pe["model_label"] == main_label]
-
-    plot_mae(mt, res / "figures" / "mae_by_version.pdf")
-    plot_para_by_version(mt, res / "figures" / "para_by_version.pdf")
-    plot_confusion(confusion(pe_main), "Konfusionsmatrix",
+    # Konfusionsmatrix: Hauptmodell über ALLE Versionen gepoolt -- Gesamtbild
+    # der Verwechslungen statt einer einzelnen, womöglich perfekten Version.
+    plot_confusion(confusion(pe[pe["model_label"] == "main"]), "Konfusionsmatrix",
                    res / "figures" / "confusion_best.pdf")
-    plot_boxplot_levels(pe_main, "Punktvergabe je Stufe",
-                        res / "figures" / "boxplot_levels.pdf")
 
-    summary = {
-        "best_version": best_version,
+    main_mt = mt[mt["model_label"] == "main"]
+    write_summary(res / "summary.json", {
+        "best_version": main_mt.sort_values("mae").iloc[0]["prompt_version"],
         "metrics": mt.to_dict(orient="records"),
         "n_records": int(len(df)),
         "models": sorted(df["model_label"].unique().tolist()),
         "versions": sorted(df["prompt_version"].unique().tolist()),
-    }
-    (res / "summary.json").write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
-
-    print("Auswertung geschrieben nach", res)
+    })
     print(mt.to_string(index=False))
-    print("Beste Version (MAE):", best_version)
-    return summary
 
 
 if __name__ == "__main__":
