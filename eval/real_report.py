@@ -10,7 +10,8 @@ Weil die Aufgaben unterschiedliche Maximalpunktzahlen haben (2--10 Punkte),
 waere ein blosser MAE ueber alle Aufgaben nicht vergleichbar. Zusaetzlich wird
 daher der skalennormierte Fehler NMAE berichtet (absoluter Fehler geteilt durch
 die Maximalpunktzahl der Aufgabe). Keine Formulierungsvarianten, daher keine
-Para-σ-Spalte.
+Para-σ-Spalte. Kennzahlen werden je Lauf (``results/raw_real/run<N>/``)
+berechnet und ueber die Laeufe gemittelt.
 
 Erzeugt:
   * results/tables/metrics_real.tex   -- V1-V5 (Hauptmodell) + V5 der beiden
@@ -26,10 +27,11 @@ import argparse
 
 import pandas as pd
 
-from eval.analyze import (ENSEMBLE, ENSEMBLE_SYSTEM, MAIN_SYSTEMS, V5_SYSTEMS,
-                          _fmt, disagreement_stats, exact_rate, load_raw,
-                          metric_cells, point_estimates, system_rows,
-                          write_summary, write_tabular)
+from eval.analyze import (ENSEMBLE, ENSEMBLE_SYSTEM, MAIN_SYSTEMS, SYSTEM_KEYS,
+                          V5_SYSTEMS, _fmt, disagreement_over_runs, exact_rate,
+                          load_runs, mean_over_runs, metric_cells,
+                          point_estimates, system_rows, write_summary,
+                          write_tabular)
 from src.dataset import load_questions
 
 SYSTEMS = MAIN_SYSTEMS + V5_SYSTEMS[1:] + [ENSEMBLE_SYSTEM]
@@ -71,6 +73,16 @@ def per_task(pe, questions):
     return pd.DataFrame(rows)
 
 
+def parse_stats(df):
+    """Parse-Ausfaelle und Regex-Rettungen der Bewerter-Aufrufe eines Laufs."""
+    graded = df[df["model_label"] != "ensemble"]
+    fails = graded[~graded["parse_ok"].astype(bool)]
+    salv = graded["parse_salvaged"].fillna(False).astype(bool) if "parse_salvaged" in graded else None
+    return {"n_graded_calls": int(len(graded)), "n_parse_fail": int(len(fails)),
+            "n_parse_salvaged": int(salv.sum()) if salv is not None else 0,
+            "fails": fails, "salvaged": graded[salv] if salv is not None else graded.iloc[0:0]}
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="Auswertung dataset_real.")
     p.add_argument("--raw", default="results/raw_real")
@@ -81,19 +93,20 @@ def main(argv=None):
     args = p.parse_args(argv)
 
     questions = load_questions(args.dataset_dir)
-    df = load_raw(args.raw)
-    pe = point_estimates(df)
-    rep = system_rows(pe, SYSTEMS, extra=extra_metrics)
+    runs = load_runs(args.raw)
+    pes = [point_estimates(df) for _, df in runs]
+    rep, _ = mean_over_runs([system_rows(pe, SYSTEMS, extra=extra_metrics) for pe in pes],
+                            SYSTEM_KEYS)
+    tasks, _ = mean_over_runs([per_task(pe, questions) for pe in pes],
+                              ["question_id", "label"])
 
-    print("== Validierung auf dataset_real ==")
+    print(f"== Validierung auf dataset_real ({len(runs)} Lauf/Läufe) ==")
     print(f"  {'System':26} {'MAE':>5} {'NMAE':>6} {'Exakt':>6} {'pm1':>6} "
           f"{'runσ':>5} {'Bias':>6}")
     for _, r in rep.iterrows():
         print(f"  {r['label']:26} {r['mae']:5.3f} {r['nmae']:6.3f} "
               f"{100*r['exact']:5.1f}% {100*r['within1']:5.1f}% "
               f"{r['run_std']:5.3f} {r['bias']:+6.2f}")
-
-    tasks = per_task(pe, questions)
     print("\n  Aufgabe                            "
           + "  ".join(f"{n:>12}" for _, _, n in TASK_SYSTEMS))
     for _, r in tasks.iterrows():
@@ -119,34 +132,35 @@ def main(argv=None):
                    for _, r in tasks.iterrows()])
 
     # Parse-Ausfaelle und Regex-Rettungen (Thinking-Modus liefert teils kein
-    # oder korruptes JSON) -- fuer die Transparenz im Text.
-    graded = df[df["model_label"] != "ensemble"]
-    fails = graded[~graded["parse_ok"].astype(bool)]
-    salvaged = graded[graded.get("parse_salvaged", pd.Series(False, index=graded.index)).fillna(False).astype(bool)]
-    print(f"\nNicht auswertbare Aufrufe: {len(fails)}/{len(graded)} "
-          f"({100*len(fails)/len(graded):.1f}%)")
+    # oder korruptes JSON) -- fuer die Transparenz im Text, summiert ueber Laeufe.
+    stats = [parse_stats(df) for _, df in runs]
+    n_calls = sum(s["n_graded_calls"] for s in stats)
+    fails = pd.concat([s["fails"] for s in stats]); salv = pd.concat([s["salvaged"] for s in stats])
+    print(f"\nNicht auswertbare Aufrufe: {len(fails)}/{n_calls} ({100*len(fails)/n_calls:.1f}%)")
     for (model, version), g in fails.groupby(["model_label", "prompt_version"]):
         print(f"  {model}/{version}: {len(g)}")
-    print(f"Per Regex gerettete (syntaktisch korrupte) Antworten: {len(salvaged)}")
-    for (model, version), g in salvaged.groupby(["model_label", "prompt_version"]):
+    print(f"Per Regex gerettete (syntaktisch korrupte) Antworten: {len(salv)}")
+    for (model, version), g in salv.groupby(["model_label", "prompt_version"]):
         print(f"  {model}/{version}: {len(g)}")
 
+    df_all = pd.concat([df for _, df in runs], ignore_index=True)
     summary = {
+        "n_runs": len(runs), "runs": [n for n, _ in runs],
         "metrics": rep.to_dict(orient="records"),
         "per_task": tasks.to_dict(orient="records"),
-        "n_records": int(len(df)),
-        "n_graded_calls": int(len(graded)),
+        "n_records": int(len(df_all)),
+        "n_graded_calls": n_calls,
         "n_parse_fail": int(len(fails)),
-        "n_parse_salvaged": int(len(salvaged)),
-        "n_answers_without_valid_rating": int((pe["n_ok"] == 0).sum()),
-        "models": sorted(df["model_label"].unique().tolist()),
+        "n_parse_salvaged": int(len(salv)),
+        "n_answers_without_valid_rating": int(sum((pe["n_ok"] == 0).sum() for pe in pes)),
+        "models": sorted(df_all["model_label"].unique().tolist()),
         "tokens": {
-            k: int(df["usage"].dropna().apply(
+            k: int(df_all["usage"].dropna().apply(
                 lambda u, k=k: (u or {}).get(k, 0) or 0).sum())
             for k in ("prompt_tokens", "completion_tokens", "reasoning_tokens")
-        } if "usage" in df.columns else {},
+        } if "usage" in df_all.columns else {},
     }
-    dis = disagreement_stats(pe)
+    dis = disagreement_over_runs(pes)
     if dis:
         summary["disagreement"] = dis
     write_summary(args.out_summary, summary)

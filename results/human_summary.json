@@ -1,4 +1,8 @@
 {
+  "n_runs": 1,
+  "runs": [
+    "run1"
+  ],
   "metrics": [
     {
       "n": 33,
@@ -153,11 +157,12 @@
     "tertiary"
   ],
   "disagreement": {
-    "n": 8,
-    "total": 33,
     "exact_glm": 0.875,
+    "exact_med": 0.75,
     "exact_mis": 0.25,
     "exact_oss": 0.625,
-    "exact_med": 0.75
+    "n": 8.0,
+    "total": 33.0,
+    "n_runs": 1
   }
 }

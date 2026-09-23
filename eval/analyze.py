@@ -2,16 +2,22 @@
 gemeinsamen Bausteine (Laden, Punkt-Schätzwerte, Kennzahlen, Tabellen- und
 Abbildungsausgabe, Anzeigenamen) für alle Auswertungsskripte bereit.
 
+Die Rohdaten liegen je unabhängigem Lauf in einem Unterordner ``run<N>/``
+(``results/raw/run1``, ``run2``, ...). Alle Kennzahlen werden je Lauf berechnet
+und anschließend über die Läufe gemittelt; die Streuung zwischen den Läufen
+wird mitgeführt (``*_std`` in den Summaries).
+
 Erzeugt:
   * results/tables/metrics_models.tex   -- beide Modelle, alle Kennzahlen (Tabelle 2)
   * results/tables/dataset_stats.tex    -- Kennzahlen des Datensatzes
   * results/figures/confusion_best.pdf  -- Konfusionsmatrix über die Punktstufen
-                                           (Hauptmodell, alle Versionen gepoolt)
+                                           (Hauptmodell, alle Versionen und Läufe)
   * results/summary.json                -- alle Kennzahlen maschinenlesbar
 
 Aufruf:
-    python -m eval.analyze                 # liest results/raw/*.jsonl
-    python -m eval.analyze --raw <pfad>    # einzelne Datei oder Verzeichnis
+    python -m eval.analyze                 # liest results/raw/run*/
+    python -m eval.analyze --raw <pfad>    # Verzeichnis mit run*/-Ordnern, ein
+                                           # einzelnes Laufverzeichnis oder eine Datei
 """
 import argparse
 import json
@@ -68,6 +74,39 @@ def load_raw(raw_arg):
     if not rows:
         raise FileNotFoundError(f"Keine Rohdaten unter {path} gefunden.")
     return pd.DataFrame(rows)
+
+
+def load_runs(raw_arg):
+    """Alle unabhängigen Läufe unter ``raw_arg`` als ``[(name, DataFrame)]``:
+    Unterordner ``run*/`` zählen je als Lauf; ohne solche Unterordner ist das
+    Verzeichnis (bzw. die Datei) selbst der einzige Lauf."""
+    path = resolve_path(raw_arg)
+    runs = sorted(p for p in path.glob("run*") if p.is_dir()) if path.is_dir() else []
+    if not runs:
+        return [(path.name, load_raw(path))]
+    return [(p.name, load_raw(p)) for p in runs]
+
+
+def mean_over_runs(frames, keys):
+    """Zeilenweise Mittelwerte (und Streuung) numerischer Spalten über die
+    Läufe; ``keys`` identifizieren die Zeile, ihre Reihenfolge bleibt die des
+    ersten Laufs. Liefert ``(mean, std)`` mit ``std``-Spalten als ``<name>_std``."""
+    if len(frames) == 1:
+        return frames[0].reset_index(drop=True), None
+    allf = pd.concat(frames, ignore_index=True)
+    num = [c for c in allf.columns if c not in keys and pd.api.types.is_numeric_dtype(allf[c])]
+    other = [c for c in allf.columns if c not in keys and c not in num]
+    g = allf.groupby(keys, sort=False)
+    mean = g[num].mean()
+    std = g[num].std(ddof=0).add_suffix("_std")
+    first = g[other].first() if other else None
+    out = mean.join(std)
+    if first is not None:
+        out = out.join(first)
+    order = frames[0][keys].drop_duplicates()
+    out = order.merge(out.reset_index(), on=keys, how="left")
+    out["n_runs"] = len(frames)
+    return out, std.reset_index()
 
 
 PE_KEYS = ["model_label", "prompt_version", "question_id", "answer_id"]
@@ -170,7 +209,10 @@ def by_answer(pe, model, version):
     return sub.set_index(["question_id", "answer_id"])
 
 
-def disagreement_stats(pe, print_prefix="  "):
+SYSTEM_KEYS = ["model_label", "prompt_version", "label"]
+
+
+def disagreement_stats(pe):
     """Antworten, über die die drei V5-Bewerter uneinig sind, und die exakte
     Quote jedes Systems auf dieser Teilmenge. ``None``, wenn kein Ensemble-Lauf
     vorliegt."""
@@ -180,15 +222,28 @@ def disagreement_stats(pe, print_prefix="  "):
     cols = {GRADER_KEY[g]: by_answer(pe, g, "v5_rubrik")["pe"] for g in GRADERS}
     comp = pd.DataFrame({**cols, "med": med["pe"], "gt": med["gt_points"]}).dropna()
     dis = comp[comp[[GRADER_KEY[g] for g in GRADERS]].round().nunique(axis=1) > 1]
-    print(f"\nUneinige Antworten: {len(dis)}/{len(comp)} "
-          f"({100*len(dis)/len(comp):.1f}%)")
     stats = {"n": int(len(dis)), "total": int(len(comp))}
     for g in GRADERS + ["ensemble"]:
-        key = GRADER_KEY[g]
         if len(dis):
-            acc = float((dis[key].round() == dis["gt"]).mean())
-            print(f"{print_prefix}exakt auf Uneinigkeits-Subset [{GRADER_NAME[g]:8}]: {100*acc:.1f}%")
-            stats[f"exact_{key}"] = acc
+            key = GRADER_KEY[g]
+            stats[f"exact_{key}"] = float((dis[key].round() == dis["gt"]).mean())
+    return stats
+
+
+def disagreement_over_runs(pes, print_prefix="  "):
+    """``disagreement_stats`` je Lauf, über die Läufe gemittelt und ausgegeben."""
+    per_run = [s for s in (disagreement_stats(pe) for pe in pes) if s]
+    if not per_run:
+        return None
+    keys = sorted({k for s in per_run for k in s})
+    stats = {k: float(np.mean([s[k] for s in per_run if k in s])) for k in keys}
+    stats["n_runs"] = len(per_run)
+    print(f"\nUneinige Antworten: {stats['n']:.1f}/{stats['total']:.0f} "
+          f"({100*stats['n']/stats['total']:.1f}%, Mittel über {len(per_run)} Lauf/Läufe)")
+    for g in GRADERS + ["ensemble"]:
+        k = f"exact_{GRADER_KEY[g]}"
+        if k in stats:
+            print(f"{print_prefix}exakt auf Uneinigkeits-Subset [{GRADER_NAME[g]:8}]: {100*stats[k]:.1f}%")
     return stats
 
 
@@ -339,28 +394,35 @@ def main(argv=None):
     p.add_argument("--results-dir", default="results")
     args = p.parse_args(argv)
 
-    df = load_raw(args.raw)
-    pe = point_estimates(df)
-    mt = metrics_table(pe)
+    runs = load_runs(args.raw)
+    pes = [point_estimates(df) for _, df in runs]
+    mt, mt_std = mean_over_runs([metrics_table(pe) for pe in pes],
+                                ["model_label", "prompt_version"])
     res = resolve_path(args.results_dir)
     (res / "tables").mkdir(parents=True, exist_ok=True)
 
     write_metrics_models(mt, res / "tables" / "metrics_models.tex")
-    write_dataset_stats(pe, res / "tables" / "dataset_stats.tex")
-    # Konfusionsmatrix: Hauptmodell über ALLE Versionen gepoolt -- Gesamtbild
-    # der Verwechslungen statt einer einzelnen, womöglich perfekten Version.
-    plot_confusion(confusion(pe[pe["model_label"] == "main"]), "Konfusionsmatrix",
-                   res / "figures" / "confusion_best.pdf")
+    write_dataset_stats(pes[0], res / "tables" / "dataset_stats.tex")
+    # Konfusionsmatrix: Hauptmodell über ALLE Versionen und Läufe gepoolt --
+    # Gesamtbild der Verwechslungen statt einer einzelnen Version.
+    mat = sum(confusion(pe[pe["model_label"] == "main"]) for pe in pes)
+    plot_confusion(mat, "Konfusionsmatrix", res / "figures" / "confusion_best.pdf")
 
     main_mt = mt[mt["model_label"] == "main"]
+    df_all = pd.concat([df for _, df in runs], ignore_index=True)
     write_summary(res / "summary.json", {
         "best_version": main_mt.sort_values("mae").iloc[0]["prompt_version"],
+        "n_runs": len(runs),
+        "runs": [name for name, _ in runs],
         "metrics": mt.to_dict(orient="records"),
-        "n_records": int(len(df)),
-        "models": sorted(df["model_label"].unique().tolist()),
-        "versions": sorted(df["prompt_version"].unique().tolist()),
+        "n_records": int(len(df_all)),
+        "models": sorted(df_all["model_label"].unique().tolist()),
+        "versions": sorted(df_all["prompt_version"].unique().tolist()),
     })
-    print(mt.to_string(index=False))
+    cols = ["model_label", "prompt_version", "mae", "exact", "within1", "run_std",
+            "para_std", "robustness"] + (["exact_std", "mae_std"] if mt_std is not None else [])
+    print(f"Läufe: {[n for n, _ in runs]}")
+    print(mt[cols].to_string(index=False))
 
 
 if __name__ == "__main__":

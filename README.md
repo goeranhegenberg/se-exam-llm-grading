@@ -47,21 +47,29 @@ se-exam-llm-grading/
 │   ├── dataset.py         # Benchmark laden + gegen Schema validieren
 │   ├── prompt_builder.py  # Prompt-Templates rendern (V4 = V3-Prompt)
 │   ├── llm_client.py      # OpenAI-/OpenRouter-Anbindung + Mock-Client
-│   ├── util.py            # robustes JSON-Parsing
-│   └── run_grading.py     # Bewertungslauf (Runner, nebenläufig)
+│   ├── util.py            # robustes JSON-Parsing, JSONL lesen
+│   ├── runner.py          # Thread-Pool, JSONL-Ausgabe, Zähler
+│   ├── run_grading.py     # Bewertungslauf (--resume holt Fehlendes nach)
+│   └── run_ensemble.py    # V6: Median der drei Bewerter (--median-only)
+├── run_all.sh             # ein kompletter Lauf: alle Modelle, alle Datensätze
 ├── eval/
-│   ├── analyze.py         # Metriken, LaTeX-Tabellen, Abbildungen (Benchmark)
-│   ├── ensemble_report.py # V6-Vergleich Median vs. Einzelmodelle
+│   ├── analyze.py         # gemeinsame Basis: Laden, Kennzahlen, Tabellen, Abbildungen
+│   ├── ensemble_report.py # V6-Vergleich Median vs. Einzelmodelle (Tabelle 3)
 │   ├── human_report.py    # Auswertung dataset_human
-│   └── real_report.py     # Auswertung dataset_real (inkl. NMAE, je Aufgabe)
+│   ├── real_report.py     # Auswertung dataset_real (inkl. NMAE, je Aufgabe)
+│   └── overview_figure.py # Abbildung 1 (exakte Quote auf allen Datensätzen)
 └── results/
-    ├── raw/               # eine JSONL-Zeile pro Modellaufruf (Benchmark)
-    ├── raw_human/         # Rohdaten der Validierung auf dataset_human
-    ├── raw_real/          # Rohdaten der Validierung auf dataset_real
-    ├── tables/            # \input-fähige LaTeX-Tabellen
+    ├── raw/run{1,2,3}/    # eine JSONL-Zeile pro Modellaufruf, je unabhängigem Lauf
+    ├── raw_human/run*/    # Rohdaten der Validierung auf dataset_human
+    ├── raw_real/run*/     # Rohdaten der Validierung auf dataset_real
+    ├── tables/            # \input-fähige LaTeX-Tabellen (Mittel über die Läufe)
     ├── figures/           # PDF- und PNG-Abbildungen
-    └── summary.json       # alle Kennzahlen maschinenlesbar
+    └── *summary.json      # alle Kennzahlen maschinenlesbar (inkl. *_std)
 ```
+
+Alle Bewertungsläufe wurden **dreimal unabhängig** wiederholt (`run1`–`run3`);
+die Auswertung berechnet jede Kennzahl je Lauf und mittelt über die Läufe, die
+Streuung zwischen den Läufen steht als `<kennzahl>_std` in den Summaries.
 
 ## Einrichtung
 
@@ -84,24 +92,28 @@ Der Betrieb läuft OpenAI-kompatibel über **OpenRouter**. Der Key wird über
 
 Aus dem Ordner `implementation/`:
 
-```powershell
+```bash
 # Offline-Rauchtest der gesamten Pipeline ohne API (deterministischer Mock):
-.\.venv\Scripts\python.exe -m src.run_grading --mock --limit 6
+python -m src.run_grading --mock --limit 6
 
-# Echter Lauf mit dem Hauptmodell (GLM 5.2) über alle fünf Prompt-Versionen:
-.\.venv\Scripts\python.exe -m src.run_grading --model main --concurrency 10
+# Ein kompletter Lauf N (alle Modelle, alle drei Datensätze, Ensemble-Median)
+# nach results/{raw,raw_human,raw_real}/runN/ -- idempotent, ein erneuter Aufruf
+# holt nur fehlende oder mit API-Fehler abgebrochene Aufrufe nach:
+./run_all.sh 2
 
-# Lauf mit dem Zweitmodell (Mistral Small 4):
-.\.venv\Scripts\python.exe -m src.run_grading --model sensitivity --concurrency 10
+# Einzelner Lauf, z. B. Hauptmodell (GLM 5.2) über alle fünf Prompt-Versionen:
+python -m src.run_grading --model main --out results/raw/run2/grading_main.jsonl --resume
 
-# Auswertung -> Tabellen, Abbildungen, summary.json:
-.\.venv\Scripts\python.exe -m eval.analyze
+# Auswertung (mittelt über alle run*/-Ordner) -> Tabellen, Abbildungen, Summaries:
+python -m eval.analyze && python -m eval.ensemble_report && \
+python -m eval.human_report && python -m eval.real_report && python -m eval.overview_figure
 ```
 
-> **Hinweis:** Vor einem *echten* Lauf alte/fremde Rohdaten aus `results/raw/`
-> entfernen oder in einen Unterordner verschieben (z. B. `archive_*`); Mock-Läufe
-> (`*_mock_*.jsonl`) blendet `eval.analyze` automatisch aus, da es alle `*.jsonl`
-> im Ordner zusammenfasst.
+> **Hinweis:** `eval.*` fasst alle `*.jsonl` eines `run*/`-Ordners zusammen;
+> Mock-Läufe (`*_mock_*.jsonl`) werden automatisch ausgeblendet. Mistral wird
+> über OpenRouter aus einem geteilten Anbieter-Pool bedient und meldet bei zu
+> vielen parallelen Aufrufen 429; `run_all.sh` nutzt dafür `CONCURRENCY_SENS=3`,
+> der Client wiederholt bis zu zehnmal mit wachsender Pause.
 
 ## Datenformat des Benchmarks
 
@@ -144,15 +156,17 @@ jede Antwort mit dem V5-Prompt bewerten; die finale Punktzahl ist der **Median**
 der drei Bewertungen.
 
 ```
-python -m src.run_ensemble        # liest die V5-Rohdaten der drei Modelle
+python -m src.run_ensemble --median-only --raw results/raw/run2 --out results/raw/run2/grading_ensemble.jsonl
 python -m eval.ensemble_report    # Vergleichstabelle (Median vs. Einzelmodelle)
 ```
 
 Voraussetzung ist, dass V5 vorher für alle drei Modelle gerechnet wurde
-(`--model main|sensitivity|tertiary --prompt-versions v5_rubrik`). Befund: Der
-Median (98,1 % exakt) übertrifft jedes Einzelmodell. (`run_ensemble.py` berechnet
-zusätzlich ein LLM-gestütztes Merge zum Vergleich; es bringt keinen Mehrwert über
-den Median und wird im Paper nicht verwendet.)
+(`--model main|sensitivity|tertiary --prompt-versions v5_rubrik`). Auf dem
+Benchmark übertrifft der Median jedes Einzelmodell, auf den beiden
+Validierungsdatensätzen nicht (Abschnitt 5.3–5.5 der Arbeit). Ohne
+`--median-only` berechnet `run_ensemble.py` zusätzlich ein LLM-gestütztes Merge
+(`v6_ensemble`, nur in `run1`); es bringt keinen Mehrwert über den Median und
+wird im Paper nicht verwendet.
 
 ## Validierung auf zwei weiteren Datensätzen
 
@@ -165,13 +179,13 @@ nutzen dieselbe Pipeline, lediglich mit anderem `--dataset-dir`.
 | `dataset_human` | 12 Fragen einer realen SE-Klausur (RUB, WS 2021/22), Antworten von den Autoren verfasst | 33 | `eval.human_report` | Tabelle 6 |
 | `dataset_real`  | 5 offene Aufgaben einer realen Klausur (Hochschule Merseburg, SS 2026), authentische Studierendenantworten | 35 | `eval.real_report` | Tabellen 7/8, Abbildungen 3/4 |
 
-```powershell
-# Beispiel dataset_real: Läufe -> Ensemble -> Auswertung
-.\.venv\Scripts\python.exe -m src.run_grading --model main        --dataset-dir dataset_real --out results/raw_real/grading_main.jsonl
-.\.venv\Scripts\python.exe -m src.run_grading --model sensitivity --dataset-dir dataset_real --out results/raw_real/grading_sensitivity.jsonl
-.\.venv\Scripts\python.exe -m src.run_grading --model tertiary --prompt-versions v5_rubrik --dataset-dir dataset_real --out results/raw_real/grading_tertiary.jsonl
-.\.venv\Scripts\python.exe -m src.run_ensemble --dataset-dir dataset_real --raw results/raw_real --out results/raw_real/grading_ensemble.jsonl
-.\.venv\Scripts\python.exe -m eval.real_report --raw results/raw_real
+```bash
+# Beispiel dataset_real, Lauf 2: Läufe -> Ensemble -> Auswertung (run_all.sh macht genau das)
+python -m src.run_grading --model main        --dataset-dir dataset_real --out results/raw_real/run2/grading_main.jsonl --resume
+python -m src.run_grading --model sensitivity --dataset-dir dataset_real --out results/raw_real/run2/grading_sensitivity.jsonl --resume
+python -m src.run_grading --model tertiary --prompt-versions v5_rubrik --dataset-dir dataset_real --out results/raw_real/run2/grading_tertiary.jsonl --resume
+python -m src.run_ensemble --median-only --dataset-dir dataset_real --raw results/raw_real/run2 --out results/raw_real/run2/grading_ensemble.jsonl
+python -m eval.real_report --raw results/raw_real
 ```
 
 Weil die Aufgaben in `dataset_real` unterschiedliche Maximalpunktzahlen haben
@@ -180,10 +194,10 @@ Fehler **NMAE** (absoluter Fehler geteilt durch die Maximalpunktzahl) sowie eine
 Aufschlüsselung je Aufgabe. Herkunft, Ground Truth und die offengelegten
 Grenzentscheidungen stehen in `dataset_real/README.md`.
 
-> **Hinweis:** Die in `results/tables/metrics_real.tex`, `per_task_real.tex` und
-> `results/figures/exact_by_*_real.*` eingecheckten Werte stammen aus dem in der
-> Arbeit berichteten Lauf. Ein erneuter Aufruf von `eval.real_report`
-> überschreibt sie mit den Werten der jeweils vorliegenden Rohdaten.
+> **Hinweis:** Die eingecheckten Tabellen und Summaries sind aus den
+> eingecheckten Rohdaten (`run1`–`run3`) erzeugt; ein erneuter Aufruf der
+> `eval.*`-Skripte überschreibt sie mit den Werten der jeweils vorliegenden
+> Rohdaten.
 
 ## Modellwahl (Begründung)
 
@@ -216,6 +230,9 @@ konfigurierbar; berichtet wird stets das tatsächlich verwendete Modell.
 * Je Antwort werden `repetitions` Wiederholungen gezogen, um die Lauf-Streuung
   (Lauf-$\sigma$) zu messen; sie liegt bei den Reasoning-Versionen durch das
   stochastische Sampling naturgemäß höher.
+* Jeder komplette Lauf wurde dreimal unabhängig wiederholt (`run1`–`run3`); alle
+  berichteten Kennzahlen sind Mittelwerte über die drei Läufe, die Streuung
+  zwischen den Läufen steht in den Summaries (`*_std`).
 
 ## Änderungen 2026-09-23 (Überarbeitung der Auswertung)
 
@@ -239,6 +256,10 @@ konfigurierbar; berichtet wird stets das tatsächlich verwendete Modell.
 * Neue Synthese-Abbildung `python -m eval.overview_figure` →
   `results/figures/exact_overview.pdf` (exakte Quote V1–V6 auf allen drei
   Datensätzen; liest `summary.json`, `human_summary.json`, `real_summary.json`).
+* **Drei unabhängige Läufe** (`results/*/run1..3`): `run_all.sh`, `--resume`
+  (fehlende/abgebrochene Aufrufe nachholen), `run_ensemble --median-only`;
+  `eval.*` mittelt alle Kennzahlen über die Läufe (`analyze.load_runs`,
+  `mean_over_runs`).
 
 ## Herkunft der Daten
 

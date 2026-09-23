@@ -128,6 +128,8 @@ def main(argv=None):
     p.add_argument("--limit", type=int, default=None,
                    help="Nur die ersten N (qid,aid,sample)-Zellen mergen (Test).")
     p.add_argument("--mock", action="store_true")
+    p.add_argument("--median-only", action="store_true",
+                   help="Nur den Median (v6_median) bilden, kein LLM-Merge, kein API-Aufruf.")
     p.add_argument("--out", default=None)
     args = p.parse_args(argv)
 
@@ -145,11 +147,13 @@ def main(argv=None):
 
     merger_model = conf["models"][MERGER]
     sampling = cfg.sampling_for(conf, MERGER, thinking=True)
-    system = load_system(args.prompts_dir)
-    template = (cfg.resolve_path(args.prompts_dir) / "v6_merge.txt").read_text(
-        encoding="utf-8")
-    client = make_client(conf, mock=args.mock, noise=0)
-    concurrency = 1 if args.mock else (args.concurrency or conf["run"].get("concurrency", 8))
+    if not args.median_only:
+        system = load_system(args.prompts_dir)
+        template = (cfg.resolve_path(args.prompts_dir) / "v6_merge.txt").read_text(
+            encoding="utf-8")
+        client = make_client(conf, mock=args.mock, noise=0)
+    concurrency = (1 if (args.mock or args.median_only)
+                   else (args.concurrency or conf["run"].get("concurrency", 8)))
 
     run_id = cfg.utcstamp()
     out_path = Path(args.out) if args.out else cfg.resolve_path(
@@ -157,8 +161,8 @@ def main(argv=None):
         f"grading_ensemble_{'mock' if args.mock else 'v6'}_{run_id}.jsonl")
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
-    print(f"[ensemble {run_id}] Bewerter={GRADERS} Merger={merger_model} "
-          f"(temp={sampling['temperature']}, top_p={sampling['top_p']}) "
+    print(f"[ensemble {run_id}] Bewerter={GRADERS} "
+          f"Merger={'nur Median' if args.median_only else merger_model} "
           f"Zellen={len(cells)} Concurrency={concurrency}")
     print(f"  Ausgabe: {out_path}")
 
@@ -166,12 +170,20 @@ def main(argv=None):
         q, a, s, recs = cell
         grades = [parse_grade(r) for r in recs]  # in GRADERS-Reihenfolge
         comp = {g: grades[i][0] for i, g in enumerate(GRADERS)}
-        order = perm_for(a["answer_id"], s)
-        user = build_merge_prompt(template, q, a["text"], [grades[i] for i in order])
         base = {**answer_meta(q, a), "sample_index": s, "n_samples": reps,
-                "component_points": comp,
-                "component_order": [GRADERS[i] for i in order]}
-        # 1) LLM-Merge (GLM) -- mit Retry bei nicht parsbarer Antwort.
+                "component_points": comp}
+        # Median-Baseline (ohne API) -- die im Paper verwendete V6-Punktzahl.
+        med = median_round([comp[g] for g in GRADERS])
+        mrec = {**base, "model_label": "ensemble", "model_requested": "median",
+                "prompt_version": "v6_median", "thinking": False,
+                "temperature": None, "top_p": None,
+                "pred_points": med, "parse_ok": med is not None, "usage": {}}
+        if args.median_only:
+            return [mrec]
+        # LLM-Merge (GLM) -- mit Retry bei nicht parsbarer Antwort.
+        order = perm_for(a["answer_id"], s)
+        base["component_order"] = [GRADERS[i] for i in order]
+        user = build_merge_prompt(template, q, a["text"], [grades[i] for i in order])
         pred, res, err, attempts = one_merge(client, merger_model, system, user,
                                              sampling, q, a, sampling["seed"])
         rec = {**base, "model_label": "ensemble", "model_requested": merger_model,
@@ -185,17 +197,12 @@ def main(argv=None):
                         "usage": res.get("usage", {}), "raw": res["text"]})
         else:
             rec["error"] = err
-        # 2) Median-Baseline (ohne API)
-        med = median_round([comp[g] for g in GRADERS])
-        mrec = {**base, "model_label": "ensemble", "model_requested": "median",
-                "prompt_version": "v6_median", "thinking": False,
-                "temperature": None, "top_p": None,
-                "pred_points": med, "parse_ok": med is not None, "usage": {}}
         return [rec, mrec]
 
+    counted = "v6_median" if args.median_only else "v6_ensemble"
     run_and_write(work, cells, concurrency, out_path, run_id,
-                  count=lambda r: r["prompt_version"] == "v6_ensemble",
-                  what="Merges")
+                  count=lambda r: r["prompt_version"] == counted,
+                  what="Zellen" if args.median_only else "Merges")
     return str(out_path)
 
 

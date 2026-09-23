@@ -4,6 +4,8 @@ Der Datensatz ``dataset_human`` (12 Fragen einer realen SE-Klausur, Antworten
 von den Autoren verfasst und von Hand nach Rubrik bepunktet) dient als
 Ueberpruefung, ob sich die Befunde des Benchmarks auf menschlich geschriebene
 Antworten uebertragen. Keine Formulierungsvarianten, daher keine Para-σ-Spalte.
+Kennzahlen werden je Lauf (``results/raw_human/run<N>/``) berechnet und ueber
+die Laeufe gemittelt.
 
 Erzeugt:
   * results/tables/metrics_human.tex  -- V1-V5 (Hauptmodell) + V5 der beiden
@@ -16,10 +18,10 @@ Aufruf (aus dem Paketverzeichnis):
 """
 import argparse
 
-from eval.analyze import (ENSEMBLE_SYSTEM, MAIN_SYSTEMS, V5_SYSTEMS,
-                          disagreement_stats, load_raw, metric_cells,
-                          point_estimates, system_rows, write_summary,
-                          write_tabular)
+from eval.analyze import (ENSEMBLE_SYSTEM, MAIN_SYSTEMS, V5_SYSTEMS, SYSTEM_KEYS,
+                          disagreement_over_runs, load_runs, mean_over_runs,
+                          metric_cells, point_estimates, system_rows,
+                          write_summary, write_tabular)
 
 SYSTEMS = MAIN_SYSTEMS + V5_SYSTEMS[1:] + [ENSEMBLE_SYSTEM]
 
@@ -31,11 +33,11 @@ def main(argv=None):
     p.add_argument("--out-summary", default="results/human_summary.json")
     args = p.parse_args(argv)
 
-    df = load_raw(args.raw)
-    pe = point_estimates(df)
-    rep = system_rows(pe, SYSTEMS)
+    runs = load_runs(args.raw)
+    pes = [point_estimates(df) for _, df in runs]
+    rep, _ = mean_over_runs([system_rows(pe, SYSTEMS) for pe in pes], SYSTEM_KEYS)
 
-    print("== Validierung auf dataset_human ==")
+    print(f"== Validierung auf dataset_human ({len(runs)} Lauf/Läufe) ==")
     print(f"  {'System':26} {'MAE':>5} {'Exakt':>6} {'pm1':>6} {'runσ':>5} "
           f"{'ex(teil)':>8}")
     for _, r in rep.iterrows():
@@ -48,10 +50,11 @@ def main(argv=None):
                   [(r["label"], metric_cells(r)) for _, r in rep.iterrows()],
                   midrule_after={MAIN_SYSTEMS[-1][2], V5_SYSTEMS[-1][2]})
 
-    summary = {"metrics": rep.to_dict(orient="records"),
-               "n_records": int(len(df)),
-               "models": sorted(df["model_label"].unique().tolist())}
-    dis = disagreement_stats(pe)
+    summary = {"n_runs": len(runs), "runs": [n for n, _ in runs],
+               "metrics": rep.to_dict(orient="records"),
+               "n_records": int(sum(len(df) for _, df in runs)),
+               "models": sorted(runs[0][1]["model_label"].unique().tolist())}
+    dis = disagreement_over_runs(pes)
     if dis:
         summary["disagreement"] = dis
     write_summary(args.out_summary, summary)

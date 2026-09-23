@@ -33,14 +33,14 @@ class Totals:
 
 
 def run_and_write(work, items, concurrency, out_path, run_id, count=None,
-                  what="Aufrufe"):
+                  what="Aufrufe", append=False):
     """``work(item)`` parallel ausführen (liefert einen Record oder eine Liste
     von Records), jeden Record sofort als JSONL-Zeile schreiben und den
     Fortschritt melden. ``count`` filtert, welche Records in die Zählung
-    eingehen (Default: alle)."""
+    eingehen (Default: alle); ``append`` hängt an eine bestehende Datei an."""
     totals = Totals()
     n = len(items)
-    with open(out_path, "w", encoding="utf-8") as fh, \
+    with open(out_path, "a" if append else "w", encoding="utf-8") as fh, \
             ThreadPoolExecutor(max_workers=concurrency) as ex:
         pending = {ex.submit(work, it) for it in items}
         for i, fut in enumerate(as_completed(pending), 1):

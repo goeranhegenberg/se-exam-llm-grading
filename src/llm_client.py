@@ -55,10 +55,12 @@ class GradingClient:
         anbieterneutral ein Boolean übergeben können."""
         return {"reasoning": {"enabled": bool(enabled)}}
 
+    # Bis zu 10 Versuche mit wachsender Pause (max. 2 min): OpenRouter meldet bei
+    # ausgelasteten Anbieter-Pools (z.B. Mistral) minutenlang 429.
     @retry(
         reraise=True,
-        stop=stop_after_attempt(5),
-        wait=wait_exponential(multiplier=2, min=2, max=40),
+        stop=stop_after_attempt(10),
+        wait=wait_exponential(multiplier=2, min=2, max=120),
         retry=retry_if_exception_type(_RETRYABLE),
     )
     def _call(self, model, system, user, temperature, top_p, max_tokens, seed,

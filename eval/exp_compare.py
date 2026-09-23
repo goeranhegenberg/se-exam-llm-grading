@@ -82,7 +82,7 @@ def main():
         hyb_mae = np.mean([abs(hyb[a] - gt[a]) for a in aids])
         hyb_fixed = sum(round(med[a]) != gt[a] and round(hyb[a]) == gt[a] for a in aids)
         hyb_broken = sum(round(med[a]) == gt[a] and round(hyb[a]) != gt[a] for a in aids)
-        print(f"\n  HYBRID (Median bei Uneinigkeit, Exp bei Einigkeit):")
+        print("\n  HYBRID (Median bei Uneinigkeit, Exp bei Einigkeit):")
         print(f"    exakt: {100*hyb_exact:.1f}%  MAE: {hyb_mae:.3f}  "
               f"(fixed {hyb_fixed}, broken {hyb_broken}, netto {hyb_fixed-hyb_broken:+d})")
 

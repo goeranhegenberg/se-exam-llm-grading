@@ -1,4 +1,8 @@
 {
+  "n_runs": 1,
+  "runs": [
+    "run1"
+  ],
   "metrics": [
     {
       "n": 35,
@@ -245,11 +249,12 @@
     "reasoning_tokens": 433218
   },
   "disagreement": {
-    "n": 9,
-    "total": 35,
     "exact_glm": 0.6666666666666666,
+    "exact_med": 0.6666666666666666,
     "exact_mis": 0.3333333333333333,
     "exact_oss": 0.6666666666666666,
-    "exact_med": 0.6666666666666666
+    "n": 9.0,
+    "total": 35.0,
+    "n_runs": 1
   }
 }

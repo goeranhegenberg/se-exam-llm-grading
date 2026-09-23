@@ -19,8 +19,13 @@ Beispiele:
 
     # Sensitivitätslauf mit dem Zweitmodell (Mistral Small 4):
     python -m src.run_grading --model sensitivity
+
+    # Abgebrochenen oder von API-Fehlern betroffenen Lauf vervollständigen
+    # (fehlende und fehlgeschlagene Aufrufe werden nachgeholt, der Rest bleibt):
+    python -m src.run_grading --model sensitivity --out <datei> --resume
 """
 import argparse
+import json
 from pathlib import Path
 
 from . import config as cfg
@@ -28,7 +33,23 @@ from .dataset import answer_meta, dataset_summary, iter_answer_items, load_quest
 from .llm_client import make_client
 from .prompt_builder import build_user_prompt, load_system
 from .runner import run_and_write
-from .util import parse_pred
+from .util import iter_jsonl, parse_pred
+
+
+def job_key(rec):
+    return (rec["prompt_version"], rec["answer_id"], rec["sample_index"])
+
+
+def resume_records(out_path, jobs):
+    """Bestehende Ausgabedatei einlesen: Records ohne API-Fehler behalten, die
+    zugehörigen Jobs streichen. Liefert ``(behaltene Records, offene Jobs)``."""
+    if not out_path.exists():
+        return [], jobs
+    keep = [r for r in iter_jsonl(out_path) if not r.get("error")]
+    done = {job_key(r) for r in keep}
+    todo = [j for j in jobs
+            if (j["version"], j["answer"]["answer_id"], j["sample_index"]) not in done]
+    return keep, todo
 
 
 def build_jobs(questions, versions, conf, model_label):
@@ -113,6 +134,9 @@ def main(argv=None):
     p.add_argument("--dataset-dir", default=None)
     p.add_argument("--prompts-dir", default="prompts")
     p.add_argument("--out", default=None)
+    p.add_argument("--resume", action="store_true",
+                   help="Bestehende --out-Datei fortsetzen: nur fehlende oder mit "
+                        "API-Fehler abgebrochene Aufrufe nachholen.")
     args = p.parse_args(argv)
 
     conf = cfg.load_config(args.config)
@@ -142,11 +166,21 @@ def main(argv=None):
           f"Versionen={versions} Concurrency={concurrency}")
     print(f"  Datensatz: {summary['n_questions']} Fragen, "
           f"{summary['n_answers']} Antworten -> {len(jobs)} Modellaufrufe")
+    kept = []
+    if args.resume:
+        kept, jobs = resume_records(out_path, jobs)
+        print(f"  Fortsetzung: {len(kept)} Aufrufe vorhanden, {len(jobs)} offen")
+        with open(out_path, "w", encoding="utf-8") as fh:
+            for rec in kept:
+                fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
     print(f"  Ausgabe: {out_path}")
+    if not jobs:
+        print("--- fertig --- nichts nachzuholen")
+        return str(out_path)
 
     run_and_write(lambda job: grade_job(job, client, system, model_name,
                                         model_label, args.prompts_dir),
-                  jobs, concurrency, out_path, run_id)
+                  jobs, concurrency, out_path, run_id, append=bool(kept))
     return str(out_path)
 
 
