@@ -28,6 +28,7 @@ se-exam-llm-grading/
 ├── config.json            # Modelle, Sampling-Parameter, Laufeinstellungen
 ├── requirements.txt       # Python-Abhängigkeiten (getestet mit Python 3.9 und 3.12)
 ├── .env.example           # Vorlage für den OpenRouter-Key (-> nach .env kopieren)
+├── vorgehensweise.md      # Konsultationsdokument (geplantes Vorgehen, Mai 2026; Abschnitt 3.5 der Arbeit)
 ├── dataset/
 │   ├── schema.json        # JSON-Schema einer Benchmark-Frage
 │   └── se-0XX.json        # Fragen mit Rubrik + Antwortvarianten (Ground Truth)
