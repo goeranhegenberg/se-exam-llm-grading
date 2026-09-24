@@ -6,6 +6,13 @@
   },
   "provider": {
     "base_url": "https://openrouter.ai/api/v1",
+    "routing": {
+      "mistralai/mistral-small-2603": {
+        "order": ["mistral/eu", "mistral/zdr", "mistral"],
+        "allow_fallbacks": true,
+        "note": "Der Standard-Endpunkt von Mistral ist bei OpenRouter aus einem geteilten Pool auf wenige Aufrufe/min limitiert (429); der EU- und der ZDR-Endpunkt haben eigene Kontingente."
+      }
+    },
     "note": "OpenRouter (OpenAI-kompatibel). Das modell-native Thinking wird pro Prompt-Version ueber run.thinking gesteuert (reasoning.enabled). Beide Modelle (GLM 5.2, Mistral Small 4) unterstuetzen reasoning und non-reasoning."
   },
   "sampling": {

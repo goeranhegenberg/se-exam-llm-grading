@@ -8,6 +8,7 @@ die Arbeit übernommen werden.
 """
 import hashlib
 import json
+import random
 import sys
 
 from openai import (
@@ -21,7 +22,7 @@ from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
-    wait_exponential,
+    stop_after_delay,
 )
 
 from . import config as cfg
@@ -39,7 +40,7 @@ _RETRYABLE = (RateLimitError, APITimeoutError, APIConnectionError,
 
 
 class GradingClient:
-    def __init__(self, api_key, base_url=None, extra_body=None):
+    def __init__(self, api_key, base_url=None, extra_body=None, routing=None):
         kwargs = {"api_key": api_key}
         if base_url:
             kwargs["base_url"] = base_url
@@ -47,6 +48,9 @@ class GradingClient:
         # Zusätzliche, nicht-OpenAI-Standard-Felder im Request-Body, die bei
         # jedem Aufruf mitgeschickt werden (i.d.R. leer).
         self.extra_body = extra_body or None
+        # OpenRouter-Provider-Routing je Modellname (``config.provider.routing``),
+        # z.B. bevorzugte Endpunkte mit eigenem Rate-Limit-Kontingent.
+        self.routing = routing or {}
 
     @staticmethod
     def thinking_body(enabled):
@@ -55,12 +59,21 @@ class GradingClient:
         anbieterneutral ein Boolean übergeben können."""
         return {"reasoning": {"enabled": bool(enabled)}}
 
-    # Bis zu 10 Versuche mit wachsender Pause (max. 2 min): OpenRouter meldet bei
-    # ausgelasteten Anbieter-Pools (z.B. Mistral) minutenlang 429.
+    @staticmethod
+    def _wait(retry_state):
+        """Rate-Limits (429) eng pollen: OpenRouter bedient geteilte Anbieter-Pools
+        (z.B. Mistral) in kurzen Fenstern von wenigen Aufrufen pro Minute; ein
+        exponentiell wachsender Backoff verschläft diese Fenster. Andere
+        transiente Fehler bekommen den üblichen exponentiellen Backoff."""
+        exc = retry_state.outcome.exception()
+        if isinstance(exc, RateLimitError):
+            return 1.5 + random.random()
+        return min(120, 2 * 2 ** retry_state.attempt_number)
+
     @retry(
         reraise=True,
-        stop=stop_after_attempt(10),
-        wait=wait_exponential(multiplier=2, min=2, max=120),
+        stop=stop_after_delay(20 * 60) | stop_after_attempt(1000),
+        wait=_wait.__func__,
         retry=retry_if_exception_type(_RETRYABLE),
     )
     def _call(self, model, system, user, temperature, top_p, max_tokens, seed,
@@ -100,6 +113,8 @@ class GradingClient:
         extra_body = dict(self.extra_body or {})
         if thinking is not None:
             extra_body.update(self.thinking_body(thinking))
+        if model in self.routing:
+            extra_body["provider"] = {k: v for k, v in self.routing[model].items() if k != "note"}
         resp = self._call(model, system, user, temperature, top_p, max_tokens,
                           seed, json_mode, extra_body)
         choice = resp.choices[0]
@@ -165,4 +180,5 @@ def make_client(conf, mock=False, noise=1):
     provider = conf.get("provider", {})
     return GradingClient(api_key,
                          base_url=provider.get("base_url") or cfg.get_base_url(),
-                         extra_body=provider.get("extra_body"))
+                         extra_body=provider.get("extra_body"),
+                         routing=provider.get("routing"))
