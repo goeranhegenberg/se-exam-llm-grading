@@ -1,0 +1,33 @@
+[run 20260923T175139Z] Modell=openai/gpt-oss-120b (tertiary) Versionen=['v5_rubrik'] Concurrency=6
+  Datensatz: 5 Fragen, 35 Antworten -> 105 Modellaufrufe
+  Fortsetzung: 0 Aufrufe vorhanden, 105 offen
+  Ausgabe: results/raw_real/run2/grading_tertiary.jsonl
+  25/105 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  50/105 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  75/105 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  100/105 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  105/105 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+--- fertig ---
+  Aufrufe: 105, Parse-Fehler: 0, API-Fehler: 0
+  Tokens: prompt=112436, completion=45757, reasoning=36205
+  Ergebnisdatei: results/raw_real/run2/grading_tertiary.jsonl
+[run 20260924T051757Z] Modell=openai/gpt-oss-120b (tertiary) Versionen=['v5_rubrik'] Concurrency=6
+  Datensatz: 5 Fragen, 35 Antworten -> 105 Modellaufrufe
+  Fortsetzung: 105 Aufrufe vorhanden, 0 offen
+  Ausgabe: results/raw_real/run2/grading_tertiary.jsonl
+--- fertig --- nichts nachzuholen
+[run 20260924T052219Z] Modell=openai/gpt-oss-120b (tertiary) Versionen=['v5_rubrik'] Concurrency=6
+  Datensatz: 5 Fragen, 35 Antworten -> 105 Modellaufrufe
+  Fortsetzung: 105 Aufrufe vorhanden, 0 offen
+  Ausgabe: results/raw_real/run2/grading_tertiary.jsonl
+--- fertig --- nichts nachzuholen
+[run 20260924T053404Z] Modell=openai/gpt-oss-120b (tertiary) Versionen=['v5_rubrik'] Concurrency=6
+  Datensatz: 5 Fragen, 35 Antworten -> 105 Modellaufrufe
+  Fortsetzung: 105 Aufrufe vorhanden, 0 offen
+  Ausgabe: results/raw_real/run2/grading_tertiary.jsonl
+--- fertig --- nichts nachzuholen
+[run 20260924T065303Z] Modell=openai/gpt-oss-120b (tertiary) Versionen=['v5_rubrik'] Concurrency=6
+  Datensatz: 5 Fragen, 35 Antworten -> 105 Modellaufrufe
+  Fortsetzung: 105 Aufrufe vorhanden, 0 offen
+  Ausgabe: results/raw_real/run2/grading_tertiary.jsonl
+--- fertig --- nichts nachzuholen

@@ -1,0 +1,11 @@
+[ensemble 20260924T065614Z] Bewerter=['main', 'sensitivity', 'tertiary'] Merger=nur Median Zellen=105 Concurrency=1
+  Ausgabe: results/raw_real/run2/grading_ensemble.jsonl
+  25/105 Zellen (Parse-Fehler: 0, API-Fehler: 0)
+  50/105 Zellen (Parse-Fehler: 0, API-Fehler: 0)
+  75/105 Zellen (Parse-Fehler: 0, API-Fehler: 0)
+  100/105 Zellen (Parse-Fehler: 0, API-Fehler: 0)
+  105/105 Zellen (Parse-Fehler: 0, API-Fehler: 0)
+--- fertig ---
+  Zellen: 105, Parse-Fehler: 0, API-Fehler: 0
+  Tokens: prompt=0, completion=0, reasoning=0
+  Ergebnisdatei: results/raw_real/run2/grading_ensemble.jsonl

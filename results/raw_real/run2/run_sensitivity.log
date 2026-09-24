@@ -1,0 +1,41 @@
+[run 20260924T063621Z] Modell=mistralai/mistral-small-2603 (sensitivity) Versionen=['v5_rubrik', 'v1_baseline', 'v2_begruendung', 'v3_thinking', 'v4_fewshot'] Concurrency=4
+  Datensatz: 5 Fragen, 35 Antworten -> 525 Modellaufrufe
+  Fortsetzung: 0 Aufrufe vorhanden, 525 offen
+  Ausgabe: results/raw_real/run2/grading_sensitivity.jsonl
+  25/525 Aufrufe (Parse-Fehler: 25, API-Fehler: 25)
+  50/525 Aufrufe (Parse-Fehler: 46, API-Fehler: 46)
+  75/525 Aufrufe (Parse-Fehler: 62, API-Fehler: 62)
+  100/525 Aufrufe (Parse-Fehler: 83, API-Fehler: 83)
+  125/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  150/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  175/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  200/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  225/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  250/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  275/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  300/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  325/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  350/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  375/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  400/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  425/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  450/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  475/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  500/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+  525/525 Aufrufe (Parse-Fehler: 85, API-Fehler: 85)
+--- fertig ---
+  Aufrufe: 525, Parse-Fehler: 85, API-Fehler: 85
+  Tokens: prompt=250477, completion=195232, reasoning=157622
+  Ergebnisdatei: results/raw_real/run2/grading_sensitivity.jsonl
+[run 20260924T065303Z] Modell=mistralai/mistral-small-2603 (sensitivity) Versionen=['v5_rubrik', 'v1_baseline', 'v2_begruendung', 'v3_thinking', 'v4_fewshot'] Concurrency=4
+  Datensatz: 5 Fragen, 35 Antworten -> 525 Modellaufrufe
+  Fortsetzung: 440 Aufrufe vorhanden, 85 offen
+  Ausgabe: results/raw_real/run2/grading_sensitivity.jsonl
+  25/85 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  50/85 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  75/85 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+  85/85 Aufrufe (Parse-Fehler: 0, API-Fehler: 0)
+--- fertig ---
+  Aufrufe: 85, Parse-Fehler: 0, API-Fehler: 0
+  Tokens: prompt=89336, completion=54714, reasoning=45061
+  Ergebnisdatei: results/raw_real/run2/grading_sensitivity.jsonl
